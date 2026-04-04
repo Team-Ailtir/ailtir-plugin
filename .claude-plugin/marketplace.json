@@ -8,9 +8,7 @@
       "description": "Ailtir AI-Client Plugin — upload, analyse, list, and chat with tender document knowledge bases via the Ailtir CLI",
       "userConfig": {
         "AILTIR_CLI_SECRET": {
-          "title": "Ailtir CLI Secret Key",
           "description": "Your Ailtir CLI secret key (starts with acli_). Find it at https://app.ailtir.ai under Account → Secrets.",
-          "type": "string",
           "sensitive": true
         }
       }
