@@ -38,13 +38,13 @@ See **[docs/usage.md][]** for invocation examples and troubleshooting.
 # 1. Install the Ailtir CLI
 uv tool install ailtir-cli
 
-# 2. Add the marketplace and install the plugin
+# 2. Add your secret key to ~/.claude/settings.json
+#    See docs/configuration.md for details
+
+# 3. Add the marketplace and install the plugin
 claude plugin marketplace add team-ailtir/ailtir-plugin
 claude plugin install ailtir@team-ailtir
 ```
-
-Claude Code will prompt for your `AILTIR_CLI_SECRET` on first install and store it
-securely in your OS keychain.
 
 ## License
 

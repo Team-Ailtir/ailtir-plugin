@@ -5,13 +5,5 @@
   "author": { "name": "Team Ailtir" },
   "homepage": "https://docs.ailtir.ai",
   "repository": "https://github.com/team-ailtir/ailtir-plugin",
-  "license": "proprietary",
-  "userConfig": {
-    "AILTIR_CLI_SECRET": {
-      "title": "Ailtir CLI Secret Key",
-      "description": "Your Ailtir CLI secret key (starts with acli_). Find it at https://app.ailtir.ai under Account → Secrets.",
-      "type": "string",
-      "sensitive": true
-    }
-  }
+  "license": "proprietary"
 }

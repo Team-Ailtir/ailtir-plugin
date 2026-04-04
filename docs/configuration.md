@@ -9,34 +9,38 @@ The plugin requires one secret: your **Ailtir CLI secret key** (`AILTIR_CLI_SECR
 3. Find the **Secrets** section and click **Reveal**
 4. Copy the CLI Key — it starts with `acli_`
 
-## How the secret is stored
+## Setting the secret
 
-When you install the plugin, Claude Code will prompt:
+Add `AILTIR_CLI_SECRET` to the `env` section of your Claude Code user settings file
+(`~/.claude/settings.json`):
 
-> Enter value for AILTIR_CLI_SECRET (your Ailtir CLI secret key — starts with acli_):
+```json
+{
+  "env": {
+    "AILTIR_CLI_SECRET": "acli_your_key_here"
+  }
+}
+```
 
-Claude Code stores the value securely in your OS keychain and injects it as the
-`AILTIR_CLI_SECRET` environment variable whenever a skill runs. You will not need to
-set it manually.
+If `settings.json` does not exist yet, create it with that content. If it already
+exists, add `AILTIR_CLI_SECRET` alongside any existing keys in the `env` object.
 
 ## Updating the secret
 
-If you need to update the stored value (e.g., after rotating your key):
-
-```sh
-claude plugin config set ailtir AILTIR_CLI_SECRET
-```
-
-Claude Code will prompt for the new value and update the keychain entry.
+To rotate your key, edit `~/.claude/settings.json` and replace the value.
 
 ## Advanced: custom API URL
 
 By default the CLI talks to `https://app.ailtir.ai/cli-api`. If you are running a
-self-hosted Ailtir instance, set `CLI_API_URL` in your environment before invoking
-the skill:
+self-hosted Ailtir instance, add `CLI_API_URL` to the same `env` block:
 
-```sh
-export CLI_API_URL=https://your-instance.example.com/cli-api
+```json
+{
+  "env": {
+    "AILTIR_CLI_SECRET": "acli_your_key_here",
+    "CLI_API_URL": "https://your-instance.example.com/cli-api"
+  }
+}
 ```
 
 [app]: https://app.ailtir.ai

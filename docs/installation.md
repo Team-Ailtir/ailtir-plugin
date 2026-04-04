@@ -9,10 +9,14 @@ Ailtir skills: the **Ailtir CLI** and the **Ailtir Claude Code Plugin**.
 
 ## Step 1 — Install the Ailtir CLI
 
-Follow the [ailtir-cli installation guide][ailtir-cli-docs] to install the CLI and
-configure your secret key.
+Follow the [ailtir-cli installation guide][ailtir-cli-docs] to install the CLI.
 
-## Step 2 — Install the Ailtir Claude Code Plugin
+## Step 2 — Configure your secret key
+
+Add your `AILTIR_CLI_SECRET` to `~/.claude/settings.json`. See
+[configuration.md][] for how to obtain the key and where to put it.
+
+## Step 3 — Install the Ailtir Claude Code Plugin
 
 Add the Ailtir marketplace to Claude Code and install the plugin:
 
@@ -21,12 +25,9 @@ claude plugin marketplace add team-ailtir/ailtir-plugin
 claude plugin install ailtir@team-ailtir
 ```
 
-During installation, Claude Code will prompt you for your **Ailtir CLI secret key**.
-See [configuration.md][] for how to obtain it.
+## Step 4 — Verify
 
-## Step 3 — Verify
-
-Reload plugins and confirm the skill is available:
+Reload plugins and confirm the skills are available:
 
 ```sh
 /reload-plugins
