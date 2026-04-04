@@ -1,0 +1,11 @@
+{
+  "name": "team-ailtir",
+  "owner": { "name": "Team Ailtir" },
+  "plugins": [
+    {
+      "name": "ailtir",
+      "source": "./plugins/ailtir",
+      "description": "Ailtir AI-Client Plugin — upload tender documents via the Ailtir CLI"
+    }
+  ]
+}

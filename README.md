@@ -29,8 +29,8 @@ See **[docs/usage.md][]** for invocation examples and troubleshooting.
 uv tool install ailtir-cli
 
 # 2. Add the marketplace and install the plugin
-claude plugin marketplace add Team-Ailtir/ailtir-plugin
-claude plugin install ailtir@Team-Ailtir
+claude plugin marketplace add team-ailtir/ailtir-plugin
+claude plugin install ailtir@team-ailtir
 ```
 
 Claude Code will prompt for your `AILTIR_CLI_SECRET` on first install and store it
