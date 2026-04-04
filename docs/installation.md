@@ -35,8 +35,8 @@ You should see the current version number printed.
 Add the Ailtir marketplace to Claude Code and install the plugin:
 
 ```sh
-claude plugin marketplace add Team-Ailtir/ailtir-plugin
-claude plugin install ailtir@Team-Ailtir
+claude plugin marketplace add team-ailtir/ailtir-plugin
+claude plugin install ailtir@team-ailtir
 ```
 
 During installation, Claude Code will prompt you for your **Ailtir CLI secret key**.
