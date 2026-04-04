@@ -6,29 +6,11 @@ This guide walks you through installing the two components required to use the
 ## Prerequisites
 
 - [Claude Code][claude-code] installed and running
-- [uv][] installed (recommended) or `pip`
 
 ## Step 1 — Install the Ailtir CLI
 
-The Ailtir CLI is the underlying tool that handles the upload. Install it with `uv`:
-
-```sh
-uv tool install ailtir-cli
-```
-
-Or with `pip`:
-
-```sh
-pip install ailtir-cli
-```
-
-Verify it installed correctly:
-
-```sh
-ailtir version
-```
-
-You should see the current version number printed.
+Follow the [ailtir-cli installation guide][ailtir-cli-docs] to install the CLI and
+configure your secret key.
 
 ## Step 2 — Install the Ailtir Claude Code Plugin
 
@@ -54,5 +36,5 @@ Reload plugins and confirm the skill is available:
 You should see `/ailtir:tender-upload` listed under the `ailtir` plugin.
 
 [claude-code]: https://claude.ai/code
-[uv]: https://docs.astral.sh/uv/getting-started/installation/
+[ailtir-cli-docs]: https://team-ailtir.github.io/ailtir-cli
 [configuration.md]: ./configuration.md
