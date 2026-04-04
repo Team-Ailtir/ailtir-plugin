@@ -5,14 +5,24 @@ A [Claude Code][claude-code] plugin that lets you upload tender documents to the
 
 ## What it does
 
-The plugin adds one skill to Claude Code:
+The plugin adds four skills to Claude Code that cover the full Ailtir workflow:
 
 **`/ailtir:tender-upload`** — Upload a ZIP archive of tender documents to Ailtir.
 Claude will help you locate the file (or accept a path directly), confirm before
 uploading, and report the knowledge base ID on success.
 
-Under the hood the skill calls the [ailtir-cli][] tool, which handles authentication
-and the upload to Ailtir's cloud storage.
+**`/ailtir:analyse <kb_id>`** — Trigger the ingestion pipeline for a knowledge base.
+If no `kb_id` is given, Claude lists your knowledge bases and asks you to pick one.
+
+**`/ailtir:list`** — List all knowledge bases in your account, showing name, `kb_id`,
+and status. Nudges you toward `/ailtir:chat` when any are ready.
+
+**`/ailtir:chat <kb_id> <question>`** — Ask a natural-language question against a
+knowledge base. Claude enriches the query with the last five conversation interactions
+as context before calling the CLI.
+
+Under the hood each skill calls the [ailtir-cli][] tool, which handles authentication
+and communication with Ailtir's cloud platform.
 
 ## Getting started
 

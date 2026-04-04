@@ -37,24 +37,45 @@ Uploading tender_docs.zip...
 Upload complete. kb_id: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
 ```
 
-## Next steps after upload
+## Analysing a tender
 
-Once the upload completes, trigger knowledge base analysis:
+Once the upload completes, trigger knowledge base ingestion:
 
-```sh
-ailtir analyse <kb_id>
+```
+/ailtir:analyse aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
 ```
 
-Then check the status:
+If you omit the `kb_id`, Claude will run `/ailtir:list` and ask you to pick one.
+Ingestion takes a few minutes. Use `/ailtir:list` to check when status changes to
+`ready`.
 
-```sh
-ailtir list
+## Listing knowledge bases
+
+```
+/ailtir:list
 ```
 
-When analysis is complete, you can query the documents:
+Shows all knowledge bases in your account with their name, `kb_id`, and current
+status (`pending`, `processing`, `ready`, or `error`).
 
-```sh
-ailtir chat <kb_id> "What is the submission deadline?"
+## Chatting with a knowledge base
+
+Once a knowledge base is `ready`, ask questions against it:
+
+```
+/ailtir:chat aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa "What is the submission deadline?"
+```
+
+Claude sends the question along with the last five conversation interactions as
+context, giving the CLI enough background to produce more accurate answers.
+
+## Typical workflow
+
+```
+/ailtir:tender-upload /Users/alice/Downloads/tender_docs.zip
+/ailtir:analyse <kb_id>
+/ailtir:list
+/ailtir:chat <kb_id> "What is the submission deadline?"
 ```
 
 ## Troubleshooting
@@ -65,6 +86,7 @@ ailtir chat <kb_id> "What is the submission deadline?"
 | `Error: file not found` | The file does not exist at that path | Check the path and try again |
 | `Error registering KB: 401` | Invalid or missing secret key | See [configuration.md][] |
 | `ailtir: command not found` | CLI not installed or not on PATH | See [installation.md][] |
+| `kb_id not found` | Wrong ID or KB not yet created | Run `/ailtir:list` to verify |
 
 [configuration.md]: ./configuration.md
 [installation.md]: ./installation.md

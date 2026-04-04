@@ -1,7 +1,7 @@
 # Installation
 
 This guide walks you through installing the two components required to use the
-`/ailtir:tender-upload` skill: the **Ailtir CLI** and the **Ailtir Claude Code Plugin**.
+Ailtir skills: the **Ailtir CLI** and the **Ailtir Claude Code Plugin**.
 
 ## Prerequisites
 
@@ -33,7 +33,8 @@ Reload plugins and confirm the skill is available:
 /help
 ```
 
-You should see `/ailtir:tender-upload` listed under the `ailtir` plugin.
+You should see `/ailtir:tender-upload`, `/ailtir:analyse`, `/ailtir:list`, and
+`/ailtir:chat` listed under the `ailtir` plugin.
 
 [claude-code]: https://claude.ai/code
 [ailtir-cli-docs]: https://team-ailtir.github.io/ailtir-cli

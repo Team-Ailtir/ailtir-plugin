@@ -1,7 +1,8 @@
 # Ailtir Plugin
 
-A [Claude Code](https://claude.ai/code) plugin that lets you upload tender documents
-to the [Ailtir](https://ailtir.ai) platform directly from your AI assistant.
+A [Claude Code](https://claude.ai/code) plugin that lets you upload, analyse, and
+query tender documents on the [Ailtir](https://ailtir.ai) platform directly from
+your AI assistant.
 
 ## Getting started
 
