@@ -1,0 +1,32 @@
+---
+name: analyse
+description: Trigger the Ailtir ingestion pipeline for a knowledge base. Invoke with /ailtir:analyse or /ailtir:analyse <kb_id>. If no kb_id is provided, run ailtir list to let the user pick one.
+argument-hint: "[<kb_id>]"
+allowed-tools: Bash
+---
+
+Trigger the ingestion pipeline for an Ailtir knowledge base using the `ailtir` CLI.
+
+## Instructions
+
+1. **If `$ARGUMENTS` is provided**, treat it as the `kb_id`. Skip to step 3.
+
+2. **If no argument is given**, run `ailtir list` and show the output to the user.
+   Ask them to confirm which `kb_id` to analyse.
+
+3. **Confirm** the `kb_id` with the user before proceeding.
+
+4. **Run the ingestion:**
+
+   ```bash
+   ailtir analyse <kb_id>
+   ```
+
+5. **On success**, inform the user that ingestion has been triggered and that it
+   takes a few minutes. Suggest running `ailtir list` to check status, or using
+   `/ailtir:list` to do so from here.
+
+6. **On failure**, show the error and suggest:
+   - Checking that `AILTIR_CLI_SECRET` is set (run `echo $AILTIR_CLI_SECRET`)
+   - Confirming the `kb_id` is correct by running `ailtir list`
+   - Running `ailtir version` to verify the CLI is installed
