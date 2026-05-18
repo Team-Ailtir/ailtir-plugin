@@ -1,6 +1,6 @@
 ---
-name: opportunity-intelligence
-description: "[BD] Score a procurement notice against your Tender Fit Profile and generate a Pre-Market Engagement Brief for PIN-stage opportunities. Invoke with /ailtir:opportunity-intelligence."
+name: ailtir_bd_opportunity-intelligence
+description: "[BD] Score a procurement notice against your Tender Fit Profile and generate a Pre-Market Engagement Brief for PIN-stage opportunities. Invoke with /ailtir:ailtir_bd_opportunity-intelligence."
 argument-hint: ""
 allowed-tools: Bash
 ---

@@ -1,5 +1,5 @@
 ---
-name: analyse
+name: kb-analyse
 description: Trigger the Ailtir ingestion pipeline for a knowledge base. Invoke with /ailtir:analyse or /ailtir:analyse <kb_id>. If no kb_id is provided, run ailtir list to let the user pick one.
 argument-hint: "[<kb_id>]"
 allowed-tools: Bash

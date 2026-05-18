@@ -1,5 +1,5 @@
 ---
-name: chat
+name: ailtir-kb-chat
 description: Ask a natural-language question against an Ailtir knowledge base. Invoke with /ailtir:chat <kb_id> <question>. Sends the last 5 conversation interactions as context alongside the question.
 argument-hint: "<kb_id> <question>"
 allowed-tools: Bash
