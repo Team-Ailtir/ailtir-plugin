@@ -20,8 +20,8 @@ platform.
 ## Typical Workflow
 
 1. Upload tender documents with `/ailtir:tender-upload`.
-2. Analyse the resulting knowledge base with `/ailtir:analyse`.
-3. Ask questions with `/ailtir:chat`.
+2. Analyse the resulting knowledge base with `/ailtir:kb-analyse`.
+3. Ask questions with `/ailtir:kb-chat`.
 4. Run specialist workflows such as compliance matrix, bid/no-bid, technical
    proposal, quote normalization, or submission pre-flight.
 

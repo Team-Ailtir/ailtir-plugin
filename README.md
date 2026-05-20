@@ -49,9 +49,9 @@ Start with the core knowledge-base workflow:
 
 ```text
 /ailtir:tender-upload /absolute/path/to/tender_docs.zip
-/ailtir:analyse <kb_id>
-/ailtir:list
-/ailtir:chat <kb_id> "What is the submission deadline?"
+/ailtir:kb-analyse <kb_id>
+/ailtir:kb-list
+/ailtir:kb-chat <kb_id> "What is the submission deadline?"
 ```
 
 Specialist skills are available under `/ailtir:*`. Run `/help` in Claude Code

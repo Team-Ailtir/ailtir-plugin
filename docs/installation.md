@@ -50,8 +50,9 @@ Reload plugins and inspect the available commands:
 /help
 ```
 
-You should see core commands such as `/ailtir:tender-upload`, `/ailtir:analyse`,
-`/ailtir:list`, and `/ailtir:chat`, plus the specialist skills listed in the
+You should see core commands such as `/ailtir:tender-upload`,
+`/ailtir:kb-analyse`, `/ailtir:kb-list`, and `/ailtir:kb-chat`, plus the
+specialist skills listed in the
 [skill catalog](skills.md).
 
 [ailtir-cli-docs]: https://team-ailtir.github.io/ailtir-cli

@@ -1,6 +1,6 @@
 ---
-name: ailtir-kb-chat
-description: Ask a natural-language question against an Ailtir knowledge base. Invoke with /ailtir:chat <kb_id> <question>. Sends the last 5 conversation interactions as context alongside the question.
+name: kb-chat
+description: Ask a natural-language question against an Ailtir knowledge base. Invoke with /ailtir:kb-chat <kb_id> <question>. Sends the last 5 conversation interactions as context alongside the question.
 argument-hint: "<kb_id> <question>"
 allowed-tools: Bash
 ---
@@ -14,7 +14,7 @@ with recent conversation context.
    everything after it is the `question`.
 
 2. **If either is missing**, ask the user to provide both the `kb_id` and the
-   question before proceeding. Offer to run `/ailtir:list` to find a valid `kb_id`.
+   question before proceeding. Offer to run `/ailtir:kb-list` to find a valid `kb_id`.
 
 3. **Build context** from the last 5 conversation interactions (each interaction
    is one user message plus the assistant reply that followed it). Format them as:

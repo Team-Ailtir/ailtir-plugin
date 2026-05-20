@@ -22,7 +22,7 @@ next steps.
 Trigger ingestion:
 
 ```text
-/ailtir:analyse <kb_id>
+/ailtir:kb-analyse <kb_id>
 ```
 
 If you omit the ID, the skill lists available knowledge bases and asks you to
@@ -33,7 +33,7 @@ choose one. Ingestion can take a few minutes.
 Check status with:
 
 ```text
-/ailtir:list
+/ailtir:kb-list
 ```
 
 Use this to confirm a knowledge base is `ready` before asking detailed
@@ -44,7 +44,7 @@ questions.
 Ask a question:
 
 ```text
-/ailtir:chat <kb_id> "What is the submission deadline?"
+/ailtir:kb-chat <kb_id> "What is the submission deadline?"
 ```
 
 The skill sends your question and recent conversation context to the CLI so the
@@ -71,5 +71,5 @@ and call `ailtir` commands such as `ailtir kb chat`.
 | `ailtir: command not found` | CLI is not installed or not on `PATH` | Reinstall the CLI and run `ailtir version` |
 | Authentication or `401` error | Missing or invalid `AILTIR_CLI_SECRET` | Check [Configuration](configuration.md) |
 | File path error | Relative path or missing ZIP file | Use an absolute path such as `/Users/alice/Downloads/tender_docs.zip` |
-| Knowledge base not ready | Ingestion is still running | Run `/ailtir:list` and wait for `ready` |
+| Knowledge base not ready | Ingestion is still running | Run `/ailtir:kb-list` and wait for `ready` |
 | Specialist skill lacks context | Missing `kb_id`, bid profile, or source document | Provide the requested ID or brief before continuing |

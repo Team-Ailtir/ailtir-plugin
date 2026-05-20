@@ -8,9 +8,9 @@ from your installed plugin version.
 | Skill | Use |
 | --- | --- |
 | `/ailtir:tender-upload` | Upload a tender ZIP archive and return a `kb_id`. |
-| `/ailtir:analyse` | Start ingestion for a knowledge base. |
-| `/ailtir:list` | List knowledge bases and processing status. |
-| `/ailtir:chat` | Ask a question against a ready knowledge base. |
+| `/ailtir:kb-analyse` | Start ingestion for a knowledge base. |
+| `/ailtir:kb-list` | List knowledge bases and processing status. |
+| `/ailtir:kb-chat` | Ask a question against a ready knowledge base. |
 
 ## Platform Skills
 
