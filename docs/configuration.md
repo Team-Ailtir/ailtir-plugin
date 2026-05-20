@@ -1,18 +1,11 @@
 # Configuration
 
-The plugin requires one secret: your **Ailtir CLI secret key** (`AILTIR_CLI_SECRET`).
+The plugin uses the Ailtir CLI, so Claude Code must have access to the same
+environment variables the CLI expects.
 
-## Obtaining your CLI secret key
+## Required Secret
 
-1. Sign in to [app.ailtir.ai][app]
-2. Click your avatar in the top right → **Account**
-3. Find the **Secrets** section and click **Reveal**
-4. Copy the CLI Key — it starts with `acli_`
-
-## Setting the secret
-
-Add `AILTIR_CLI_SECRET` to the `env` section of your Claude Code user settings file
-(`~/.claude/settings.json`):
+Set `AILTIR_CLI_SECRET` in `~/.claude/settings.json`:
 
 ```json
 {
@@ -22,17 +15,20 @@ Add `AILTIR_CLI_SECRET` to the `env` section of your Claude Code user settings f
 }
 ```
 
-If `settings.json` does not exist yet, create it with that content. If it already
-exists, add `AILTIR_CLI_SECRET` alongside any existing keys in the `env` object.
+To get the key:
 
-## Updating the secret
+1. Sign in to [app.ailtir.ai][app].
+2. Open **Account** from your user menu.
+3. Reveal the CLI key in the **Secrets** section.
+4. Copy the value beginning with `acli_`.
 
-To rotate your key, edit `~/.claude/settings.json` and replace the value.
+If `settings.json` already exists, add the key inside the existing `env` object
+rather than replacing unrelated settings.
 
-## Advanced: custom API URL
+## Optional API URL
 
-By default the CLI talks to `https://app.ailtir.ai/cli-api`. If you are running a
-self-hosted Ailtir instance, add `CLI_API_URL` to the same `env` block:
+By default, the CLI talks to `https://app.ailtir.ai/cli-api`. For a self-hosted
+or non-production environment, add `CLI_API_URL`:
 
 ```json
 {
@@ -42,5 +38,19 @@ self-hosted Ailtir instance, add `CLI_API_URL` to the same `env` block:
   }
 }
 ```
+
+## Rotate a Key
+
+Replace the `AILTIR_CLI_SECRET` value in `~/.claude/settings.json`, then reload
+Claude Code plugins:
+
+```text
+/reload-plugins
+```
+
+## Security Notes
+
+Do not paste real secret keys into prompts, commits, screenshots, or support
+tickets. Use placeholders such as `acli_your_key_here` when sharing examples.
 
 [app]: https://app.ailtir.ai

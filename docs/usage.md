@@ -1,92 +1,75 @@
 # Usage
 
-## Uploading a tender
+Use the core skills to create and query a knowledge base, then run specialist
+skills against the same tender or bid context.
 
-### With a file path
+## Upload Tender Documents
 
-If you already know the path to your ZIP file, pass it as an argument:
+Pass an absolute path to a ZIP archive:
 
-```
+```text
 /ailtir:tender-upload /Users/alice/Downloads/tender_docs.zip
 ```
 
-Claude will confirm the path and run the upload immediately.
+If you omit the path, Claude Code will help browse common locations such as
+`~/Downloads` and `~/Documents`, then ask for confirmation before upload.
 
-### Without a file path
+On success, the CLI returns a knowledge-base ID (`kb_id`). Keep that ID for the
+next steps.
 
-If you omit the path, Claude will use the filesystem browser to help you locate
-the ZIP file:
+## Analyse the Knowledge Base
 
-```
-/ailtir:tender-upload
-```
+Trigger ingestion:
 
-Claude will browse `~/Downloads` and `~/Documents` and ask you to confirm the file
-before uploading.
-
-## What happens during upload
-
-1. The `ailtir` CLI registers the file with the Ailtir API
-2. The ZIP is uploaded directly to secure cloud storage
-3. On success, Claude reports the **knowledge base ID** (`kb_id`)
-
-Example output:
-
-```
-Uploading tender_docs.zip...
-Upload complete. kb_id: aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
-```
-
-## Analysing a tender
-
-Once the upload completes, trigger knowledge base ingestion:
-
-```
-/ailtir:analyse aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
-```
-
-If you omit the `kb_id`, Claude will run `/ailtir:list` and ask you to pick one.
-Ingestion takes a few minutes. Use `/ailtir:list` to check when status changes to
-`ready`.
-
-## Listing knowledge bases
-
-```
-/ailtir:list
-```
-
-Shows all knowledge bases in your account with their name, `kb_id`, and current
-status (`pending`, `processing`, `ready`, or `error`).
-
-## Chatting with a knowledge base
-
-Once a knowledge base is `ready`, ask questions against it:
-
-```
-/ailtir:chat aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa "What is the submission deadline?"
-```
-
-Claude sends the question along with the last five conversation interactions as
-context, giving the CLI enough background to produce more accurate answers.
-
-## Typical workflow
-
-```
-/ailtir:tender-upload /Users/alice/Downloads/tender_docs.zip
+```text
 /ailtir:analyse <kb_id>
+```
+
+If you omit the ID, the skill lists available knowledge bases and asks you to
+choose one. Ingestion can take a few minutes.
+
+## List Knowledge Bases
+
+Check status with:
+
+```text
 /ailtir:list
+```
+
+Use this to confirm a knowledge base is `ready` before asking detailed
+questions.
+
+## Chat with a Knowledge Base
+
+Ask a question:
+
+```text
 /ailtir:chat <kb_id> "What is the submission deadline?"
 ```
 
+The skill sends your question and recent conversation context to the CLI so the
+answer can use the active bid context.
+
+## Run Specialist Workflows
+
+After the core workflow is ready, choose a specialist skill from the
+[skill catalog](skills.md). Examples:
+
+```text
+/ailtir:ailtir_bd_bid-no-bid <kb_id>
+/ailtir:ailtir_ta_compliance-matrix <kb_id>
+/ailtir:ailtir_prop_submission-preflight <kb_id>
+```
+
+Specialist skills often ask for missing context, enforce human approval gates,
+and call `ailtir` commands such as `ailtir kb chat`.
+
 ## Troubleshooting
 
-| Error | Likely cause | Fix |
-|---|---|---|
-| `Error: file_path must be an absolute path` | A relative path was passed | Use a full path starting with `/` |
-| `Error: file not found` | The file does not exist at that path | Check the path and try again |
-| `Error registering KB: 401` | Invalid or missing secret key | See [configuration.md][] |
-| `ailtir: command not found` | CLI not installed or not on PATH | See [installation.md][] |
-| `kb_id not found` | Wrong ID or KB not yet created | Run `/ailtir:list` to verify |
-
-[configuration.md]: ./configuration.md
-[installation.md]: ./installation.md
+| Symptom | Likely cause | Fix |
+| --- | --- | --- |
+| `ailtir: command not found` | CLI is not installed or not on `PATH` | Reinstall the CLI and run `ailtir version` |
+| Authentication or `401` error | Missing or invalid `AILTIR_CLI_SECRET` | Check [Configuration](configuration.md) |
+| File path error | Relative path or missing ZIP file | Use an absolute path such as `/Users/alice/Downloads/tender_docs.zip` |
+| Knowledge base not ready | Ingestion is still running | Run `/ailtir:list` and wait for `ready` |
+| Specialist skill lacks context | Missing `kb_id`, bid profile, or source document | Provide the requested ID or brief before continuing |

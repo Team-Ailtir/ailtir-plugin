@@ -1,11 +1,28 @@
 # Ailtir Plugin
 
-A [Claude Code](https://claude.ai/code) plugin that lets you upload, analyse, and
-query tender documents on the [Ailtir](https://ailtir.ai) platform directly from
-your AI assistant.
+The Ailtir Claude Code plugin adds `/ailtir:*` skills for tender upload,
+knowledge-base analysis, bid/no-bid decisions, qualification responses,
+estimating workflows, proposal production, and post-award learning.
 
-## Getting started
+The plugin guides Claude Code through repeatable workflows. It relies on the
+[Ailtir CLI][ailtir-cli] for authentication and communication with the Ailtir
+platform.
 
-- [Installation](installation.md) — install the Ailtir CLI and the Claude Code plugin
-- [Configuration](configuration.md) — set up your Ailtir secret key
-- [Usage](usage.md) — invoke the skill and troubleshoot issues
+## Start Here
+
+- [Installation](installation.md): install the Ailtir CLI and Claude Code plugin.
+- [Configuration](configuration.md): set `AILTIR_CLI_SECRET` and optional API
+  settings.
+- [Usage](usage.md): run the core upload, analyse, list, and chat workflow.
+- [Skill catalog](skills.md): browse the available specialist bid workflow
+  skills.
+
+## Typical Workflow
+
+1. Upload tender documents with `/ailtir:tender-upload`.
+2. Analyse the resulting knowledge base with `/ailtir:analyse`.
+3. Ask questions with `/ailtir:chat`.
+4. Run specialist workflows such as compliance matrix, bid/no-bid, technical
+   proposal, quote normalization, or submission pre-flight.
+
+[ailtir-cli]: https://github.com/Team-Ailtir/ailtir-cli

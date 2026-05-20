@@ -1,42 +1,58 @@
 # Installation
 
-This guide walks you through installing the two components required to use the
-Ailtir skills: the **Ailtir CLI** and the **Ailtir Claude Code Plugin**.
+Install two components before using the Ailtir skills: the Ailtir CLI and the
+Ailtir Claude Code plugin.
 
 ## Prerequisites
 
-- [Claude Code][claude-code] installed and running
+- [Claude Code][claude-code] installed and running.
+- Access to an Ailtir account with a CLI secret key.
+- `uv` available if you install the CLI with `uv tool install`.
 
-## Step 1 — Install the Ailtir CLI
+## 1. Install the Ailtir CLI
 
-Follow the [ailtir-cli installation guide][ailtir-cli-docs] to install the CLI.
+Install the CLI:
 
-## Step 2 — Configure your secret key
+```sh
+uv tool install ailtir-cli
+```
 
-Add your `AILTIR_CLI_SECRET` to `~/.claude/settings.json`. See
-[configuration.md][] for how to obtain the key and where to put it.
+Confirm it is available on your shell path:
 
-## Step 3 — Install the Ailtir Claude Code Plugin
+```sh
+ailtir version
+```
 
-Add the Ailtir marketplace to Claude Code and install the plugin:
+If your environment uses another installation method, follow the
+[Ailtir CLI documentation][ailtir-cli-docs].
+
+## 2. Configure Your Secret
+
+Add `AILTIR_CLI_SECRET` to `~/.claude/settings.json`. See
+[Configuration](configuration.md) for the expected file format and optional
+`CLI_API_URL` setting.
+
+## 3. Install the Plugin
+
+Add the Ailtir marketplace and install the plugin:
 
 ```sh
 claude plugin marketplace add team-ailtir/ailtir-plugin
 claude plugin install ailtir@team-ailtir
 ```
 
-## Step 4 — Verify
+## 4. Verify in Claude Code
 
-Reload plugins and confirm the skills are available:
+Reload plugins and inspect the available commands:
 
-```sh
+```text
 /reload-plugins
 /help
 ```
 
-You should see `/ailtir:tender-upload`, `/ailtir:analyse`, `/ailtir:list`, and
-`/ailtir:chat` listed under the `ailtir` plugin.
+You should see core commands such as `/ailtir:tender-upload`, `/ailtir:analyse`,
+`/ailtir:list`, and `/ailtir:chat`, plus the specialist skills listed in the
+[skill catalog](skills.md).
 
-[claude-code]: https://claude.ai/code
 [ailtir-cli-docs]: https://team-ailtir.github.io/ailtir-cli
-[configuration.md]: ./configuration.md
+[claude-code]: https://claude.ai/code
