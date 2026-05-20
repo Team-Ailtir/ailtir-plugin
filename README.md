@@ -1,58 +1,79 @@
 # ailtir-plugin
 
-A [Claude Code][claude-code] plugin that lets you upload tender documents to the
-[Ailtir][ailtir] platform directly from your AI assistant.
+`ailtir-plugin` is the Claude Code plugin for Ailtir. It adds `/ailtir:*`
+skills that help construction and bid teams upload tender packs, analyse
+knowledge bases, ask questions of tender documents, and run specialist
+workflows across business development, qualification, estimating, proposal, and
+post-award activity.
 
-## What it does
+The plugin is a thin assistant layer over the [Ailtir CLI][ailtir-cli]. Skills
+guide Claude Code through the right prompts, checks, approval gates, and CLI
+commands; the CLI handles authentication and calls to the Ailtir platform.
 
-The plugin adds four skills to Claude Code that cover the full Ailtir workflow:
+## Who It Is For
 
-**`/ailtir:tender-upload`** — Upload a ZIP archive of tender documents to Ailtir.
-Claude will help you locate the file (or accept a path directly), confirm before
-uploading, and report the knowledge base ID on success.
+Use this plugin if you work with Ailtir from Claude Code and want repeatable bid
+workflows instead of one-off prompts. The skills are designed for tender upload,
+knowledge-base analysis, bid/no-bid decisions, compliance reviews, proposal
+assembly, social value responses, quote normalization, and reporting.
 
-**`/ailtir:kb-analyse <kb_id>`** — Trigger the ingestion pipeline for a knowledge base.
-If no `kb_id` is given, Claude lists your knowledge bases and asks you to pick one.
+## Install
 
-**`/ailtir:kb-list`** — List all knowledge bases in your account, showing name, `kb_id`,
-and status. Nudges you toward `/ailtir:chat` when any are ready.
-
-**`/ailtir:kb-chat <kb_id> <question>`** — Ask a natural-language question against a
-knowledge base. Claude enriches the query with the last five conversation interactions
-as context before calling the CLI.
-
-Under the hood each skill calls the [ailtir-cli][] tool, which handles authentication
-and communication with Ailtir's cloud platform.
-
-## Getting started
-
-See **[docs/installation.md][]** to install the CLI and plugin.
-
-See **[docs/configuration.md][]** to set up your Ailtir secret key.
-
-See **[docs/usage.md][]** for invocation examples and troubleshooting.
-
-## Quick install
+Install the Ailtir CLI first:
 
 ```sh
-# 1. Install the Ailtir CLI
 uv tool install ailtir-cli
+```
 
-# 2. Add your secret key to ~/.claude/settings.json
-#    See docs/configuration.md for details
+Add your `AILTIR_CLI_SECRET` to `~/.claude/settings.json`, then install the
+plugin marketplace entry:
 
-# 3. Add the marketplace and install the plugin
+```sh
 claude plugin marketplace add team-ailtir/ailtir-plugin
 claude plugin install ailtir@team-ailtir
 ```
+
+Reload Claude Code plugins:
+
+```text
+/reload-plugins
+/help
+```
+
+See [Installation][installation] and [Configuration][configuration] for the full
+setup flow.
+
+## Basic Use
+
+Start with the core knowledge-base workflow:
+
+```text
+/ailtir:tender-upload /absolute/path/to/tender_docs.zip
+/ailtir:kb-analyse <kb_id>
+/ailtir:kb-list
+/ailtir:kb-chat <kb_id> "What is the submission deadline?"
+```
+
+Specialist skills are available under `/ailtir:*`. Run `/help` in Claude Code
+after installation to see the current skill list and invocation names.
+
+## Repository Documentation
+
+Contributor and maintainer guidance is split by audience:
+
+- [AGENTS.md][agents] explains the repository structure and how to maintain
+  skills.
+- [CONTRIBUTING.md][contributing] explains local checks, release preparation,
+  and deployment.
+- [docs/][docs] contains end-user installation, configuration, and usage pages.
 
 ## License
 
 Proprietary. Copyright Team Ailtir.
 
-[ailtir]: https://app.ailtir.ai
+[agents]: ./AGENTS.md
 [ailtir-cli]: https://github.com/Team-Ailtir/ailtir-cli
-[claude-code]: https://claude.ai/code
-[docs/installation.md]: ./docs/installation.md
-[docs/configuration.md]: ./docs/configuration.md
-[docs/usage.md]: ./docs/usage.md
+[configuration]: ./docs/configuration.md
+[contributing]: ./CONTRIBUTING.md
+[docs]: ./docs
+[installation]: ./docs/installation.md

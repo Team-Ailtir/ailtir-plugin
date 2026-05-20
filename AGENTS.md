@@ -1,72 +1,70 @@
 # Repository Guidelines
 
-## Project Structure & Module Organization
+## Purpose
 
-This repository packages the Ailtir Claude Code plugin and its documentation.
-The plugin lives under `plugins/ailtir/`. Plugin metadata is in
-`plugins/ailtir/.claude-plugin/plugin.json`, MCP configuration is in
-`plugins/ailtir/.mcp.json`, and each skill is a directory under
-`plugins/ailtir/skills/` containing a single `SKILL.md`.
+This file is for maintainers and coding agents changing the repository. User
+installation and usage belong in [README.md][readme] and `docs/`; release steps
+belong in [CONTRIBUTING.md][contributing].
 
-Documentation for GitHub Pages is in `docs/`, with `docs/_config.yml` providing
-Jekyll configuration. The root `README.md` should stay concise and point users
-to the detailed docs.
+## Repository Structure
 
-## Build, Test, and Development Commands
+- `.claude-plugin/marketplace.json` registers the Team Ailtir marketplace and
+  points Claude Code at `plugins/ailtir`.
+- `plugins/ailtir/.claude-plugin/plugin.json` is the plugin manifest. Keep the
+  name, version, description, repository, and license accurate.
+- `plugins/ailtir/.mcp.json` declares MCP servers available to the plugin.
+- `plugins/ailtir/skills/*/SKILL.md` contains the skill definitions loaded by
+  Claude Code.
+- `docs/` contains the GitHub Pages documentation, built by the Pages workflow
+  in `.github/workflows/pages.yml`.
 
-There is no application build step or package manager lockfile in this repo.
-Use these checks during development:
+## Skill Layout
 
-```sh
-git status
-git diff --check
-find plugins/ailtir/skills -name SKILL.md | sort
+Each skill lives in its own directory and exposes one `SKILL.md`. Directory
+names are lowercase and hyphenated, with an underscore separating domain and
+workflow where useful, for example `proposal_doc-assembly` or
+`tender-analysis_contract-risk`.
+
+Every `SKILL.md` starts with YAML front matter:
+
+```yaml
+---
+name: ailtir_domain_workflow
+description: "Short user-facing summary. Include the /ailtir: invocation."
+argument-hint: "[<kb_id>]"
+allowed-tools: Bash
+---
 ```
 
-`git diff --check` catches whitespace errors before commit. The `find` command
-confirms every skill directory exposes the expected `SKILL.md` entry point.
+Use `allowed-tools: Bash` for CLI-only skills. Add MCP tools only when the skill
+actually needs them.
 
-For manual plugin validation, install the plugin through Claude Code, then run:
+## Maintaining Skills
 
-```sh
-/reload-plugins
-/help
-```
+Keep skills operational, not promotional. A good skill defines scope, states what
+it does not do, lists ordered instructions, and includes error handling for
+missing configuration, missing knowledge bases, failed CLI commands, or required
+human approval.
 
-Docs are built by GitHub Actions using Jekyll Pages when files under `docs/`
-change on `main`.
+When adding or changing a skill:
 
-## Coding Style & Naming Conventions
+1. Choose a stable invocation name and keep it consistent in the directory,
+   front matter, README/docs references, and examples.
+2. Prefer concrete commands such as `ailtir kb chat <kb_id> "..."`
+   over vague tool descriptions.
+3. Preserve approval gates for bid/no-bid, submission, credential exceptions,
+   commercial thresholds, and other human decisions.
+4. Do not embed customer data, secrets, portal credentials, or private tender
+   content in examples.
+5. Update user docs only when the change affects installation, configuration, or
+   normal usage.
 
-Most source files are Markdown and JSON. Use two-space indentation in JSON and
-keep Markdown headings sentence-like and scannable. Skill directories use
-lowercase, hyphenated names, often grouped by domain with an underscore, for
-example `tender-analysis_contract-risk` or `proposal_doc-assembly`.
+## Style
 
-Each skill file must include YAML front matter with `name`, `description`,
-`argument-hint` when useful, and `allowed-tools`. Keep instructions direct,
-numbered where order matters, and include concrete CLI examples such as
-`ailtir analyse <kb_id>`.
+Use Markdown for instructions and two-space indentation for JSON. Keep headings
+short, use numbered lists when sequence matters, and keep examples copy-pasteable.
+Commit messages should be short imperative subjects, such as `Add qualification
+skill` or `Fix plugin manifest version`.
 
-## Testing Guidelines
-
-No automated test suite is currently defined. Validate changes by checking
-Markdown rendering, plugin reload behavior, and the relevant skill workflow in
-Claude Code. For CLI-facing skills, verify command names and arguments against
-the documented Ailtir CLI behavior before updating examples.
-
-## Commit & Pull Request Guidelines
-
-Recent commits use short imperative subjects, for example `Add marketplace.json`
-or `Fix userConfig validation`. Follow that style: start with a verb, keep the
-subject specific, and avoid bundling unrelated changes.
-
-Pull requests should describe the changed skill or doc area, include manual
-validation steps, and note any user-facing command changes. Include screenshots
-only for rendered documentation changes where layout or navigation is affected.
-
-## Security & Configuration Tips
-
-Never commit real `AILTIR_CLI_SECRET` values or customer tender data. Examples
-should use placeholders such as `acli_your_key_here` and generic paths like
-`/absolute/path/to/tender.zip`.
+[contributing]: ./CONTRIBUTING.md
+[readme]: ./README.md
