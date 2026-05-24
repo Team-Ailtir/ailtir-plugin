@@ -48,10 +48,10 @@ setup flow.
 Start with the core knowledge-base workflow:
 
 ```text
-/ailtir:tender-upload /absolute/path/to/tender_docs.zip
-/ailtir:kb-analyse <kb_id>
-/ailtir:kb-list
-/ailtir:kb-chat <kb_id> "What is the submission deadline?"
+/ailtir:ailtir_kb_upload /absolute/path/to/tender_docs.zip
+/ailtir:ailtir_kb_analyse <kb_id>
+/ailtir:ailtir_kb_list
+/ailtir:ailtir_kb_chat <kb_id> "What is the submission deadline?"
 ```
 
 Specialist skills are available under `/ailtir:*`. Run `/help` in Claude Code

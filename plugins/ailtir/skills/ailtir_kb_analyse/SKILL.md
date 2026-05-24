@@ -1,6 +1,6 @@
 ---
-name: kb-analyse
-description: Trigger the Ailtir ingestion pipeline for a knowledge base. Invoke with /ailtir:kb-analyse or /ailtir:kb-analyse <kb_id>. If no kb_id is provided, run ailtir kbs list to let the user pick one.
+name: ailtir_kb_analyse
+description: Trigger the Ailtir ingestion pipeline for a knowledge base. Invoke with /ailtir:ailtir_kb_analyse or /ailtir:ailtir_kb_analyse <kb_id>. If no kb_id is provided, run ailtir kbs list to let the user pick one.
 argument-hint: "[<kb_id>]"
 allowed-tools: Bash
 ---
@@ -24,7 +24,7 @@ Trigger the ingestion pipeline for an Ailtir knowledge base using the `ailtir` C
 
 5. **On success**, inform the user that ingestion has been triggered and that it
    takes a few minutes. Suggest running `ailtir kbs list` to check status, or using
-   `/ailtir:kb-list` to do so from here.
+   `/ailtir:ailtir_kb_list` to do so from here.
 
 6. **On failure**, show the error and suggest:
    - Checking that `AILTIR_CLI_API_TOKEN` is set (run `echo $AILTIR_CLI_API_TOKEN`)

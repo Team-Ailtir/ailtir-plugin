@@ -1,6 +1,6 @@
 ---
-name: tender-upload
-description: Upload a ZIP archive of tender documents to Ailtir. Invoke with /ailtir:tender-upload or /ailtir:tender-upload /absolute/path/to/tender.zip. If no path is provided, browse the filesystem to locate the ZIP file.
+name: ailtir_kb_upload
+description: Upload a ZIP archive of tender documents to Ailtir. Invoke with /ailtir:ailtir_kb_upload or /ailtir:ailtir_kb_upload /absolute/path/to/tender.zip. If no path is provided, browse the filesystem to locate the ZIP file.
 argument-hint: "[/absolute/path/to/tender.zip]"
 allowed-tools: Bash mcp__filesystem__list_directory mcp__filesystem__read_file
 ---
