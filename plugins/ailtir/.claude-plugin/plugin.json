@@ -1,6 +1,6 @@
 {
   "name": "ailtir",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Ailtir AI-Client Plugin — upload, analyse, list, and chat with tender document knowledge bases via the Ailtir CLI",
   "author": { "name": "Team Ailtir" },
   "homepage": "https://docs.ailtir.ai",
