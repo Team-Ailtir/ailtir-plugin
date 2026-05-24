@@ -30,6 +30,6 @@ Upload a tender ZIP archive to the Ailtir platform using the `ailtir` CLI.
    run `ailtir analyse <kb_id>` next to build their knowledge base.
 
 6. **On failure**, show the error and suggest:
-   - Checking that `AILTIR_CLI_SECRET` is set (run `echo $AILTIR_CLI_SECRET`)
+   - Checking that `AILTIR_CLI_API_TOKEN` is set (run `echo $AILTIR_CLI_API_TOKEN`)
    - Confirming the file exists and is a valid ZIP archive
    - Running `ailtir version` to verify the CLI is installed

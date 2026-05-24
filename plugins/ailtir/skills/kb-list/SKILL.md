@@ -20,5 +20,5 @@ List all knowledge bases in the Ailtir account using the `ailtir` CLI.
    them using `/ailtir:kb-chat <kb_id>`.
 
 3. **On failure**, show the error and suggest:
-   - Checking that `AILTIR_CLI_SECRET` is set (run `echo $AILTIR_CLI_SECRET`)
+   - Checking that `AILTIR_CLI_API_TOKEN` is set (run `echo $AILTIR_CLI_API_TOKEN`)
    - Running `ailtir version` to verify the CLI is installed

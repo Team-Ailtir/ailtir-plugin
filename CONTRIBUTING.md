@@ -72,6 +72,6 @@ Jekyll Pages and publishes to GitHub Pages.
 
 ## Secrets
 
-Never commit real `AILTIR_CLI_SECRET` values, customer tender packs, generated
+Never commit real `AILTIR_CLI_API_TOKEN` values, customer tender packs, generated
 bid workspaces, or private portal material. Use placeholders such as
 `acli_your_key_here` and `/absolute/path/to/tender.zip`.

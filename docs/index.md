@@ -11,7 +11,7 @@ platform.
 ## Start Here
 
 - [Installation](installation.md): install the Ailtir CLI and Claude Code plugin.
-- [Configuration](configuration.md): set `AILTIR_CLI_SECRET` and optional API
+- [Configuration](configuration.md): set `AILTIR_CLI_API_TOKEN` and optional API
   settings.
 - [Usage](usage.md): run the core upload, analyse, list, and chat workflow.
 - [Skill catalog](skills.md): browse the available specialist bid workflow

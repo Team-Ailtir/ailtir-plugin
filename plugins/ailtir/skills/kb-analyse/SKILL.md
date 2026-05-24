@@ -27,6 +27,6 @@ Trigger the ingestion pipeline for an Ailtir knowledge base using the `ailtir` C
    `/ailtir:kb-list` to do so from here.
 
 6. **On failure**, show the error and suggest:
-   - Checking that `AILTIR_CLI_SECRET` is set (run `echo $AILTIR_CLI_SECRET`)
+   - Checking that `AILTIR_CLI_API_TOKEN` is set (run `echo $AILTIR_CLI_API_TOKEN`)
    - Confirming the `kb_id` is correct by running `ailtir list`
    - Running `ailtir version` to verify the CLI is installed

@@ -28,7 +28,7 @@ If your environment uses another installation method, follow the
 
 ## 2. Configure Your Secret
 
-Add `AILTIR_CLI_SECRET` to `~/.claude/settings.json`. See
+Add `AILTIR_CLI_API_TOKEN` to `~/.claude/settings.json`. See
 [Configuration](configuration.md) for the expected file format and optional
 `CLI_API_URL` setting.
 

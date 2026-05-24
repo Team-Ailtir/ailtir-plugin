@@ -25,7 +25,7 @@ Install the Ailtir CLI first:
 uv tool install ailtir-cli
 ```
 
-Add your `AILTIR_CLI_SECRET` to `~/.claude/settings.json`, then install the
+Add your `AILTIR_CLI_API_TOKEN` to `~/.claude/settings.json`, then install the
 plugin marketplace entry:
 
 ```sh

@@ -3,14 +3,14 @@
 The plugin uses the Ailtir CLI, so Claude Code must have access to the same
 environment variables the CLI expects.
 
-## Required Secret
+## Required CLI Token
 
-Set `AILTIR_CLI_SECRET` in `~/.claude/settings.json`:
+Set `AILTIR_CLI_API_TOKEN` in `~/.claude/settings.json`:
 
 ```json
 {
   "env": {
-    "AILTIR_CLI_SECRET": "acli_your_key_here"
+    "AILTIR_CLI_API_TOKEN": "acli_your_key_here"
   }
 }
 ```
@@ -27,14 +27,14 @@ rather than replacing unrelated settings.
 
 ## Optional API URL
 
-By default, the CLI talks to `https://app.ailtir.ai/cli-api`. For a self-hosted
+By default, the CLI talks to `https://app.ailtir.ai/api-cli`. For a self-hosted
 or non-production environment, add `CLI_API_URL`:
 
 ```json
 {
   "env": {
-    "AILTIR_CLI_SECRET": "acli_your_key_here",
-    "CLI_API_URL": "https://your-instance.example.com/cli-api"
+    "AILTIR_CLI_API_TOKEN": "acli_your_key_here",
+    "CLI_API_URL": "https://your-instance.example.com/api-cli"
   }
 }
 ```
@@ -50,7 +50,7 @@ paths, or command arguments.
 ```json
 {
   "env": {
-    "AILTIR_CLI_SECRET": "acli_your_key_here",
+    "AILTIR_CLI_API_TOKEN": "acli_your_key_here",
     "AILTIR_POSTHOG_PROJECT_TOKEN": "phc_your_project_token_here"
   }
 }
@@ -63,7 +63,7 @@ By default, events are sent to the EU Cloud ingest host
 ```json
 {
   "env": {
-    "AILTIR_CLI_SECRET": "acli_your_key_here",
+    "AILTIR_CLI_API_TOKEN": "acli_your_key_here",
     "AILTIR_POSTHOG_PROJECT_TOKEN": "phc_your_project_token_here",
     "AILTIR_POSTHOG_HOST": "https://us.i.posthog.com"
   }
@@ -75,8 +75,8 @@ request is rejected, the skill continues normally.
 
 ## Rotate a Key
 
-Replace the `AILTIR_CLI_SECRET` value in `~/.claude/settings.json`, then reload
-Claude Code plugins:
+Replace the `AILTIR_CLI_API_TOKEN` value in `~/.claude/settings.json`, then
+reload Claude Code plugins:
 
 ```text
 /reload-plugins
