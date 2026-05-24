@@ -1,0 +1,17 @@
+{
+  "description": "Record anonymous Ailtir skill usage events",
+  "hooks": {
+    "UserPromptExpansion": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/track-skill-usage.sh",
+            "args": [],
+            "timeout": 2
+          }
+        ]
+      }
+    ]
+  }
+}

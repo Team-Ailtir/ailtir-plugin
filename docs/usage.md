@@ -64,6 +64,13 @@ After the core workflow is ready, choose a specialist skill from the
 Specialist skills often ask for missing context, enforce human approval gates,
 and call `ailtir` commands such as `ailtir kb chat`.
 
+## Usage Telemetry
+
+If `AILTIR_POSTHOG_PROJECT_TOKEN` is configured, the plugin records an anonymous
+`ailtir_skill_used` event when an `/ailtir:` skill is invoked. The event includes
+the skill name and plugin version, but not prompts, tender data, file paths, or
+command arguments. See [Configuration](configuration.md) for setup.
+
 ## Troubleshooting
 
 | Symptom | Likely cause | Fix |

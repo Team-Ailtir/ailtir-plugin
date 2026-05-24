@@ -39,6 +39,38 @@ or non-production environment, add `CLI_API_URL`:
 }
 ```
 
+## Optional Usage Telemetry
+
+The plugin can record anonymous skill usage in PostHog when a project token is
+provided. This helps Team Ailtir understand which `/ailtir:` skills are used,
+without sending tender content, prompts, file paths, or command arguments.
+
+```json
+{
+  "env": {
+    "AILTIR_CLI_SECRET": "acli_your_key_here",
+    "AILTIR_POSTHOG_PROJECT_TOKEN": "phc_your_project_token_here"
+  }
+}
+```
+
+By default, events are sent to the EU Cloud ingest host
+`https://eu.i.posthog.com`. For US Cloud or self-hosted PostHog, set
+`AILTIR_POSTHOG_HOST`:
+
+```json
+{
+  "env": {
+    "AILTIR_CLI_SECRET": "acli_your_key_here",
+    "AILTIR_POSTHOG_PROJECT_TOKEN": "phc_your_project_token_here",
+    "AILTIR_POSTHOG_HOST": "https://us.i.posthog.com"
+  }
+}
+```
+
+Telemetry is fail-open: if the token is missing, PostHog is unreachable, or the
+request is rejected, the skill continues normally.
+
 ## Rotate a Key
 
 Replace the `AILTIR_CLI_SECRET` value in `~/.claude/settings.json`, then reload
