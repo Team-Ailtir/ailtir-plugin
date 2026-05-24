@@ -17,7 +17,7 @@ Does NOT: make Go/No-Bid decisions, read full ITT documentation, contact procure
 
 1. **Load the strategic profile.** Run:
    ```bash
-   ailtir profile get
+   ailtir profiles get
    ```
    Extract: sector focus with weights, geographic preference, contract value sweet spot (min/max), preferred procurement routes, team capacity (max concurrent bids and active bid count), and any exclusion rules. If the profile is empty or missing, stop and prompt: "Your Tender Fit Profile is not set up. Run `/ailtir:onboarding` first."
 
@@ -55,7 +55,7 @@ Does NOT: make Go/No-Bid decisions, read full ITT documentation, contact procure
 7. **Handle PIN-stage notices.** If the notice is a Prior Information Notice:
    - Flag as PIN, priority HIGH.
    - If score ≥ 70, generate a Pre-Market Engagement Brief:
-     - Run `ailtir kb chat <kb_id> "authority profile and past procurement history for <authority name>"` to retrieve relationship history and past procurement patterns.
+     - Run `ailtir kbs chat <kb_id> "authority profile and past procurement history for <authority name>"` to retrieve relationship history and past procurement patterns.
      - Summarise: authority name/type, prior relationship (projects or "No prior relationship"), typical contract value/procurement route patterns, engagement timeline ("PIN published [date]. RFQ expected [estimate]. Window: [weeks] remaining.").
      - Suggest engagement actions: technical site visit, RFI submission, pre-qualification meeting.
    - Present the brief and ask: "Pursue pre-market engagement (~10 hours), Monitor only, or Ignore?"

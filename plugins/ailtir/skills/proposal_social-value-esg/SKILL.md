@@ -15,7 +15,7 @@ Does NOT: make commercial decisions about what commitments to promise, approve o
 
 ## Instructions
 
-1. **Load the organisation profile.** Run `ailtir profile get`. If missing, stop: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load the organisation profile.** Run `ailtir profiles get`. If missing, stop: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Obtain ITT social value requirements.** Ask the user to provide: (a) the specific social value questions from the ITT, (b) weightings and word/page limits per question, (c) scoring band descriptors, and (d) the project location (postcode or Eircode), contract value, duration, and estimated peak workforce.
 
@@ -23,7 +23,7 @@ Does NOT: make commercial decisions about what commitments to promise, approve o
 
 4. **Determine response type.** If social value is compliance-only (contract conditions, not scored), generate a short CBC Compliance Statement and stop. If scored, proceed with full response generation.
 
-5. **Load organisation social value profile.** Run `ailtir kb chat <kb_id> "social value profile partnerships accreditations past delivery KPIs"` to retrieve accreditations, named partnerships, apprenticeship programme details, workforce data, and past delivery KPIs. Flag to the Bid Manager if the evidence base is thin.
+5. **Load organisation social value profile.** Run `ailtir kbs chat <kb_id> "social value profile partnerships accreditations past delivery KPIs"` to retrieve accreditations, named partnerships, apprenticeship programme details, workforce data, and past delivery KPIs. Flag to the Bid Manager if the evidence base is thin.
 
 6. **Perform local area analysis.** For the project location, identify: nearby schools and colleges (within 5 km), community organisations and social enterprises, unemployment and deprivation data, and local authority social priorities. Cross-reference against the organisation's existing partnership register.
 

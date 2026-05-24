@@ -15,7 +15,7 @@ Does NOT: produce the content that fulfils requirements, analyse contract risk (
 
 ## Instructions
 
-1. **Load the contractor profile and bid team.** Run `ailtir profile get`. Extract: organization type, procurement route, bid team members and their roles. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load the contractor profile and bid team.** Run `ailtir profiles get`. Extract: organization type, procurement route, bid team members and their roles. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Obtain the full ITT document pack.** Ask the user to provide all available ITT documents as PDFs or DOCX files: Instructions to Tenderers, Returnable Schedules list, Evaluation Criteria, Form of Tender, Employer's Requirements or Specification, Contract Conditions, and any appendices. Note the tender submission deadline.
 

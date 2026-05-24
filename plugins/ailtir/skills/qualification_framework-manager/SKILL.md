@@ -17,28 +17,31 @@ Does NOT: prepare individual call-off bids (standard bid workflow via Orchestrat
 
 1. **Load the contractor profile.** Run:
    ```bash
-   ailtir profile get
+   ailtir profiles get
    ```
    Confirm the organization type and that framework management is enabled. If no framework KB exists, inform the user: "No framework registry found. Proceed to onboard your first framework agreement."
 
-2. **Onboard a framework agreement.** Ask the user to upload the framework agreement PDF. Extract structured data using:
+2. **Onboard a framework agreement.** Ask the user to provide a ZIP archive
+   containing the framework agreement PDF. Upload and analyse it using:
    ```bash
-   ailtir analyse <file>
+   ailtir kbs upload <absolute-path-to-zip>
+   ailtir kbs analyse <kb_id>
    ```
+   Use the knowledge-base ID returned by the upload for the analyse command.
    Pull: framework body, framework name, lots (ID, description, sectors), award date, expiry date, spend cap (total and per lot), call-off procedure, evaluation method, performance review schedule, KPIs, and renewal window. Validate mandatory fields and flag any gaps for Bid Manager input.
 
 3. **Stop and confirm with the user:** Present the extracted framework record for review. Ask the user to confirm accuracy, correct any misread fields, and confirm the first performance review date and renewal window estimate. Commit to the framework registry only on approval.
 
 4. **Monitor active frameworks daily.** Run:
    ```bash
-   ailtir kb chat <kb_id> "List all active frameworks with spend utilisation, next performance review date, and days to expiry"
+   ailtir kbs chat <kb_id> "List all active frameworks with spend utilisation, next performance review date, and days to expiry"
    ```
    Check for: spend approaching cap (alert at 70%, 85%, 95%), performance review approaching (T-90, T-30, T-7 days), renewal window approaching (T-12 months, T-6 months, T-3 months before expiry), and frameworks expiring within 30 days with no renewal in progress.
 
 5. **Assess a new framework application opportunity.** When an application opportunity is identified, evaluate:
    - Sector alignment with contractor's strategic focus.
    - Estimated call-off volume and value.
-   - Credential readiness — run: `ailtir kb chat <kb_id> "Do we meet the credential requirements for <framework body> application?"` and cross-reference with `/ailtir:ailtir_qual_credential-passport`.
+   - Credential readiness — run: `ailtir kbs chat <kb_id> "Do we meet the credential requirements for <framework body> application?"` and cross-reference with `/ailtir:ailtir_qual_credential-passport`.
    - Case study availability — check whether relevant project references exist via `/ailtir:ailtir_qual_case-study`.
    - Portfolio loading — how many active frameworks does the contractor already hold?
    Compile into an Application Brief with a recommendation (Apply/Skip) and rationale.
@@ -55,7 +58,7 @@ Does NOT: prepare individual call-off bids (standard bid workflow via Orchestrat
 
 11. **Compile a performance review package.** At T-90 days before a scheduled review, aggregate KPI data from completed call-offs under the framework:
     ```bash
-    ailtir kb chat <kb_id> "Summarise H&S record, programme adherence, defect rates, and client satisfaction scores for framework <id>"
+    ailtir kbs chat <kb_id> "Summarise H&S record, programme adherence, defect rates, and client satisfaction scores for framework <id>"
     ```
     Flag any KPIs below framework thresholds. Suggest improvement narratives for positive trends. Present the draft package to the Bid Manager for review and enrichment.
 

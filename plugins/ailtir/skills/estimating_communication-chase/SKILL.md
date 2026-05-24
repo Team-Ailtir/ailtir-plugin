@@ -15,11 +15,11 @@ Does NOT: negotiate pricing with subcontractors, evaluate or compare quotes (tha
 
 ## Instructions
 
-1. **Load project context.** Run `ailtir profile get`. Extract project name, submission deadline, procurement route, and scope package list. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load project context.** Run `ailtir profiles get`. Extract project name, submission deadline, procurement route, and scope package list. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Obtain the subcontractor list.** Ask the user to provide the list of subcontractors per trade package: company name, contact name, email, trade, package reference, and any known relationship notes. Verify each entry has a valid email address. Flag contacts with no email as requiring manual phone enquiry.
 
-3. **Check GDPR consent status.** Run `ailtir kb chat <kb_id> "GDPR consent and opt-out status for [company]"` for each subcontractor. Exclude any contact who has opted out or has no consent record. Alert the Estimator: "[Company] not contactable (no consent / opted out). Alternative subcontractor needed for [package]."
+3. **Check GDPR consent status.** Run `ailtir kbs chat <kb_id> "GDPR consent and opt-out status for [company]"` for each subcontractor. Exclude any contact who has opted out or has no consent record. Alert the Estimator: "[Company] not contactable (no consent / opted out). Alternative subcontractor needed for [package]."
 
 4. **Generate personalized enquiry emails.** For each eligible subcontractor, draft an email containing: project name and location, trade package scope summary, unique portal link (from `/ailtir:ailtir_est_subcontractor-portal`), quote deadline (date and time), Estimator contact details, and a GDPR footer with unsubscribe link. All emails must appear to come from the contractor's own domain.
 

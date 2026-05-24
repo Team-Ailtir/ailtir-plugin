@@ -17,8 +17,8 @@ Does NOT: make reference selection decisions (Bid Manager does), perform scope g
 
 1. **Load the contractor profile and project KB.** Run:
    ```bash
-   ailtir profile get
-   ailtir kb list
+   ailtir profiles get
+   ailtir kbs list
    ```
    Identify the Project History KB. If none exists, stop and prompt: "No project history KB found. Run `/ailtir:ailtir_platform_onboarding` or upload project records first."
 
@@ -26,7 +26,7 @@ Does NOT: make reference selection decisions (Bid Manager does), perform scope g
 
 3. **Run a semantic project search.** Construct a natural-language query from the PQQ criteria and search the project KB:
    ```bash
-   ailtir kb chat <kb_id> "Find the most relevant completed projects for: <sector>, <value range>, <location>, <key requirements>"
+   ailtir kbs chat <kb_id> "Find the most relevant completed projects for: <sector>, <value range>, <location>, <key requirements>"
    ```
    Retrieve the top 10 matches. If fewer than 3 projects score above 50, flag "Limited portfolio match" and inform the user.
 
@@ -38,7 +38,7 @@ Does NOT: make reference selection decisions (Bid Manager does), perform scope g
 
 7. **Generate tailored narratives.** For each confirmed project, generate a 500–800 word case study narrative emphasising the aspects most relevant to the PQQ's evaluation criteria weighting:
    ```bash
-   ailtir kb chat <kb_id> "Generate a case study narrative for project <id> emphasising <criteria focus> for a PQQ weighted <weightings>"
+   ailtir kbs chat <kb_id> "Generate a case study narrative for project <id> emphasising <criteria focus> for a PQQ weighted <weightings>"
    ```
    Do not reuse boilerplate across projects or between different PQQs.
 

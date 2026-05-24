@@ -15,7 +15,7 @@ Does NOT: make Go/No-Bid decisions, modify BOQ line items or pricing, draft cont
 
 ## Instructions
 
-1. **Load the contractor profile.** Run `ailtir profile get`. Extract: project sector, organization type. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load the contractor profile.** Run `ailtir profiles get`. Extract: project sector, organization type. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Obtain the tender documents.** Ask the user to provide: (required) the specification PDF and BOQ PDF; (optional) the drawings package as a list of PDF sheets. Also ask for basic project metadata: project type, contract value, and programme duration.
 

@@ -17,7 +17,7 @@ Does NOT: make Go/No-Bid recommendations; draft technical proposals; contact com
 
 1. **Load the competitor registry.** Run:
    ```bash
-   ailtir kb chat <kb_id> "list all competitor profiles"
+   ailtir kbs chat <kb_id> "list all competitor profiles"
    ```
    If the registry is empty, inform the user: "The competitor registry needs seeding. Provide debrief records, contract award notices, or framework member lists to build initial profiles."
 
@@ -29,7 +29,7 @@ Does NOT: make Go/No-Bid recommendations; draft technical proposals; contact com
 
 3. **Ingest a contract award notice or debrief record.** Extract: winner identity, contract title, CPV codes, contract value, number of tenderers, contracting authority, and award date. Run fuzzy name matching against the existing registry:
    ```bash
-   ailtir kb chat <kb_id> "match competitor name <name> in registry"
+   ailtir kbs chat <kb_id> "match competitor name <name> in registry"
    ```
    If the winner matches an existing entry, update their profile: increment win count for this sector/authority/value band. If the winner is a new entity, create a provisional record and flag for the Commercial Director to confirm.
 
@@ -48,7 +48,7 @@ Does NOT: make Go/No-Bid recommendations; draft technical proposals; contact com
 
 6. **Generate a competitive assessment for a specific opportunity.** Receive the opportunity metadata: authority, CPV codes, estimated value, procurement route, location, evaluation method. Query the registry for likely competitors:
    ```bash
-   ailtir kb chat <kb_id> "competitors active in sector <sector> region <region> value band <range>"
+   ailtir kbs chat <kb_id> "competitors active in sector <sector> region <region> value band <range>"
    ```
    Score each competitor's likelihood of bidding:
    - Framework member for the relevant framework: +40 points

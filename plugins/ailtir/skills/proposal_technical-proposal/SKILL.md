@@ -15,13 +15,13 @@ Does NOT: copy verbatim from past documents, make technical feasibility decision
 
 ## Instructions
 
-1. **Load the organisation profile.** Run `ailtir profile get`. If missing, stop: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load the organisation profile.** Run `ailtir profiles get`. If missing, stop: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Obtain inputs.** Ask the user to provide: (a) voice note transcript or written rough draft from the site manager, (b) ITT evaluation criteria with weightings and scoring band descriptors, and (c) project metadata (sector, contract form, value, location). If evaluation criteria are not yet available, proceed to draft and note that scoring will begin once criteria are provided.
 
 3. **Present the transcript for verification.** If the input was a voice note, display the cleaned transcript and ask the user to confirm it is accurate before proceeding.
 
-4. **Retrieve similar past method statements.** Run `ailtir kb chat <kb_id> "method statements sector:<sector> contract:<form> scope:<scope>"` to retrieve the top similar past examples. Summarise: sector, contract form, quality score, win/loss, and structural patterns. Note that every sourced section will carry inline attribution.
+4. **Retrieve similar past method statements.** Run `ailtir kbs chat <kb_id> "method statements sector:<sector> contract:<form> scope:<scope>"` to retrieve the top similar past examples. Summarise: sector, contract form, quality score, win/loss, and structural patterns. Note that every sourced section will carry inline attribution.
 
 5. **Identify content gaps.** Compare the input against the standard method statement topics for this project type. Flag any topics absent from the input that should be covered (e.g., programme, H&S, environmental management).
 
@@ -37,7 +37,15 @@ Does NOT: copy verbatim from past documents, make technical feasibility decision
 
 11. **Present final draft for Technical Lead review.** Stop and confirm with the user: "Here is the draft, quality score report, reference summary, and iteration history. Approve, request targeted revisions, or escalate for specialist input."
 
-12. **Tag to knowledge base.** After Technical Lead approval, run `ailtir upload` to tag the approved method statement with sector, contract form, methodologies, and criteria addressed.
+12. **Store for future retrieval.** After Technical Lead approval, package the
+    approved method statement into a ZIP archive, run:
+    ```bash
+    ailtir kbs upload <absolute-path-to-zip>
+    ailtir kbs analyse <kb_id>
+    ```
+    Use the knowledge-base ID returned by the upload for the analyse command.
+    Record sector, contract form, methodologies, and criteria addressed in the
+    document metadata or summary.
 
 13. **Confirm next step.** Remind the user: "When the method statement is approved, run `/ailtir:ailtir_prop_doc-assembly` to include it in the submission package."
 

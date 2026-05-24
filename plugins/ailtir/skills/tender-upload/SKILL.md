@@ -23,11 +23,11 @@ Upload a tender ZIP archive to the Ailtir platform using the `ailtir` CLI.
 4. **Run the upload:**
 
    ```bash
-   ailtir upload <absolute-path-to-zip>
+   ailtir kbs upload <absolute-path-to-zip>
    ```
 
 5. **On success**, report the `kb_id` from the CLI output. Remind the user they can
-   run `ailtir analyse <kb_id>` next to build their knowledge base.
+   run `ailtir kbs analyse <kb_id>` next to build their knowledge base.
 
 6. **On failure**, show the error and suggest:
    - Checking that `AILTIR_CLI_API_TOKEN` is set (run `echo $AILTIR_CLI_API_TOKEN`)

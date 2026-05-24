@@ -15,7 +15,7 @@ Does NOT: negotiate pricing, select which subcontractor to use, assess technical
 
 ## Instructions
 
-1. **Load project context.** Run `ailtir profile get`. Extract project type, location, contract value, submission deadline. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load project context.** Run `ailtir profiles get`. Extract project type, location, contract value, submission deadline. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Obtain the quote(s).** Ask the user to provide the quote source: PDF file path, pasted email text, or confirmation that a portal submission has been received. Accept multiple quotes in one session.
 
@@ -25,11 +25,11 @@ Does NOT: negotiate pricing, select which subcontractor to use, assess technical
 
 5. **Flag missing or incomplete data.** If delivery date, validity period, or key inclusions/exclusions are absent, mark the quote as "Incomplete" and draft a clarification question for each gap.
 
-6. **Check supplier risk.** Run `ailtir kb chat <kb_id> "supplier performance history for [supplierName]"` to retrieve past performance: on-time delivery rate, cost overrun history, quality issues, insurance status. Classify as High / Medium / Low / Unvetted risk and summarize findings.
+6. **Check supplier risk.** Run `ailtir kbs chat <kb_id> "supplier performance history for [supplierName]"` to retrieve past performance: on-time delivery rate, cost overrun history, quality issues, insurance status. Classify as High / Medium / Low / Unvetted risk and summarize findings.
 
-7. **Benchmark unit rates.** Run `ailtir kb chat <kb_id> "market benchmark unit rates for [tradeType] in [location]"`. Flag any rate more than 20% above or below benchmark. Note the benchmark source and date adjustment factors.
+7. **Benchmark unit rates.** Run `ailtir kbs chat <kb_id> "market benchmark unit rates for [tradeType] in [location]"`. Flag any rate more than 20% above or below benchmark. Note the benchmark source and date adjustment factors.
 
-8. **Analyze inclusions and exclusions.** Run `ailtir kb chat <kb_id> "main contract scope requirements for [tradeType]"`. For each quote, identify: items explicitly included, items explicitly excluded, and items not mentioned that the main contract requires. Flag scope gaps between trade packages (e.g., commissioning not covered by either mechanical or electrical sub).
+8. **Analyze inclusions and exclusions.** Run `ailtir kbs chat <kb_id> "main contract scope requirements for [tradeType]"`. For each quote, identify: items explicitly included, items explicitly excluded, and items not mentioned that the main contract requires. Flag scope gaps between trade packages (e.g., commissioning not covered by either mechanical or electrical sub).
 
 9. **Stop and confirm with the user:** Present the normalized quote data, risk flags, benchmark comparisons, and inclusions/exclusions analysis. Ask the Estimator to confirm extracted data is correct before proceeding to matrix update.
 

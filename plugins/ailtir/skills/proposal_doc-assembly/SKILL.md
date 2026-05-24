@@ -15,7 +15,7 @@ Does NOT: write or edit content substance, make compliance decisions, validate s
 
 ## Instructions
 
-1. **Load the organisation profile.** Run `ailtir profile get`. If missing, stop: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load the organisation profile.** Run `ailtir profiles get`. If missing, stop: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Obtain the assembly directive.** Ask the user to provide: (a) the compliance matrix or returnable schedules list from the ITT, including document names, required file types, page limits, and naming conventions, and (b) the target submission portal (e.g., eTenders) and its file size limits.
 

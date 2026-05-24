@@ -17,7 +17,7 @@ Does NOT: access or process paying customers' internal data; make bid recommenda
 
 1. **Load available public data sources.** Run:
    ```bash
-   ailtir kb list
+   ailtir kbs list
    ```
    Identify the contractor registry KB. Confirm which ingestion sources are active: eTenders CSV, TED API, BCMS CSV, Safe-T-Cert directory, VCR directory, and CIF directory. If the registry KB is empty or missing, inform the user: "The contractor registry must be seeded before this skill can produce useful output. Provide the relevant data files or confirm portal access."
 
@@ -69,7 +69,7 @@ Does NOT: access or process paying customers' internal data; make bid recommenda
 
 8. **Seed an OrgProfile on customer conversion.** When a free-tier user converts to a paying customer, export their Prospect Profile as a structured seed:
    ```bash
-   ailtir kb chat <kb_id> "export prospect profile for <CRO number or registry ID>"
+   ailtir kbs chat <kb_id> "export prospect profile for <CRO number or registry ID>"
    ```
    Pass the seed to the onboarding flow: sector focus, geographic preferences, contract value range, authority relationships, and certifications. Inform the user: "Profile seed ready for onboarding. Customer should confirm or correct all pre-populated fields. Fields not available from public data — team capacity, preferred subcontractors, content library — will be collected during onboarding."
 

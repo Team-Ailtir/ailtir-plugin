@@ -17,8 +17,8 @@ Does NOT: select which credentials to present (the Credential Passport agent doe
 
 1. **Load the bid context.** Run:
    ```bash
-   ailtir profile get
-   ailtir kb list
+   ailtir profiles get
+   ailtir kbs list
    ```
    Confirm the active opportunity, submission deadline, procurement route, and available KBs. If a bid context is missing, ask the user to provide the opportunity details before proceeding.
 
@@ -35,7 +35,7 @@ Does NOT: select which credentials to present (the Credential Passport agent doe
 
 5. **Retrieve compliance statements.** Query the corporate credentials KB for approved standard text:
    ```bash
-   ailtir kb chat <kb_id> "Retrieve the current H&S policy statement, environmental management statement, and modern slavery declaration with their last-updated dates"
+   ailtir kbs chat <kb_id> "Retrieve the current H&S policy statement, environmental management statement, and modern slavery declaration with their last-updated dates"
    ```
    Flag any statement last updated more than 12 months ago as AMBER. Flag any statement more than 24 months old as RED and block inclusion until refreshed — escalate to the Compliance Lead.
 

@@ -17,7 +17,7 @@ Does NOT: draft method statements, case studies, or any bid content, make commer
 
 1. **Receive bootstrap configuration.** Accept the trigger from Agent 1.3 with org ID, priority domains, and target timeline. Run:
    ```bash
-   ailtir kb list
+   ailtir kbs list
    ```
    Load the OrgProfile to set taxonomy weightings for the six knowledge domains: Credential Store, Project Library, Template Library, Commercial Data, Procurement Intelligence, and Relationship Graph.
 

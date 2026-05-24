@@ -15,7 +15,7 @@ Does NOT: make Go/No-Bid decisions, draft contract amendment language, contact p
 
 ## Instructions
 
-1. **Load the contractor profile.** Run `ailtir profile get`. Extract: organization type (main contractor, subcontractor, consultant, D&B), sector focus, and any configured risk thresholds. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load the contractor profile.** Run `ailtir profiles get`. Extract: organization type (main contractor, subcontractor, consultant, D&B), sector focus, and any configured risk thresholds. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Obtain the ITT Contract Particulars.** Ask the user to provide the Contract Particulars PDF (upload path or pasted text). Optionally ask for the technical specification PDF for cross-referencing defects liability clauses.
 

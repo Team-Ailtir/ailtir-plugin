@@ -15,7 +15,7 @@ Does NOT: make Go/No-Bid recommendations, track pre-Go pipeline metrics, conduct
 
 ## Instructions
 
-1. **Load the contractor profile.** Run `ailtir profile get`. Extract: organization type, team roster with roles, capacity ceiling (maximum concurrent bids or hours), and any configured cost benchmarks. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load the contractor profile.** Run `ailtir profiles get`. Extract: organization type, team roster with roles, capacity ceiling (maximum concurrent bids or hours), and any configured cost benchmarks. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Determine the reporting request.** Ask the user what they need: (a) active bid dashboard — current status of all live bids; (b) team utilization check — loading by person and role; (c) bid cost report — estimated vs actual for one or more bids; (d) win rate calibration — predicted vs actual outcomes; or (e) bid retrospective — post-completion analysis for a specific bid. Proceed to the relevant steps.
 

@@ -17,13 +17,14 @@ Does NOT: override expired credentials (Director does), perform contract complia
 
 1. **Load the contractor profile.** Run:
    ```bash
-   ailtir profile get
+   ailtir profiles get
    ```
    Extract the declared credential portfolio (mandatory vs optional certs), renewal schedule, and alert thresholds. If the profile is missing, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
 
-2. **Ingest a credential document.** Ask the user to upload a credential PDF or image. Use:
+2. **Ingest a credential document.** Ask the user to provide a ZIP archive
+   containing the credential PDF or image. Use:
    ```bash
-   ailtir upload <file>
+   ailtir kbs upload <absolute-path-to-zip>
    ```
    Create an intake log entry (timestamp, filename, uploader, file hash).
 
@@ -35,13 +36,13 @@ Does NOT: override expired credentials (Director does), perform contract complia
 
 6. **Monitor expiry dates.** Run a daily check across all `ACTIVE` credentials:
    ```bash
-   ailtir kb chat <kb_id> "List credentials expiring within 90 days"
+   ailtir kbs chat <kb_id> "List credentials expiring within 90 days"
    ```
    Generate alerts at 90 days (email to Compliance Lead), 60 days (email + Teams to Bid Manager + Finance), 30 days (email + Teams + SMS to Director), 7 days (critical escalation to Director + Compliance Lead). On expiry (day 0), mark status `EXPIRED` and escalate immediately.
 
 7. **Validate credentials against a CPV code.** When a bid opportunity is identified, run:
    ```bash
-   ailtir kb chat <kb_id> "What credentials are required for CPV <code> and are they all current?"
+   ailtir kbs chat <kb_id> "What credentials are required for CPV <code> and are they all current?"
    ```
    Check each required credential's `validation_status`. Return PASS (all mandatory certs valid) or FAIL with a list of missing/expired certs and remediation timelines.
 

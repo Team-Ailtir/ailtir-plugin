@@ -17,7 +17,7 @@ Does NOT: make the final Go/No-Bid decision; read full ITT documents; draft tech
 
 1. **Load the contractor profile and configuration.** Run:
    ```bash
-   ailtir profile get
+   ailtir profiles get
    ```
    Extract: sector focus with weights, geographic preference, contract value sweet spot, financial ceiling (max single contract and max total concurrent), minimum margin requirement (%), risk appetite threshold (Conservative ≥35% win prob / Balanced ≥25% / Aggressive ≥15%), team capacity (Bid Manager, Cost Manager, Technical Lead available hours), and any exclusion rules. If configuration is missing or incomplete, stop and ask the user to configure these settings before proceeding.
 
@@ -25,7 +25,7 @@ Does NOT: make the final Go/No-Bid decision; read full ITT documents; draft tech
 
 3. **Run mandatory disqualifier checks (credential validation).** Run:
    ```bash
-   ailtir kb chat <kb_id> "required certifications for CPV <codes>"
+   ailtir kbs chat <kb_id> "required certifications for CPV <codes>"
    ```
    Cross-reference the contractor's active credentials against the mandatory requirements for each CPV code. If any required credential is missing or expires before the submission deadline, set Disqualifier = FAIL and inform the user: "No-Bid recommended unless credentials are obtained before deadline — [credential name], remediation deadline: [date]."
 
@@ -37,13 +37,13 @@ Does NOT: make the final Go/No-Bid decision; read full ITT documents; draft tech
 
 7. **Calculate win probability.** Start from the contractor's historical win rate in the same sector and value band:
    ```bash
-   ailtir kb chat <kb_id> "historical win rate for sector <sector> value band <range>"
+   ailtir kbs chat <kb_id> "historical win rate for sector <sector> value band <range>"
    ```
    Apply adjustments: authority relationship strength from `/ailtir:ailtir_bd_relationship-intelligence` (+5% score ≥70, +3% score 40-69, +0% score <40); strategic fit score (+2% if ≥80, +0% if 60-79, -3% if <60); procurement route (+3% restricted, +5% negotiated with prior relationship, -2% negotiated new authority); evaluation method (+3% MEAT if strong technical credentials, -3% if weak). Express result with confidence interval (e.g., "29% ±8%"). If fewer than 5 historical bids exist in the category, label confidence LOW and use market benchmarks as baseline.
 
 8. **Analyse expected margin.** Run:
    ```bash
-   ailtir kb chat <kb_id> "historical margin for sector <sector> authority <authority>"
+   ailtir kbs chat <kb_id> "historical margin for sector <sector> authority <authority>"
    ```
    Adjust for: new authority discount expectation (-1-2%), competitive intensity, and risk reserve (1-3%). Compare against the minimum margin requirement from the contractor profile. If expected margin is below minimum, set flag "Margin below threshold."
 

@@ -15,7 +15,7 @@ Does NOT: make Go/No-Bid decisions, conduct contract negotiations, contact procu
 
 ## Instructions
 
-1. **Load the contractor profile.** Run `ailtir profile get`. Extract: organization name, sector focus, active bid history. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load the contractor profile.** Run `ailtir profiles get`. Extract: organization name, sector focus, active bid history. If no profile exists, stop and prompt: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Obtain the tender outcome notification.** Ask the user to paste or upload the Standstill Letter or Contract Award Notice (PDF or email text). Ask also for the corresponding tender reference and the price submitted.
 
@@ -33,7 +33,14 @@ Does NOT: make Go/No-Bid decisions, conduct contract negotiations, contact procu
 
 9. **Stop and confirm the analysis with the user.** Show the score comparison and ask: "Does this accurately reflect the feedback received? Correct any extraction errors and add any context from your direct interaction with the authority."
 
-10. **Update the knowledge base.** Run `ailtir kb upload` to store the structured debrief record: authority name, tender details, our scores, winning scores, evaluator feedback, competitive intelligence, and observed scoring patterns. If the authority's weighting appears to differ from its historical profile, flag: "H&S weighting appears to be [X]% in this tender vs. [Y]% in prior records. Confirm before updating the profile."
+10. **Update the knowledge base.** Package the structured debrief record into a
+    ZIP archive, run `ailtir kbs upload <absolute-path-to-zip>`, then run
+    `ailtir kbs analyse <kb_id>` using the knowledge-base ID returned by the
+    upload. Store: authority name, tender details, our scores, winning scores,
+    evaluator feedback, competitive intelligence, and observed scoring patterns.
+    If the authority's weighting appears to differ from its historical profile,
+    flag: "H&S weighting appears to be [X]% in this tender vs. [Y]% in prior
+    records. Confirm before updating the profile."
 
 11. **Generate lessons and recommendations.** Produce a short recommendations section for future tenders with this authority: which criteria to strengthen, what content the winner emphasized, and any evaluator preferences revealed by the debrief. Present to the user for approval before storing.
 

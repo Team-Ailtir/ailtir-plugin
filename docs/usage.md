@@ -62,7 +62,7 @@ After the core workflow is ready, choose a specialist skill from the
 ```
 
 Specialist skills often ask for missing context, enforce human approval gates,
-and call `ailtir` commands such as `ailtir kb chat`.
+and call `ailtir` commands such as `ailtir kbs chat`.
 
 ## Usage Telemetry
 

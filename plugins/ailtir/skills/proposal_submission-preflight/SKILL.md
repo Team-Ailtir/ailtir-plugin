@@ -15,7 +15,7 @@ Does NOT: write or edit content, assemble or format documents (Agent 6.3 does th
 
 ## Instructions
 
-1. **Load the organisation profile.** Run `ailtir profile get`. If missing, stop: "Run `/ailtir:ailtir_platform_onboarding` first."
+1. **Load the organisation profile.** Run `ailtir profiles get`. If missing, stop: "Run `/ailtir:ailtir_platform_onboarding` first."
 
 2. **Confirm the package is ready.** Ask the user to confirm: (a) the assembled submission package is in the bid workspace (output from `/ailtir:ailtir_prop_doc-assembly`), (b) the Returnable Schedules list is available (from the ITT compliance matrix), and (c) the submission deadline and target portal are known.
 

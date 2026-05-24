@@ -12,7 +12,7 @@ List all knowledge bases in the Ailtir account using the `ailtir` CLI.
 1. **Run:**
 
    ```bash
-   ailtir list
+   ailtir kbs list
    ```
 
 2. **On success**, display the output (name, `kb_id`, status) in a readable table.

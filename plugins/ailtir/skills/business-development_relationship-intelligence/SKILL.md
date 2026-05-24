@@ -17,11 +17,11 @@ Does NOT: contact stakeholders directly or send communications; make Go/No-Bid d
 
 1. **Load the contractor profile and active pipeline.** Run:
    ```bash
-   ailtir profile get
+   ailtir profiles get
    ```
    Then run:
    ```bash
-   ailtir kb list
+   ailtir kbs list
    ```
    Identify the relationship intelligence KB. If none exists, ask the user to set one up before proceeding.
 
@@ -34,7 +34,7 @@ Does NOT: contact stakeholders directly or send communications; make Go/No-Bid d
 
 3. **Add or update a contact.** Collect: full name, organisation, role/title, and optionally email, phone, and notes. Before storing, check GDPR consent status:
    ```bash
-   ailtir kb chat <kb_id> "consent status for <name> at <organisation>"
+   ailtir kbs chat <kb_id> "consent status for <name> at <organisation>"
    ```
    If no consent record exists, store only name and organisation under legitimate interest basis and flag as "Pending Consent." Run fuzzy deduplication: if a contact with more than 85% name similarity at the same organisation already exists, stop and confirm with the user: "Possible duplicate found — merge, keep separate, or delete?"
 
@@ -52,7 +52,7 @@ Does NOT: contact stakeholders directly or send communications; make Go/No-Bid d
 
 6. **Match contacts to an opportunity.** When given an authority name or opportunity ID, run:
    ```bash
-   ailtir kb chat <kb_id> "contacts at <authority>"
+   ailtir kbs chat <kb_id> "contacts at <authority>"
    ```
    If contacts are found, generate a stakeholder map: names, roles, scores, last interaction dates, and recommended approach per contact. If no direct contacts exist, search for indirect connections (people who previously worked at the authority, or design team contacts linked to the project). If no connections at all, report "Cold opportunity — no relationship intelligence available" and suggest relevant networking events.
 

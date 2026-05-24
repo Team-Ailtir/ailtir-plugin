@@ -36,12 +36,12 @@ with recent conversation context.
 4. **Run the query:**
 
    ```bash
-   ailtir chat <kb_id> "<enriched question with context>"
+   ailtir kbs chat <kb_id> "<enriched question with context>"
    ```
 
 5. **On success**, present the CLI response clearly to the user.
 
 6. **On failure**, show the error and suggest:
    - Checking that `AILTIR_CLI_API_TOKEN` is set (run `echo $AILTIR_CLI_API_TOKEN`)
-   - Confirming the `kb_id` is correct and its status is `ready` (run `ailtir list`)
+   - Confirming the `kb_id` is correct and its status is `ready` (run `ailtir kbs list`)
    - Running `ailtir version` to verify the CLI is installed

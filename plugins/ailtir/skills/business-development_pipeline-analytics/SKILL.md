@@ -17,11 +17,11 @@ Does NOT: make Go/No-Bid recommendations; score individual opportunities; conduc
 
 1. **Load the contractor strategic profile and pipeline data.** Run:
    ```bash
-   ailtir profile get
+   ailtir profiles get
    ```
    Extract: target sectors with weightings, geographic focus, contract value sweet spot, capacity ceiling (max concurrent bids), and annual revenue target. Then run:
    ```bash
-   ailtir kb list
+   ailtir kbs list
    ```
    Identify the pipeline analytics KB. If no historical data exists (fewer than 12 months), note: "Limited history — trends may not reflect full seasonal cycles. Seasonal pattern analysis unavailable until 12 months have accumulated."
 
@@ -35,7 +35,7 @@ Does NOT: make Go/No-Bid recommendations; score individual opportunities; conduc
 
 3. **Calculate pipeline health metrics.** Query the KB for all active opportunities by stage (surfaced, evaluated, Go decision, submitted):
    ```bash
-   ailtir kb chat <kb_id> "pipeline opportunities by stage with estimated values and win probabilities"
+   ailtir kbs chat <kb_id> "pipeline opportunities by stage with estimated values and win probabilities"
    ```
    Calculate:
    - Total pipeline value (unweighted): sum of estimated mid-point values for all active stages
@@ -61,7 +61,7 @@ Does NOT: make Go/No-Bid recommendations; score individual opportunities; conduc
 
 6. **Model forward capacity.** Query the KB for current active bids, expected submissions in the next 30/60/90 days, and historical velocity (average time from Go decision to outcome):
    ```bash
-   ailtir kb chat <kb_id> "active bids, pending Go decisions, and expected outcomes in next 90 days"
+   ailtir kbs chat <kb_id> "active bids, pending Go decisions, and expected outcomes in next 90 days"
    ```
    Calculate projected concurrent bids for each horizon. Compare against the capacity ceiling. If projected utilisation exceeds 80% within 30 days, flag a WARNING. If it exceeds 100%, flag CRITICAL and suggest specific lower-priority bids as candidates for deferral (lowest win probability and lowest strategic fit score).
 

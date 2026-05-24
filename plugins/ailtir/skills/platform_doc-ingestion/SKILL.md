@@ -15,9 +15,11 @@ Does NOT: interpret document content beyond classification and metadata extracti
 
 ## Instructions
 
-1. **Accept and validate the upload.** Receive one or more files via:
+1. **Accept and validate the upload.** The current Ailtir CLI accepts ZIP
+   archives for knowledge-base uploads. If the user provides individual files,
+   ask them to package the files into a ZIP archive first. Upload the archive via:
    ```bash
-   ailtir upload <file_path> [--bid-id <bid_id>] [--category-hint <hint>]
+   ailtir kbs upload <absolute-path-to-zip>
    ```
    Validate that each file is not zero-byte, does not exceed 100 MB per file or 2 GB per batch, and passes virus scanning. Unpack ZIP files and process each contained file individually. Confirm receipt to the user immediately (within 2 seconds) — processing continues in the background.
 
