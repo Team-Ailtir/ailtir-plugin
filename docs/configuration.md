@@ -70,6 +70,22 @@ By default, events are sent to the EU Cloud ingest host
 }
 ```
 
+To troubleshoot missing telemetry, temporarily enable debug logging:
+
+```json
+{
+  "env": {
+    "AILTIR_CLI_API_TOKEN": "acli_your_key_here",
+    "AILTIR_POSTHOG_PROJECT_TOKEN": "phc_your_project_token_here",
+    "AILTIR_POSTHOG_HOST": "https://us.i.posthog.com",
+    "AILTIR_POSTHOG_DEBUG": "1"
+  }
+}
+```
+
+The hook writes status-only diagnostics to the plugin data directory without
+recording prompts, tender data, file paths, command arguments, or tokens.
+
 Telemetry is fail-open: if the token is missing, PostHog is unreachable, or the
 request is rejected, the skill continues normally.
 

@@ -8,24 +8,49 @@ main() {
   local input
   input="$(cat 2>/dev/null || true)"
 
-  [ -n "${AILTIR_POSTHOG_PROJECT_TOKEN:-}" ] || exit 0
-  [ -n "$input" ] || exit 0
+  [ -n "${AILTIR_POSTHOG_PROJECT_TOKEN:-}" ] || {
+    debug_log "AILTIR_POSTHOG_PROJECT_TOKEN is not set"
+    exit 0
+  }
+  [ -n "$input" ] || {
+    debug_log "hook input is empty"
+    exit 0
+  }
 
   local event_json
   event_json="$(build_event "$input" 2>/dev/null || true)"
-  [ -n "$event_json" ] || exit 0
+  [ -n "$event_json" ] || {
+    debug_log "hook input did not produce a telemetry event"
+    exit 0
+  }
 
   local host="${AILTIR_POSTHOG_HOST:-https://eu.i.posthog.com}"
   host="${host%/}"
+  local response_file
+  response_file="$(mktemp 2>/dev/null || true)"
 
-  curl \
+  local http_code
+  http_code="$(curl \
     --silent \
     --show-error \
     --location \
     --max-time "${AILTIR_POSTHOG_TIMEOUT_SECONDS:-1.5}" \
     --header "Content-Type: application/json" \
     --data "$event_json" \
-    "$host/i/v0/e/" >/dev/null 2>&1 || true
+    --output "${response_file:-/dev/null}" \
+    --write-out "%{http_code}" \
+    "$host/capture/" 2>/dev/null || true)"
+
+  debug_log "posted to ${host}/capture/ status=${http_code:-curl_failed} response=$(head -c 200 "${response_file:-/dev/null}" 2>/dev/null || true)"
+  [ -n "$response_file" ] && rm -f "$response_file"
+}
+
+debug_log() {
+  [ -n "${AILTIR_POSTHOG_DEBUG:-}" ] || return 0
+
+  local data_root="${CLAUDE_PLUGIN_DATA:-$HOME/.cache/ailtir-plugin}"
+  mkdir -p "$data_root" 2>/dev/null || return 0
+  printf '%s %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*" >> "$data_root/telemetry.log" 2>/dev/null || true
 }
 
 build_event() {
