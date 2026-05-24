@@ -41,9 +41,11 @@ or non-production environment, add `CLI_API_URL`:
 
 ## Optional Usage Telemetry
 
-The plugin can record anonymous skill usage in PostHog when a project token is
-provided. This helps Team Ailtir understand which `/ailtir:` skills are used,
-without sending tender content, prompts, file paths, or command arguments.
+The plugin can record anonymous skill usage in PostHog when a PostHog project
+token is provided. Use the project token value beginning with `phc_`; do not use
+a numeric project ID or a personal API key. This helps Team Ailtir understand
+which `/ailtir:` skills are used, without sending tender content, prompts, file
+paths, or command arguments.
 
 ```json
 {
@@ -82,7 +84,8 @@ Claude Code plugins:
 
 ## Security Notes
 
-Do not paste real secret keys into prompts, commits, screenshots, or support
-tickets. Use placeholders such as `acli_your_key_here` when sharing examples.
+Do not paste real secret keys or project tokens into prompts, commits,
+screenshots, or support tickets. Use placeholders such as `acli_your_key_here`
+or `phc_your_project_token_here` when sharing examples.
 
 [app]: https://app.ailtir.ai

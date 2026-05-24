@@ -66,10 +66,11 @@ and call `ailtir` commands such as `ailtir kb chat`.
 
 ## Usage Telemetry
 
-If `AILTIR_POSTHOG_PROJECT_TOKEN` is configured, the plugin records an anonymous
-`ailtir_skill_used` event when an `/ailtir:` skill is invoked. The event includes
-the skill name and plugin version, but not prompts, tender data, file paths, or
-command arguments. See [Configuration](configuration.md) for setup.
+If `AILTIR_POSTHOG_PROJECT_TOKEN` is configured with a PostHog project token
+beginning with `phc_`, the plugin records an anonymous `ailtir_skill_used` event
+when an `/ailtir:` skill is invoked. The event includes the skill name and plugin
+version, but not prompts, tender data, file paths, or command arguments. See
+[Configuration](configuration.md) for setup.
 
 ## Troubleshooting
 

@@ -41,7 +41,36 @@ claude plugin marketplace add team-ailtir/ailtir-plugin
 claude plugin install ailtir@team-ailtir
 ```
 
-## 4. Verify in Claude Code
+## 4. Install in Claude CoWork
+
+Claude CoWork installs plugins from the Claude Desktop app. Use this path when
+you want the Ailtir skills available in CoWork instead of, or in addition to,
+Claude Code.
+
+1. Open the Claude Desktop app and switch to **CoWork**.
+2. Open **Customize** in the left sidebar, then select **Plugins**.
+3. Select **Add marketplace**.
+4. Enter the Ailtir plugin repository:
+
+   ```text
+   team-ailtir/ailtir-plugin
+   ```
+
+   If CoWork asks for a full URL, use:
+
+   ```text
+   https://github.com/team-ailtir/ailtir-plugin
+   ```
+
+5. Select the Ailtir plugin from the marketplace and click **Install**.
+6. Open the installed plugin and confirm that the Ailtir skills are listed.
+
+If your organization distributes plugins centrally, the Ailtir plugin may appear
+under your organization-managed plugins instead of requiring a manual marketplace
+entry. If you received a packaged plugin file, use the upload option on the
+Plugins page and select that package.
+
+## 5. Verify in Claude Code
 
 Reload plugins and inspect the available commands:
 
