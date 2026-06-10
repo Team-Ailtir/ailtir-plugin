@@ -1,4 +1,4 @@
-# Ailtir Co-Work Plugin v2.6
+# The Ailtir Co-Work Plugin
 
 **The AI-native tender management platform for Irish construction contractors.**
 
