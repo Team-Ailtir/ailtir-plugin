@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "notion": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-notion"
+      ],
+      "env": {
+        "NOTION_API_KEY": "~~database"
+      }
+    },
+    "m365": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-m365"
+      ],
+      "env": {
+        "M365_TENANT_ID": "~~cloud_storage",
+        "M365_CLIENT_ID": "~~cloud_storage",
+        "M365_CLIENT_SECRET": "~~cloud_storage"
+      }
+    }
+  }
+}
