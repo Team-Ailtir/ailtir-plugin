@@ -7,6 +7,7 @@ This guide installs the Ailtir Co-Work Plugin and prepares its MCP integrations.
 - Claude Code with plugin support.
 - Python 3 available as `python` or `python3`. Several workflows run bundled Python helper scripts.
 - Node.js with `npx`. The bundled Notion and Microsoft 365 MCP servers are launched with `npx`.
+- `unzip` available on `PATH` for tender pack extraction and archive handling.
 - Access to the `Team-Ailtir/ailtir-plugin` GitHub repository or marketplace.
 
 Verify local tools:
@@ -15,6 +16,7 @@ Verify local tools:
 python3 --version
 node --version
 npx --version
+unzip -v
 claude --version
 ```
 
