@@ -1,6 +1,8 @@
 ---
 name: ailtir-compliance-matrix
-description: Extracts all ITT requirements into a tracked deliverables matrix. Triggered by /ailtir-compliance-matrix or when bid-planner runs.
+description: Extracts all ITT requirements into a tracked deliverables matrix. Triggered by /ailtir-cowork-plugin:compliance-matrix or when bid-planner runs.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Compliance Matrix Builder

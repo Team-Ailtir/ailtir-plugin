@@ -1,5 +1,5 @@
 ---
-description: Session initialization. Syncs Notion databases to local markdown cache and presents a briefing. Triggered by /prime.
+description: Session initialization. Syncs Notion databases to local markdown cache and presents a briefing. Triggered by /ailtir-cowork-plugin:prime.
 ---
 
 # Ailtir Session Prime
@@ -9,7 +9,7 @@ This command prepares the workspace for a new session.
 ## Step 1 — Sync Notion Cache
 Run the `sync_notion_cache.py` script to pull the latest data from the Notion databases (Bid Pipeline, Subcontractor Directory, CRM, RFI Log) into the local `Context/notion-cache/` folder.
 ```bash
-python commands/sync_notion_cache.py --output-dir Context/notion-cache/
+python "${CLAUDE_PLUGIN_ROOT}/commands/sync_notion_cache.py" --output-dir Context/notion-cache/
 ```
 
 ## Step 2 — Read Context

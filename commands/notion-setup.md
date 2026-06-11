@@ -4,6 +4,6 @@ description: Builds the required Notion databases (CRM, Bid Pipeline, Subcontrac
 
 # Ailtir Notion Setup
 
-Run the `ailtir-notion-setup` skill to build your business databases in Notion.
+Run the hidden `ailtir-notion-setup` workflow to build your business databases in Notion.
 
 <skill name="ailtir-notion-setup" />

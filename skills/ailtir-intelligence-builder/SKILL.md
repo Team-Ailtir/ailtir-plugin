@@ -1,3 +1,10 @@
+---
+name: ailtir-intelligence-builder
+description: Builds and maintains the Ailtir Intelligence knowledge base through interviews or bulk ingestion of historical tender material.
+user-invocable: false
+disable-model-invocation: true
+---
+
 # Ailtir Intelligence Builder
 `ailtir-intelligence-builder`
 

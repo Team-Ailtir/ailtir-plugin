@@ -1,6 +1,8 @@
 ---
 name: ailtir-ingest
-description: Routes messy data dropped into an Ailtir workspace (subcontractor quotes, tender addendums, RFIs, emails) into the right project folder and updates Notion databases. Always confirms before writing. Triggered by /ingest or when the user drops files into the workspace without clear instructions.
+description: Routes messy data dropped into an Ailtir workspace (subcontractor quotes, tender addendums, RFIs, emails) into the right project folder and updates Notion databases. Always confirms before writing. Triggered by /ailtir-cowork-plugin:ingest or when the user drops files into the workspace without clear instructions.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Ingest
@@ -36,7 +38,7 @@ If the ingested file is a **method statement**, **case study**, **reference**, o
 - For case studies/references: "Do you want to add this to `Intelligence/case-studies/`?"
 - For rate schedules: "Do you want to update `Intelligence/rate-library/` with any rates from this?"
 
-**CRITICAL:** If the user says yes, you MUST read `skills/ailtir-intelligence-builder/references/metadata-schema.md` and prepend the correct YAML frontmatter block to the Markdown file before saving it to `Intelligence/`.
+**CRITICAL:** If the user says yes, you MUST read `${CLAUDE_PLUGIN_ROOT}/skills/ailtir-intelligence-builder/references/metadata-schema.md` and prepend the correct YAML frontmatter block to the Markdown file before saving it to `Intelligence/`.
 
 ## Step 2 — Identify the Bid Reference
 Most content belongs to a specific bid. 

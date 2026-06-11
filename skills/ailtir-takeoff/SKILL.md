@@ -1,6 +1,8 @@
 ---
 name: ailtir-takeoff
-description: Extracts elemental quantities from construction drawings (PDF) into an Irish-standard (SCSI/NRM2) Excel register. Triggered by /ailtir-takeoff or when the user asks to measure drawings.
+description: Extracts elemental quantities from construction drawings (PDF) into an Irish-standard (SCSI/NRM2) Excel register. Triggered by /ailtir-cowork-plugin:takeoff or when the user asks to measure drawings.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Takeoff
@@ -14,7 +16,7 @@ Ask the user which drawing(s) they want measured and what elements they are look
 Run the `extract.py` script on the specified drawing. The script uses PDF vector extraction and geometry reconstruction to find elements.
 
 ```bash
-python /home/ubuntu/ailtir-v2/skills/ailtir-takeoff/scripts/extract.py [drawing.pdf] -o takeoff.json
+python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-takeoff/scripts/extract.py" [drawing.pdf] -o takeoff.json
 ```
 
 ## Step 3 — Format for Irish Practice
@@ -31,7 +33,7 @@ For each item, list:
 Run the `excel_output.py` script to generate the final Ailtir-branded workbook.
 
 ```bash
-python /home/ubuntu/ailtir-v2/skills/ailtir-takeoff/scripts/excel_output.py takeoff.json -o takeoff_register.xlsx
+python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-takeoff/scripts/excel_output.py" takeoff.json -o takeoff_register.xlsx
 ```
 
 Present the Excel file to the user.

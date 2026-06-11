@@ -21,7 +21,7 @@ Run the following command:
 ```bash
 manus-config schedule create \
   --title "Ailtir Opportunity Monitor" \
-  --detail "Run the /ailtir-opportunity-monitor skill to check my email for eTenders alerts, filter them against my company profile, and log matches to my Notion Bid Pipeline." \
+  --detail "Run the /ailtir-cowork-plugin:opportunity-monitor workflow to check my email for eTenders alerts, filter them against my company profile, and log matches to my Notion Bid Pipeline." \
   --cron "0 0 8 * * 1-5" \
   --repeated
 ```

@@ -4,6 +4,6 @@ description: The master orchestrator for new tenders. Catalogues the pack, runs 
 
 # Ailtir Bid Planner
 
-Run the `ailtir-bid-planner` skill to analyse a new tender pack.
+Run the hidden `ailtir-bid-planner` workflow to analyze a new tender pack.
 
 <skill name="ailtir-bid-planner" />

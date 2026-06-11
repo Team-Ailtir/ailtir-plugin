@@ -1,6 +1,8 @@
 ---
 name: ailtir-post-tender-interview
-description: Prepares the contractor team for a CWMF post-tender interview. Generates presentation outlines, Q&A prep, and key talking points. Triggered by /ailtir-post-tender-interview or when the user asks to prep for a tender interview.
+description: Prepares the contractor team for a CWMF post-tender interview. Generates presentation outlines, Q&A prep, and key talking points. Triggered by /ailtir-cowork-plugin:post-tender-interview or when the user asks to prep for a tender interview.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Post-Tender Interview Prep

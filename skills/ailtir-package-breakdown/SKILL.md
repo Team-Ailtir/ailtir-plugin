@@ -1,6 +1,8 @@
 ---
 name: ailtir-package-breakdown
-description: Phase 2 skill. Converts project documents (head contract, specs, drawings) into a subcontractor trade package register and scope matrix. Triggered by /ailtir-package-breakdown.
+description: Phase 2 skill. Converts project documents (head contract, specs, drawings) into a subcontractor trade package register and scope matrix. Triggered by /ailtir-cowork-plugin:package-breakdown.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir — Procurement Packaging
@@ -22,7 +24,7 @@ List each package. For each, define:
 
 Run the Python script to generate the Package Register Excel workbook:
 ```bash
-python scripts/create_package_register.py --output "Package_Register_[Project].xlsx"
+python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-package-breakdown/scripts/create_package_register.py" --output "Package_Register_[Project].xlsx"
 ```
 
 - [HUMAN INPUT REQUIRED] Confirm the package list with the user before running the Python script.
@@ -38,7 +40,7 @@ Populate the workbook with:
 
 ## Step 3 — Present
 
-Provide the Excel workbook. Ask: "Would you like me to draft the Subcontractor Enquiry packs for any of these trades (`/ailtir-subcontractor-enquiry`)?"
+Provide the Excel workbook. Ask: "Would you like me to draft the Subcontractor Enquiry packs for any of these trades (`/ailtir-cowork-plugin:subcontractor-enquiry`)?"
 
 ## Quality Checks
 - [ ] Every trade required for the project scope is represented as a package.

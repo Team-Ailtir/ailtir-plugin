@@ -1,6 +1,7 @@
 ---
 name: ailtir-rate-library
 description: Provides current Irish construction cost rates (labour, materials, m2 benchmarks). Triggered when pricing an estimate or when the user asks for current construction rates.
+user-invocable: false
 ---
 
 # Ailtir Rate Library

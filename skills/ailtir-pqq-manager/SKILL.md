@@ -1,6 +1,8 @@
 ---
 name: ailtir-pqq-manager
-description: Auto-fills PQQs (Pre-Qualification Questionnaires) or SAQs (Suitability Assessment Questionnaires) from the company context. Triggered by /ailtir-pqq-manager.
+description: Auto-fills PQQs (Pre-Qualification Questionnaires) or SAQs (Suitability Assessment Questionnaires) from the company context. Triggered by /ailtir-cowork-plugin:pqq-manager.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir PQQ Manager

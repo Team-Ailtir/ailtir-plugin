@@ -23,7 +23,7 @@ Ask the user the following questions, ONE AT A TIME. Wait for their answer befor
 Run the Python script to build the definitive Ailtir workstation folder structure:
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-setup/scripts/create_workstation.py" --path ~/Ailtir-Tendering
+python "${CLAUDE_PLUGIN_ROOT}/resources/setup/scripts/create_workstation.py" --path ~/Ailtir-Tendering
 ```
 
 This creates `Context/`, `Bids/`, `Intelligence/`, `Active Projects/`, and `Daily/` in the user's home directory.
@@ -39,7 +39,7 @@ Use the file operation tools to create the following files in `~/Ailtir-Tenderin
 
 ## Step 4 — Write the Global CLAUDE.md
 
-Read `${CLAUDE_PLUGIN_ROOT}/skills/ailtir-setup/templates/CLAUDE.md`. Replace the placeholders (`{{COMPANY_NAME}}`, etc.) with the data gathered in the interview.
+Read `${CLAUDE_PLUGIN_ROOT}/resources/setup/templates/CLAUDE.md`. Replace the placeholders (`{{COMPANY_NAME}}`, etc.) with the data gathered in the interview.
 Write the final result to `~/Ailtir-Tendering/CLAUDE.md` in the root of the workspace.
 
 - [HUMAN INPUT REQUIRED] All 7 interview questions must be answered by the user before writing any Context files.
@@ -59,9 +59,9 @@ Setup complete. Your workspace is configured for [Company Name].
 
 To get the most out of the quality-writer from day one, we should add 2-3 case studies and your top win themes to the `Intelligence/` folder. I can interview you for 10 minutes to write them up, or you can point me to a folder of old CVs and tenders and I'll extract them automatically.
 
-If you want to do that now, run `/ailtir-intelligence-builder`.
-If you are using Notion, run `/ailtir-notion-setup` to build your databases.
-Otherwise, drop a tender pack into the workspace and run `/bid-planner` to begin.
+If you want to do that now, run `/ailtir-cowork-plugin:intelligence-builder`.
+If you are using Notion, run `/ailtir-cowork-plugin:notion-setup` to build your databases.
+Otherwise, drop a tender pack into the workspace and run `/ailtir-cowork-plugin:bid-planner` to begin.
 ```
 
 ## Quality Checks

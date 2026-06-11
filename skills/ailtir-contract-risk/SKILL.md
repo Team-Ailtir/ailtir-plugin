@@ -1,6 +1,8 @@
 ---
 name: ailtir-contract-risk
-description: Reviews PW-CF or RIAI contracts clause-by-clause against the playbook. Triggered by /ailtir-contract-risk or when bid-planner runs.
+description: Reviews PW-CF or RIAI contracts clause-by-clause against the playbook. Triggered by /ailtir-cowork-plugin:contract-risk or when bid-planner runs.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Contract Risk Reviewer

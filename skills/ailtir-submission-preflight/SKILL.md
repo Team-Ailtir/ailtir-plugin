@@ -1,6 +1,8 @@
 ---
 name: ailtir-submission-preflight
-description: Runs final deterministic compliance checks before submission. Triggered by /ailtir-submission-preflight.
+description: Runs final deterministic compliance checks before submission. Triggered by /ailtir-cowork-plugin:submission-preflight.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Submission Pre-Flight

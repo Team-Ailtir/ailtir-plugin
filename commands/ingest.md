@@ -4,6 +4,6 @@ description: Routes messy data (quotes, RFIs, emails) into the right project fol
 
 # Ailtir Ingestion Engine
 
-Run the `ailtir-ingest` skill to process and route the provided files or text.
+Run the hidden `ailtir-ingest` workflow to process and route the provided files or text.
 
 <skill name="ailtir-ingest" />

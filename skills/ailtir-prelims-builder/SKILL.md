@@ -1,6 +1,8 @@
 ---
 name: ailtir-prelims-builder
-description: Builds a priced Schedule of Preliminaries for Irish Public Works Contracts (PW-CF). Triggered by /ailtir-prelims-builder or when the user asks to price prelims.
+description: Builds a priced Schedule of Preliminaries for Irish Public Works Contracts (PW-CF). Triggered by /ailtir-cowork-plugin:prelims-builder or when the user asks to price prelims.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Prelims Builder

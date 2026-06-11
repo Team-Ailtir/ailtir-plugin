@@ -1,6 +1,8 @@
 ---
 name: ailtir-bid-assembly
-description: Compiles the final submission documents. Triggered by /ailtir-bid-assembly.
+description: Compiles the final submission documents. Triggered by /ailtir-cowork-plugin:bid-assembly.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Bid Assembly

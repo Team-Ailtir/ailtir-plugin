@@ -1,6 +1,8 @@
 ---
 name: ailtir-cost-reconciliation
-description: Final verification of a construction estimate. Cross-checks against requirements, benchmarks against SCSI guides, and identifies gaps. Triggered by /ailtir-cost-reconciliation or step 4 of the estimating workflow.
+description: Final verification of a construction estimate. Cross-checks against requirements, benchmarks against SCSI guides, and identifies gaps. Triggered by /ailtir-cowork-plugin:cost-reconciliation or step 4 of the estimating workflow.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Cost Reconciliation

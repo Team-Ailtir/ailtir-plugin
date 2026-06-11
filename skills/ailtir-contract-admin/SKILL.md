@@ -1,6 +1,8 @@
 ---
 name: ailtir-contract-admin
-description: Drafts contractual notices (Delay, Additional Cost) with correct time bars for PW-CF and RIAI. Triggered by /ailtir-contract-admin.
+description: Drafts contractual notices (Delay, Additional Cost) with correct time bars for PW-CF and RIAI. Triggered by /ailtir-cowork-plugin:contract-admin.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Contract Admin

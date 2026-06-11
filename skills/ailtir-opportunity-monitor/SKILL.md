@@ -1,6 +1,8 @@
 ---
 name: ailtir-opportunity-monitor
 description: Automated daily background task that checks your email for eTenders and OJEU tender alerts, scores each opportunity against your company profile using a 5-dimension strategic fit model, and logs qualified leads to your Notion Bid Pipeline.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Opportunity Monitor
@@ -68,7 +70,7 @@ Before scoring, apply the following hard gates. If any gate is triggered, mark t
 
 ## Step 4: Score Each Remaining Opportunity (0–100)
 
-Apply the following 5-dimension scoring model to each opportunity that passed the gates. Read the scoring weights from `skills/ailtir-opportunity-monitor/references/scoring-model.md`.
+Apply the following 5-dimension scoring model to each opportunity that passed the gates. Read the scoring weights from `${CLAUDE_PLUGIN_ROOT}/skills/ailtir-opportunity-monitor/references/scoring-model.md`.
 
 ### Dimension 1 — Sector Match (max 25 points)
 Compare the opportunity's CPV codes against the company's declared primary and secondary sectors in `Context/company.md`.

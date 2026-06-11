@@ -1,6 +1,8 @@
 ---
 name: ailtir-go-no-go
-description: Evaluates bid viability against CIRI/Safe-T-Cert gates and the Ailtir weighted scoring matrix. Triggered by /ailtir-go-no-go or when bid-planner runs.
+description: Evaluates bid viability against CIRI/Safe-T-Cert gates and the Ailtir weighted scoring matrix. Triggered by /ailtir-cowork-plugin:go-no-go or when bid-planner runs.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Go/No-Go Evaluator

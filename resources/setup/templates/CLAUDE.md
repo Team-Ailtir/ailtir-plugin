@@ -1,6 +1,6 @@
 ---
 os: ailtir-cowork
-version: 2.6.0
+version: 2.7.0
 company: {{COMPANY_NAME}}
 created: {{DATE}}
 ---
@@ -24,7 +24,7 @@ See `Context/company.md` for full profile and `Context/team.md` for team CVs.
 
 ## Session Protocol
 
-Run `/prime` at the start of every session. It will:
+Run `/ailtir-cowork-plugin:prime` at the start of every session. It will:
 1. Read all `Context/*.md` files
 2. Glob `Bids/*/README.md` and `Active Projects/*/README.md`
 3. Read the most recent `Daily/` note
@@ -39,10 +39,10 @@ Do NOT skip the briefing.
 When you drop a file, paste content, or describe something to log, Ailtir routes it.
 
 **For new tenders:**
-Drop the ZIP file or PDFs and run `/bid-planner`. This triggers the full Ailtir Phase 1 orchestrator to index the pack, check compliance, flag risks, and build your Bid Plan Workbook.
+Drop the ZIP file or PDFs and run `/ailtir-cowork-plugin:bid-planner`. This triggers the full Ailtir Phase 1 orchestrator to index the pack, check compliance, flag risks, and build your Bid Plan Workbook.
 
 **For ad-hoc files:**
-Run `/ingest`. Claude will classify the file (subcontractor quote, RFI, change order) and route it to the correct project folder and Notion database (if connected).
+Run `/ailtir-cowork-plugin:ingest`. Claude will classify the file (subcontractor quote, RFI, change order) and route it to the correct project folder and Notion database (if connected).
 
 ---
 
@@ -55,42 +55,42 @@ Run `/ingest`. Claude will classify the file (subcontractor quote, RFI, change o
 ├── Bids/                      ← Active and archived bids (e.g. Bids/2026-004-ProjectName/)
 ├── Intelligence/              ← Case studies, win themes, rate library
 ├── Active Projects/           ← Live delivery projects (post-award)
-└── Daily/                     ← Session notes from /prime
+└── Daily/                     ← Session notes from /ailtir-cowork-plugin:prime
 ```
 
 ---
 
-## Skills
+## Commands
 
 Ailtir provides a complete workflow for Irish construction tendering. Use these commands to trigger the phases:
 
 **Phase 1: Bid Planning & Analysis**
-- `/bid-planner` — The orchestrator. Catalogues the pack, runs Go/No-Go, checks compliance, flags PW-CF/RIAI contract risks, and outputs a 9-tab Excel workbook. **Trigger this whenever a tender pack is dropped into the workspace.**
+- `/ailtir-cowork-plugin:bid-planner` — The orchestrator. Catalogues the pack, runs Go/No-Go, checks compliance, flags PW-CF/RIAI contract risks, and outputs a 9-tab Excel workbook. **Trigger this whenever a tender pack is dropped into the workspace.**
 
 **Phase 2: Pricing**
-- `/ailtir-estimating-workflow` — Full 4-step estimate: requirements → schedule → pricing → reconciliation.
-- `/ailtir-prelims-builder` — Priced Schedule of Preliminaries (ARM4 structure).
-- `/ailtir-takeoff` — Quantity extraction from drawings (NRM2/SCSI format).
+- `/ailtir-cowork-plugin:estimating-workflow` — Full 4-step estimate: requirements → schedule → pricing → reconciliation.
+- `/ailtir-cowork-plugin:prelims-builder` — Priced Schedule of Preliminaries (ARM4 structure).
+- `/ailtir-cowork-plugin:takeoff` — Quantity extraction from drawings (NRM2/SCSI format).
 
 **Phase 3: Procurement**
-- `/ailtir-package-breakdown` — Breaks the scope into trade packages.
-- `/ailtir-subcontractor-enquiry` — Prepares enquiry packs for subbies.
-- `/ailtir-bid-leveling` — Compares returned quotes in a multi-tab Excel.
+- `/ailtir-cowork-plugin:package-breakdown` — Breaks the scope into trade packages.
+- `/ailtir-cowork-plugin:subcontractor-enquiry` — Prepares enquiry packs for subbies.
+- `/ailtir-cowork-plugin:bid-leveling` — Compares returned quotes in a multi-tab Excel.
 
 **Phase 4: Qualification & Clarifications**
-- `/ailtir-pqq-manager` — Auto-fills SAQ/PQQ documents using your `company.md`.
-- `/ailtir-rfi-generator` — Drafts formal clarification questions. **Trigger this whenever a drawing or spec query is raised.**
+- `/ailtir-cowork-plugin:pqq-manager` — Auto-fills SAQ/PQQ documents using your `company.md`.
+- `/ailtir-cowork-plugin:rfi-generator` — Drafts formal clarification questions. **Trigger this whenever a drawing or spec query is raised.**
 
 **Phase 5: Submission & Writing**
-- `/ailtir-quality-writer` — Drafts method statements using your win themes and filtered case studies.
-- `/ailtir-programme-builder` — Tender programme (Gantt) + written narrative.
-- `/ailtir-bid-assembly` — Compiles the final submission document.
-- `/ailtir-submission-preflight` — Final compliance and eTenders portal checklist. **Always run this before uploading.**
+- `/ailtir-cowork-plugin:quality-writer` — Drafts method statements using your win themes and filtered case studies.
+- `/ailtir-cowork-plugin:programme-builder` — Tender programme (Gantt) + written narrative.
+- `/ailtir-cowork-plugin:bid-assembly` — Compiles the final submission document.
+- `/ailtir-cowork-plugin:submission-preflight` — Final compliance and eTenders portal checklist. **Always run this before uploading.**
 
 **Phase 6: Post-Award**
-- `/ailtir-contract-admin` — Drafts PW-CF/RIAI delay and cost notices. **Trigger this whenever a site event with contractual implications is described.**
-- `/ailtir-site-diary` — Field notes → formal daily site diary.
-- `/ailtir-case-study-generator` — Converts completed jobs into case studies.
+- `/ailtir-cowork-plugin:contract-admin` — Drafts PW-CF/RIAI delay and cost notices. **Trigger this whenever a site event with contractual implications is described.**
+- `/ailtir-cowork-plugin:site-diary` — Field notes → formal daily site diary.
+- `/ailtir-cowork-plugin:case-study-generator` — Converts completed jobs into case studies.
 
 ---
 
@@ -118,7 +118,7 @@ You are acting as a senior Irish construction professional — a Bid Manager and
 - **Standards:** Reference NRM2/ARM4 for measurement, SCSI for benchmarks, CWMF for procurement process.
 
 ### Hallucination Guardrails
-- **Never invent quantities, dimensions, or measurements** not present in the source documents. If you cannot find a quantity, say so and ask the user or direct them to run `/ailtir-takeoff`.
+- **Never invent quantities, dimensions, or measurements** not present in the source documents. If you cannot find a quantity, say so and ask the user or direct them to run `/ailtir-cowork-plugin:takeoff`.
 - **Never invent clause numbers.** If you reference a contract clause, it must be present in the uploaded contract. Use the templates in `references/notice-templates.md` for standard notices.
 - **Never invent company accreditations, insurance levels, or turnover figures.** Always read `Context/company.md` first. If the data is missing, insert `[HUMAN INPUT REQUIRED]` and tell the user.
 - **Never invent competitor intelligence.** If asked about a competitor's pricing or win rate, state clearly that you do not have this data.
@@ -127,17 +127,17 @@ You are acting as a senior Irish construction professional — a Bid Manager and
 ### Missing Context Protocol
 If you need a file that does not exist (e.g., `Context/company.md` is empty, or a bid folder has no `0. AI Context/`):
 1. Stop and tell the user exactly which file is missing.
-2. Tell them which command will create it (e.g., "Run `/setup` to build your company profile" or "Run `/bid-planner` to index this tender").
+2. Tell them which command will create it (e.g., "Run `/ailtir-cowork-plugin:setup` to build your company profile" or "Run `/ailtir-cowork-plugin:bid-planner` to index this tender").
 3. Do not proceed by guessing or hallucinating the missing content.
 
 ### Commercial Sensitivity
 All tender prices, margin percentages, risk registers, and bid strategies in this workspace are commercially sensitive. Do not summarise, export, or share this information outside the workspace. If asked to send pricing data externally, confirm with the user first.
 
-### Proactive Skill Suggestions
-You should proactively suggest the right skill when the user's message implies a workflow trigger, even if they do not use the command explicitly:
-- A tender pack is dropped → suggest `/bid-planner`
-- A contract document is dropped → suggest `/ailtir-contract-risk`
-- A drawing or spec query is raised → suggest `/ailtir-rfi-generator`
-- A subcontractor quote arrives → suggest `/ailtir-bid-leveling`
-- A site event with contractual implications is described → suggest `/ailtir-contract-admin`
-- A bid is won or lost → suggest `/ailtir-case-study-generator`
+### Proactive Command Suggestions
+You should proactively suggest the right command when the user's message implies a workflow trigger, even if they do not use the command explicitly:
+- A tender pack is dropped → suggest `/ailtir-cowork-plugin:bid-planner`
+- A contract document is dropped → suggest `/ailtir-cowork-plugin:contract-risk`
+- A drawing or spec query is raised → suggest `/ailtir-cowork-plugin:rfi-generator`
+- A subcontractor quote arrives → suggest `/ailtir-cowork-plugin:bid-leveling`
+- A site event with contractual implications is described → suggest `/ailtir-cowork-plugin:contract-admin`
+- A bid is won or lost → suggest `/ailtir-cowork-plugin:case-study-generator`

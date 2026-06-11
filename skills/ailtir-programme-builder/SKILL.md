@@ -1,6 +1,8 @@
 ---
 name: ailtir-programme-builder
-description: Generates a tender programme (Gantt schedule) and narrative for Irish public works tenders. Triggered by /ailtir-programme-builder or when the user asks for a project schedule.
+description: Generates a tender programme (Gantt schedule) and narrative for Irish public works tenders. Triggered by /ailtir-cowork-plugin:programme-builder or when the user asks for a project schedule.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Programme Builder

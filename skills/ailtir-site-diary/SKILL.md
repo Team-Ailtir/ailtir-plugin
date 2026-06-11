@@ -1,6 +1,8 @@
 ---
 name: ailtir-site-diary
-description: Transforms rough field notes or voice transcripts into a formal daily site diary compliant with PW-CF requirements. Triggered by /ailtir-site-diary or when the user drops field notes.
+description: Transforms rough field notes or voice transcripts into a formal daily site diary compliant with PW-CF requirements. Triggered by /ailtir-cowork-plugin:site-diary or when the user drops field notes.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Site Diary

@@ -1,6 +1,8 @@
 ---
 name: ailtir-dashboard
-description: Builds a live interactive HTML dashboard as a Claude Artifact, pulling data from Notion via MCP to visualise the bid pipeline, subcontractor register, and BD KPIs. Triggered by /ailtir-dashboard.
+description: Builds a live interactive HTML dashboard as a Claude Artifact, pulling data from Notion via MCP to visualise the bid pipeline, subcontractor register, and BD KPIs. Triggered by /ailtir-cowork-plugin:dashboard.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Dashboard Builder

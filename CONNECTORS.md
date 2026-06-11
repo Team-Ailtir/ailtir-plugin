@@ -7,12 +7,12 @@ This file documents how Ailtir interacts with external MCP connectors.
 ### Notion
 **Purpose:** The business brain. Holds the CRM, Bid Pipeline, Subcontractor Directory, and RFI Log.
 **Required MCP Tools:** `notion-create-database`, `notion-create-pages`, `notion-search`, `notion-update-page`.
-**Setup:** Run `/ailtir-notion-setup` to build the required architecture.
+**Setup:** Run `/ailtir-cowork-plugin:notion-setup` to build the required architecture.
 
 ### Email Connector (Gmail or Microsoft 365)
 **Purpose:** Reads incoming tender alerts (eTenders, OJEU) for the automated opportunity monitor.
 **Required App Integration:** Gmail or Microsoft 365 Outlook.
-**Setup:** Run `/enable-monitor` to configure the scheduled background task.
+**Setup:** Run `/ailtir-cowork-plugin:enable-monitor` to configure the scheduled background task.
 
 ### SharePoint / OneDrive (Microsoft 365)
 **Purpose:** The project archive. Holds heavy tender documents, drawings, and specifications.

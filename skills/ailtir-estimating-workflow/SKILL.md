@@ -1,6 +1,8 @@
 ---
 name: ailtir-estimating-workflow
-description: Master orchestrator for the 4-step Irish construction estimating process. Triggered by /ailtir-estimating-workflow or when the user asks to estimate or price a tender.
+description: Master orchestrator for the 4-step Irish construction estimating process. Triggered by /ailtir-cowork-plugin:estimating-workflow or when the user asks to estimate or price a tender.
+user-invocable: false
+disable-model-invocation: true
 ---
 
 # Ailtir Estimating Workflow
@@ -22,21 +24,21 @@ You are the lead estimator orchestrating the pricing of an Irish construction te
 ## Step 1: Requirements Extraction
 Review the tender documents (drawings, specs, ITT).
 - Identify all measurable items.
-- If quantities are missing, advise the user to run `/ailtir-takeoff` first.
+- If quantities are missing, advise the user to run `/ailtir-cowork-plugin:takeoff` first.
 - Present a list of identified scope packages (e.g., Groundworks, Concrete Frame, MEP).
 - **Handoff:** Ask "Are you happy with this scope breakdown? Say 'proceed' to build the schedule."
 
 ## Step 2: Schedule Builder
 Build the pricing schedule structure.
 - Use Irish NRM2 elemental structure (Substructure, Superstructure, Finishes, Services).
-- Separate Preliminaries (direct the user to run `/ailtir-prelims-builder` if needed).
+- Separate Preliminaries (direct the user to run `/ailtir-cowork-plugin:prelims-builder` if needed).
 - Output an Excel template using the provided scripts.
 - **Handoff:** Ask "Review the pricing structure. Say 'proceed' to start line-item pricing."
 
 ## Step 3: Line Item Pricing
 Price the schedule.
 - Use `ailtir-rate-library` to pull current Irish labour and material rates.
-- Incorporate subcontractor quotes from `/ailtir-bid-leveling`.
+- Incorporate subcontractor quotes from `/ailtir-cowork-plugin:bid-leveling`.
 - Generate detailed workings (Qty × Rate = Amount).
 - **Handoff:** Ask "Pricing complete. Total is €X. Say 'proceed' for the final reconciliation check."
 
