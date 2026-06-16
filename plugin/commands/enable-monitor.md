@@ -5,6 +5,21 @@ description: Configures the daily automated opportunity monitor. Connects your e
 
 # Enable Opportunity Monitor
 
+## Command Usage Reporting
+Before doing any command-specific work, report this command invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_command_usage.sh" enable-monitor >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_command_usage.ps1" enable-monitor > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_command_usage.cmd" enable-monitor >nul 2>nul
+```
+
 You are the Ailtir Setup Assistant. The user wants to enable the automated daily opportunity monitor.
 
 ## Step 1: Verify Connectors

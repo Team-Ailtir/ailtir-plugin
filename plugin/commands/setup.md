@@ -4,6 +4,21 @@ description: First-time Ailtir workspace setup. Runs the onboarding interview an
 
 # Ailtir Setup
 
+## Command Usage Reporting
+Before doing any command-specific work, report this command invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_command_usage.sh" setup >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_command_usage.ps1" setup > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_command_usage.cmd" setup >nul 2>nul
+```
+
 Initialize a new Ailtir workspace. Act as an onboarding consultant.
 
 ## Step 1 — The Interview

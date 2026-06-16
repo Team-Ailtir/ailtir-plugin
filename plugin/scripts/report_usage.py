@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Report anonymous Ailtir skill usage to PostHog.
+"""Report anonymous Ailtir skill or command usage to PostHog.
 
 This helper is intentionally fail-open. A workflow must continue if telemetry is
 not configured, PostHog is unreachable, or a response is rejected.
@@ -20,7 +20,10 @@ import urllib.request
 import uuid
 
 
-EVENT_NAME = "ailtir_skill_used"
+EVENT_NAMES = {
+    "command": "ailtir_command_used",
+    "skill": "ailtir_skill_used",
+}
 DEFAULT_POSTHOG_HOST = "https://eu.i.posthog.com"
 DEFAULT_TIMEOUT_SECONDS = 1.5
 
@@ -31,9 +34,15 @@ POSTHOG_PROJECT_TOKEN = "phc_your_project_token_here"
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Report anonymous Ailtir skill usage to PostHog."
+        description="Report anonymous Ailtir skill or command usage to PostHog."
     )
-    parser.add_argument("skill_name", help="Ailtir skill directory name")
+    parser.add_argument("name", help="Ailtir skill or command name")
+    parser.add_argument(
+        "--kind",
+        choices=sorted(EVENT_NAMES),
+        default="skill",
+        help="Usage entity kind to report",
+    )
     parser.add_argument(
         "--dry-run",
         action="store_true",
@@ -41,7 +50,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    event = build_event(args.skill_name)
+    event = build_event(args.name, args.kind)
     if not event:
         return 0
 
@@ -53,9 +62,9 @@ def main() -> int:
     return 0
 
 
-def build_event(skill_name: str) -> dict[str, object] | None:
-    if not re.fullmatch(r"[A-Za-z0-9_.-]+", skill_name):
-        debug_log(f"invalid skill name: {skill_name!r}")
+def build_event(name: str, kind: str) -> dict[str, object] | None:
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+", name):
+        debug_log(f"invalid {kind} name: {name!r}")
         return None
 
     token = posthog_project_token()
@@ -68,22 +77,16 @@ def build_event(skill_name: str) -> dict[str, object] | None:
         debug_log("could not resolve plugin root")
         return None
 
-    skills_root = plugin_root / "skills"
-    skill_path = (skills_root / skill_name).resolve()
-    try:
-        skill_path.relative_to(skills_root.resolve())
-    except ValueError:
-        debug_log(f"skill path escapes skills root: {skill_name}")
+    if not entity_exists(plugin_root, name, kind):
+        debug_log(f"{kind} does not exist: {name}")
         return None
 
-    if not (skill_path / "SKILL.md").is_file():
-        debug_log(f"skill does not exist: {skill_name}")
-        return None
+    name_key = f"{kind}_name"
 
     properties: dict[str, object] = {
-        "skill_name": skill_name,
+        name_key: name,
         "plugin_version": plugin_version(plugin_root),
-        "source": "skill",
+        "source": kind,
         "$process_person_profile": False,
     }
 
@@ -93,11 +96,32 @@ def build_event(skill_name: str) -> dict[str, object] | None:
 
     return {
         "api_key": token,
-        "event": EVENT_NAME,
+        "event": EVENT_NAMES[kind],
         "distinct_id": install_id(),
         "properties": properties,
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
+
+
+def entity_exists(plugin_root: pathlib.Path, name: str, kind: str) -> bool:
+    if kind == "skill":
+        entities_root = plugin_root / "skills"
+        entity_path = (entities_root / name).resolve()
+        try:
+            entity_path.relative_to(entities_root.resolve())
+        except ValueError:
+            debug_log(f"skill path escapes skills root: {name}")
+            return False
+        return (entity_path / "SKILL.md").is_file()
+
+    commands_root = plugin_root / "commands"
+    command_path = (commands_root / f"{name}.md").resolve()
+    try:
+        command_path.relative_to(commands_root.resolve())
+    except ValueError:
+        debug_log(f"command path escapes commands root: {name}")
+        return False
+    return command_path.is_file()
 
 
 def posthog_project_token() -> str | None:

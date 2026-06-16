@@ -33,8 +33,8 @@ Use `${CLAUDE_PLUGIN_ROOT}` for bundled file references. Never hard-code local a
 
 Invoke bundled Python helpers through the platform launchers in `scripts/`:
 `run_python.sh` for macOS/Linux, `run_python.ps1` for PowerShell, and
-`run_python.cmd` for cmd. Use the telemetry-specific `report_skill_usage.*`
-wrappers only for fail-open usage reporting.
+`run_python.cmd` for cmd. Use the telemetry-specific `report_command_usage.*`
+and `report_skill_usage.*` wrappers only for fail-open usage reporting.
 
 Do not commit secrets, tender documents, pricing data, Notion tokens, Microsoft 365 credentials, or generated customer workspaces.
 
