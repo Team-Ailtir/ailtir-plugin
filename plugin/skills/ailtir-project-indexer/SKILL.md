@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Project Indexer
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-project-indexer >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-project-indexer > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-project-indexer >nul 2>nul
+```
+
 Transforms a construction project folder into three durable markdown context files that downstream Claude sessions can read cheaply, instead of repeatedly re-parsing PDFs, specifications, and drawings.
 
 ## Why this skill exists

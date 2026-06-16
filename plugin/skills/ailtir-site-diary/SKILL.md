@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir Site Diary
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-site-diary >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-site-diary > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-site-diary >nul 2>nul
+```
+
 You are transforming messy, unstructured field notes, WhatsApp messages, or voice transcripts from a Site Manager into a professional, formal daily site diary. This document is a critical commercial record under Irish Public Works Contracts (PW-CF).
 
 ## Step 1 — Ingest the Raw Notes

@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir Programme Builder
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-programme-builder >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-programme-builder > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-programme-builder >nul 2>nul
+```
+
 You are creating a tender programme (schedule) and accompanying narrative to satisfy the CWMF requirements for an Irish public works tender.
 
 ## Step 1 — Gather Project Parameters

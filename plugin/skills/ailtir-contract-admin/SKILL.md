@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir Contract Admin
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-contract-admin >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-contract-admin > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-contract-admin >nul 2>nul
+```
+
 You are drafting a formal contractual notice for a live project.
 
 ## Step 1 — Gather Details

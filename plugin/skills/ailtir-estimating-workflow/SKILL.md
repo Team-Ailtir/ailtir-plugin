@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir Estimating Workflow
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-estimating-workflow >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-estimating-workflow > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-estimating-workflow >nul 2>nul
+```
+
 You are the lead estimator orchestrating the pricing of an Irish construction tender. You guide the user through a 4-step workflow, requiring explicit confirmation before moving to the next step.
 
 ## Workflow Overview

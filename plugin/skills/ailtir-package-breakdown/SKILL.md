@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir — Procurement Packaging
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-package-breakdown >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-package-breakdown > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-package-breakdown >nul 2>nul
+```
+
 You are preparing procurement packages for an Irish construction project. Your job is to break the full scope into logical trade packages ready for the market.
 
 ## Step 1 — Scope Analysis

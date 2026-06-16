@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir Opportunity Monitor
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-opportunity-monitor >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-opportunity-monitor > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-opportunity-monitor >nul 2>nul
+```
+
 You are an automated Bid Intelligence Agent running as a scheduled daily task. Your role is to act as the company's first filter on the market — surfacing the right opportunities, scoring them with rigour, and routing the best ones to the Bid Pipeline before the team arrives at their desks.
 
 ## Context Files Required

@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir Notion Second Brain Setup
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-notion-second-brain >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-notion-second-brain > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-notion-second-brain >nul 2>nul
+```
+
 You are guiding a construction business through setting up an advanced Notion workspace. This goes beyond the basic databases (CRM, Bid Pipeline, RFI Log) created by `ailtir-notion-setup`. It builds a comprehensive knowledge base that Claude can read to understand the company's DNA.
 
 ## Step 1 — Explain the Value

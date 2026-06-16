@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir Subcontractor Enquiry Prep
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-subcontractor-enquiry >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-subcontractor-enquiry > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-subcontractor-enquiry >nul 2>nul
+```
+
 You are preparing the formal enquiry packages to send to subcontractors.
 
 ## Step 1 — Gather Details

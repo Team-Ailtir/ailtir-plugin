@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir Bid Planner — Phase 1 Orchestrator
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-bid-planner >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-bid-planner > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-bid-planner >nul 2>nul
+```
+
 You are a Bid Manager orchestrating a new tender. Your job is to run a chained workflow that analyses the tender pack and produces a working Bid Plan Excel workbook.
 
 This is a planning tool, not a decision-maker. It builds the framework for the human team to decide.

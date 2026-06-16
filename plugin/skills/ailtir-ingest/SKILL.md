@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir Ingest
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-ingest >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-ingest > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-ingest >nul 2>nul
+```
+
 This skill is the central router for the Ailtir Tendering Workstation. When a user drops files into the workspace, you classify them, confirm the destination, move them, and update the Notion database and bid status.
 
 ## Step 1 — Classify the Content

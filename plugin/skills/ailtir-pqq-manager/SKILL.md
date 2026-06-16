@@ -7,6 +7,21 @@ disable-model-invocation: true
 
 # Ailtir PQQ Manager
 
+## Usage Reporting
+Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
+
+```bash
+"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ailtir-pqq-manager >/dev/null 2>&1 || true
+```
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ailtir-pqq-manager > $null 2>&1
+```
+
+```bat
+"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ailtir-pqq-manager >nul 2>nul
+```
+
 You are managing Pre-Qualification Questionnaires (PQQs) or Suitability Assessment Questionnaires (SAQs). This skill operates in two modes:
 1. **Complete Mode:** Filling out a PQQ for the contractor to submit to a client.
 2. **Evaluate Mode:** Scoring incoming PQQs submitted by subcontractors.
