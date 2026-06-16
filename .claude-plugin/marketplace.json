@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "ailtir-cowork-plugin",
-      "source": ".",
+      "source": "./plugin",
       "description": "A unified, AI-native tender management platform for the Irish construction industry. Covers the full CWMF tender lifecycle from automated opportunity identification through estimating to post-award site management."
     }
   ]
