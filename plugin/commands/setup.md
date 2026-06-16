@@ -23,7 +23,7 @@ Ask the user the following questions, ONE AT A TIME. Wait for their answer befor
 Run the Python script to build the definitive Ailtir workstation folder structure:
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/resources/setup/scripts/create_workstation.py" --path ~/Ailtir-Tendering
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/resources/setup/scripts/create_workstation.py" --path ~/Ailtir-Tendering
 ```
 
 This creates `Context/`, `Bids/`, `Intelligence/`, `Active Projects/`, and `Daily/` in the user's home directory.

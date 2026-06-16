@@ -52,7 +52,7 @@ Follow these steps in order. Show the user what you're doing at each step — es
 Walk the project root and build a complete inventory. Use `scripts/discover.py`:
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-project-indexer/scripts/discover.py" "<project_root>" -o /tmp/project_inventory.json
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-project-indexer/scripts/discover.py" "<project_root>" -o /tmp/project_inventory.json
 ```
 
 This produces a JSON inventory listing every file, its size, its folder, and (for PDFs) quick stats that help classify it as a drawing vs a document.
@@ -66,7 +66,7 @@ Show the user the folder tree and a short summary (e.g. "Found 142 PDFs across 7
 For every PDF, decide whether it's a **drawing** or a **document**. Use `scripts/classify.py`:
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-project-indexer/scripts/classify.py" /tmp/project_inventory.json -o /tmp/project_classified.json
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-project-indexer/scripts/classify.py" /tmp/project_inventory.json -o /tmp/project_classified.json
 ```
 
 The classifier uses vector statistics (page orientation, line count, text density, aspect ratio) to split drawings from documents. It's fast and local — no vision calls. Borderline cases get flagged for human confirmation.
@@ -161,7 +161,7 @@ Record the chosen perspective. It goes in `CLAUDE.md` and at the top of `drawing
 Run `scripts/process_drawing.py` against every drawing PDF, sending output into `0. AI Context/drawings_split/<source_stem>/`:
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-project-indexer/scripts/process_drawing.py" "<drawing_path>" \
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-project-indexer/scripts/process_drawing.py" "<drawing_path>" \
   -o "<project_root>/0. AI Context/drawings_split/<source_stem>" \
   --dpi 200
 ```

@@ -39,7 +39,7 @@ List each package. For each, define:
 
 Run the Python script to generate the Package Register Excel workbook:
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-package-breakdown/scripts/create_package_register.py" --output "Package_Register_[Project].xlsx"
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-package-breakdown/scripts/create_package_register.py" --output "Package_Register_[Project].xlsx"
 ```
 
 - [HUMAN INPUT REQUIRED] Confirm the package list with the user before running the Python script.

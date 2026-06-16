@@ -31,7 +31,7 @@ Ask the user which drawing(s) they want measured and what elements they are look
 Run the `extract.py` script on the specified drawing. The script uses PDF vector extraction and geometry reconstruction to find elements.
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-takeoff/scripts/extract.py" [drawing.pdf] -o takeoff.json
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-takeoff/scripts/extract.py" [drawing.pdf] -o takeoff.json
 ```
 
 ## Step 3 — Format for Irish Practice
@@ -48,7 +48,7 @@ For each item, list:
 Run the `excel_output.py` script to generate the final Ailtir-branded workbook.
 
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-takeoff/scripts/excel_output.py" takeoff.json -o takeoff_register.xlsx
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-takeoff/scripts/excel_output.py" takeoff.json -o takeoff_register.xlsx
 ```
 
 Present the Excel file to the user.

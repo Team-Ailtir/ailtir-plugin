@@ -31,6 +31,11 @@ disable-model-invocation: true
 
 Use `${CLAUDE_PLUGIN_ROOT}` for bundled file references. Never hard-code local absolute paths such as `/home/...` or `/tmp/...` unless the output is intentionally temporary.
 
+Invoke bundled Python helpers through the platform launchers in `scripts/`:
+`run_python.sh` for macOS/Linux, `run_python.ps1` for PowerShell, and
+`run_python.cmd` for cmd. Use the telemetry-specific `report_skill_usage.*`
+wrappers only for fail-open usage reporting.
+
 Do not commit secrets, tender documents, pricing data, Notion tokens, Microsoft 365 credentials, or generated customer workspaces.
 
 ## Verification

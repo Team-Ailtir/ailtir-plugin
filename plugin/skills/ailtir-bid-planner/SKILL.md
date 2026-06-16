@@ -68,7 +68,7 @@ Identify the contract form (PW-CF1-5, RIAI 2025, JCT). Scan for non-standard ame
 ### Part A — The Bid Plan Workbook
 Run the Python script to generate the Excel workbook:
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-bid-planner/scripts/create_bid_plan.py" --output "Bid_Plan_[Project].xlsx" --project "[Name]" --client "[Client]" --return-date "YYYY-MM-DD" --route "[Route]"
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-bid-planner/scripts/create_bid_plan.py" --output "Bid_Plan_[Project].xlsx" --project "[Name]" --client "[Client]" --return-date "YYYY-MM-DD" --route "[Route]"
 ```
 Then, use `openpyxl` (via a secondary Python script or direct manipulation) to populate the 9 tabs with the data you extracted in Step 2.
 
@@ -76,7 +76,7 @@ Then, use `openpyxl` (via a secondary Python script or direct manipulation) to p
 Generate a Bid Reference Number (format: `YYYY-NNN-ProjectName`, e.g. `2026-004-BallymunSchool`). Check the Notion Bid Pipeline for the next sequential number, or ask the user.
 Run the Python script to generate the 9-section folder structure directly in the workstation:
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-bid-planner/scripts/create_bid_folders.py" \
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-bid-planner/scripts/create_bid_folders.py" \
   --bid-ref "[Bid Reference]" \
   --packages "Groundworks, Concrete, Steel, Roofing, MEP" \
   --quality-questions "Q1 Methodology, Q2 Programme, Q3 Health and Safety" \

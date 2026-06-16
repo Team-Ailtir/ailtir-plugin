@@ -54,7 +54,7 @@ Subcontractor quotes rarely cover the exact same scope. You must perform a forma
 
 Run the Python script to generate the Comparison Excel workbook:
 ```bash
-python "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-bid-leveling/scripts/create_comparison.py" --output "Quote_Comparison_[Package].xlsx" --package "[Package Name]"
+"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/ailtir-bid-leveling/scripts/create_comparison.py" --output "Quote_Comparison_[Package].xlsx" --package "[Package Name]"
 ```
 
 - [HUMAN INPUT REQUIRED] If a plug value for missing scope cannot be estimated from other quotes, flag it as `[REQUIRES ESTIMATOR PLUG]` and ask the user.
