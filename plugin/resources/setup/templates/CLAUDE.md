@@ -92,6 +92,9 @@ Ailtir provides a complete workflow for Irish construction tendering. Use these 
 - `/ailtir-cowork-plugin:site-diary` — Field notes → formal daily site diary.
 - `/ailtir-cowork-plugin:case-study-generator` — Converts completed jobs into case studies.
 
+**Feedback**
+- `/ailtir-cowork-plugin:feedback` — Captures a quick 1-10 usefulness rating, reason, and three structured follow-up answers for the latest Ailtir workflow.
+
 ---
 
 ## Connectors & Data Architecture

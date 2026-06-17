@@ -23,6 +23,9 @@ SETUP
 EVERY SESSION
   /ailtir-cowork-plugin:prime
 
+FEEDBACK
+  /ailtir-cowork-plugin:feedback
+
 PHASE 0 - OPPORTUNITY IDENTIFICATION
   /ailtir-cowork-plugin:opportunity-monitor
 
