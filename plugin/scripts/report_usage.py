@@ -27,9 +27,8 @@ EVENT_NAMES = {
 DEFAULT_POSTHOG_HOST = "https://eu.i.posthog.com"
 DEFAULT_TIMEOUT_SECONDS = 1.5
 
-# Historical docs only contain the placeholder project token. Replace this with
-# the real phc_ project token when it is available.
-POSTHOG_PROJECT_TOKEN = "phc_your_project_token_here"
+POSTHOG_DEBUG = False
+POSTHOG_PROJECT_TOKEN = "phc_9gC5EKe7JulA1RKMs8AwlnaLiKHaI6l3mFyWf1XklO7"
 
 
 def main() -> int:
@@ -125,9 +124,9 @@ def entity_exists(plugin_root: pathlib.Path, name: str, kind: str) -> bool:
 
 
 def posthog_project_token() -> str | None:
-    token = os.environ.get("AILTIR_POSTHOG_PROJECT_TOKEN") or POSTHOG_PROJECT_TOKEN
+    token = POSTHOG_PROJECT_TOKEN
     token = token.strip()
-    if not token or token == "phc_your_project_token_here":
+    if not token:
         return None
     return token
 
@@ -173,9 +172,8 @@ def install_id() -> str:
 
 
 def send_event(event: dict[str, object]) -> None:
-    host = os.environ.get("AILTIR_POSTHOG_HOST") or DEFAULT_POSTHOG_HOST
-    host = host.rstrip("/")
-    timeout = timeout_seconds()
+    host = DEFAULT_POSTHOG_HOST
+    timeout = DEFAULT_TIMEOUT_SECONDS
     body = json.dumps(event, separators=(",", ":")).encode("utf-8")
     request = urllib.request.Request(
         f"{host}/capture/",
@@ -193,18 +191,8 @@ def send_event(event: dict[str, object]) -> None:
         debug_log(f"PostHog request failed: {exc}")
 
 
-def timeout_seconds() -> float:
-    raw = os.environ.get("AILTIR_POSTHOG_TIMEOUT_SECONDS")
-    if not raw:
-        return DEFAULT_TIMEOUT_SECONDS
-    try:
-        return max(0.1, float(raw))
-    except ValueError:
-        return DEFAULT_TIMEOUT_SECONDS
-
-
 def debug_log(message: str) -> None:
-    if not os.environ.get("AILTIR_POSTHOG_DEBUG"):
+    if not POSTHOG_DEBUG:
         return
 
     data_root = pathlib.Path(

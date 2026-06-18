@@ -78,8 +78,8 @@ See [INSTALL.md][install] for MCP server prerequisites and credential setup.
 
 ## Environment Variables
 
-The plugin can run with local files only. Connector and telemetry features use
-the following environment variables:
+The plugin can run with local files only. Connector features use the following
+environment variables:
 
 | Variable | Required | Used By | Purpose |
 |---|---:|---|---|
@@ -87,16 +87,13 @@ the following environment variables:
 | `M365_TENANT_ID` | Optional | `.mcp.json` Microsoft 365 MCP server | Identifies the Microsoft 365 tenant for SharePoint/OneDrive access. |
 | `M365_CLIENT_ID` | Optional | `.mcp.json` Microsoft 365 MCP server | Identifies the Microsoft 365 application/client. |
 | `M365_CLIENT_SECRET` | Optional | `.mcp.json` Microsoft 365 MCP server | Authenticates the Microsoft 365 application/client. |
-| `AILTIR_POSTHOG_PROJECT_TOKEN` | Optional | `scripts/report_usage.py`, `scripts/report_feedback.py` | Enables anonymous usage and feedback reporting. If unset, reporting is skipped. |
-| `AILTIR_POSTHOG_HOST` | Optional | `scripts/report_usage.py`, `scripts/report_feedback.py` | Overrides the PostHog host. Defaults to `https://eu.i.posthog.com`. |
-| `AILTIR_POSTHOG_TIMEOUT_SECONDS` | Optional | `scripts/report_usage.py`, `scripts/report_feedback.py` | Overrides the telemetry HTTP timeout. Defaults to `1.5` seconds. |
-| `AILTIR_POSTHOG_DEBUG` | Optional | `scripts/report_usage.py`, `scripts/report_feedback.py` | Writes telemetry debug logs when set. |
 | `CLAUDE_PLUGIN_ROOT` | Runtime | Commands, skills, telemetry scripts | Provided by Claude Code for installed plugins. Points to the plugin package root. |
 | `CLAUDE_PLUGIN_DATA` | Runtime | `scripts/report_usage.py`, `scripts/report_feedback.py` | Optional Claude/plugin data directory. Stores the anonymous install ID and telemetry debug log. Defaults to `~/.cache/ailtir-plugin`. |
 
-Telemetry is fail-open: missing tokens, missing data directories, or network
-failures do not block plugin workflows. Events set
-`$process_person_profile: false` and use an anonymous install ID.
+Telemetry uses the plugin's bundled PostHog project token, the EU PostHog host,
+and a fixed 1.5 second timeout. It is fail-open: data directory or network
+failures do not block plugin workflows. Events set `$process_person_profile:
+false` and use an anonymous install ID.
 
 ## Release Notes
 
