@@ -1,5 +1,10 @@
 $ErrorActionPreference = "Stop"
 
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+if (-not $env:CLAUDE_PLUGIN_ROOT) {
+    $env:CLAUDE_PLUGIN_ROOT = Split-Path -Parent $scriptDir
+}
+
 if ($args.Count -lt 1) {
     Write-Error "usage: run_python.ps1 <script.py> [args...]"
     exit 2

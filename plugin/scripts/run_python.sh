@@ -1,5 +1,11 @@
 #!/usr/bin/env sh
 
+script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" 2>/dev/null && pwd)
+if [ -z "${CLAUDE_PLUGIN_ROOT:-}" ]; then
+  CLAUDE_PLUGIN_ROOT=$(dirname -- "$script_dir")
+  export CLAUDE_PLUGIN_ROOT
+fi
+
 if [ "$#" -lt 1 ]; then
   printf '%s\n' "usage: run_python.sh <script.py> [args...]" >&2
   exit 2

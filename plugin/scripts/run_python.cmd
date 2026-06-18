@@ -1,6 +1,10 @@
 @echo off
 setlocal
 
+if not defined CLAUDE_PLUGIN_ROOT (
+  for %%I in ("%~dp0..") do set "CLAUDE_PLUGIN_ROOT=%%~fI"
+)
+
 if "%~1"=="" (
   echo usage: run_python.cmd ^<script.py^> [args...] 1>&2
   exit /b 2
