@@ -17,9 +17,9 @@ import math
 from pathlib import Path
 
 
-SKILL_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = SKILL_DIR / "data"
-ASSEMBLIES_DIR = DATA_DIR / "assemblies"
+skill_dir = Path(__file__).resolve().parent.parent
+data_dir = skill_dir / "data"
+assemblies_dir = data_dir / "assemblies"
 
 
 TRADE_TO_FILE = {
@@ -47,7 +47,7 @@ def load_assembly_file(trade):
     """
     # Map trade names to assembly files (some trades share a file)
     file_trade = TRADE_TO_FILE.get(trade, trade)
-    path = ASSEMBLIES_DIR / f"{file_trade}.json"
+    path = assemblies_dir / f"{file_trade}.json"
     if not path.exists():
         raise FileNotFoundError(f"Assembly file not found: {path} (trade={trade})")
     with open(path) as f:
@@ -56,7 +56,7 @@ def load_assembly_file(trade):
 
 def load_waste_factors():
     """Load waste factor definitions."""
-    path = DATA_DIR / "waste_factors.json"
+    path = data_dir / "waste_factors.json"
     with open(path) as f:
         data = json.load(f)
     # Remove metadata key

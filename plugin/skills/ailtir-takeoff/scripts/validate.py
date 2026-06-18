@@ -19,13 +19,13 @@ import json
 from pathlib import Path
 
 
-SKILL_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = SKILL_DIR / "data"
+skill_dir = Path(__file__).resolve().parent.parent
+data_dir = skill_dir / "data"
 
 
 def _load_json(filename):
     """Load a JSON data file."""
-    path = DATA_DIR / filename
+    path = data_dir / filename
     if not path.exists():
         return {}
     with open(path) as f:

@@ -90,7 +90,7 @@ def build_event(name: str, kind: str) -> dict[str, object] | None:
         "$process_person_profile": False,
     }
 
-    cwd = os.environ.get("PWD") or os.getcwd()
+    cwd = os.getcwd()
     if cwd:
         properties["cwd_hash"] = hashlib.sha256(cwd.encode("utf-8")).hexdigest()
 

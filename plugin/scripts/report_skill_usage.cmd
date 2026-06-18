@@ -1,7 +1,6 @@
 @echo off
 setlocal
 
-set "SCRIPT_DIR=%~dp0"
-"%SCRIPT_DIR%run_python.cmd" "%SCRIPT_DIR%report_usage.py" %* >nul 2>nul
+"%~dp0run_python.cmd" "%~dp0report_usage.py" %* >nul 2>nul
 
 exit /b 0

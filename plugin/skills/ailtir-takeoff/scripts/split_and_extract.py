@@ -35,8 +35,8 @@ except ImportError:
     Image = None
 
 # Import the extraction module
-SCRIPT_DIR = Path(__file__).parent
-sys.path.insert(0, str(SCRIPT_DIR))
+script_dir = Path(__file__).parent
+sys.path.insert(0, str(script_dir))
 from extract import extract_page
 
 

@@ -33,23 +33,23 @@ except ImportError:
     sys.exit(1)
 
 # Import geometry module
-SCRIPT_DIR = Path(__file__).parent
-sys.path.insert(0, str(SCRIPT_DIR))
+script_dir = Path(__file__).parent
+sys.path.insert(0, str(script_dir))
 try:
     from geometry import analyze_drawings
 except ImportError:
     analyze_drawings = None
     print("WARNING: geometry.py not found — geometric analysis disabled", file=sys.stderr)
 
-SKILL_DIR = SCRIPT_DIR.parent
-DATA_DIR = SKILL_DIR / "data"
+skill_dir = script_dir.parent
+data_dir = skill_dir / "data"
 
 
 # ── Load External Data ──
 
 def load_tag_patterns():
     """Load tag patterns from data/tags.json."""
-    tags_file = DATA_DIR / "tags.json"
+    tags_file = data_dir / "tags.json"
     if not tags_file.exists():
         print(f"WARNING: {tags_file} not found — using built-in patterns", file=sys.stderr)
         return _builtin_tag_patterns()
@@ -74,7 +74,7 @@ def load_tag_patterns():
 
 def load_standard_scales():
     """Load standard scales from data/standard_scales.json."""
-    scales_file = DATA_DIR / "standard_scales.json"
+    scales_file = data_dir / "standard_scales.json"
     if not scales_file.exists():
         return {"metric": [1, 2, 5, 10, 20, 25, 50, 75, 100, 200, 250, 500, 1000]}
     with open(scales_file) as f:

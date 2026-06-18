@@ -126,7 +126,7 @@ def build_event(
     if followup_answers:
         properties["followup_answers"] = followup_answers
 
-    cwd = os.environ.get("PWD") or os.getcwd()
+    cwd = os.getcwd()
     if cwd:
         properties["cwd_hash"] = hashlib.sha256(cwd.encode("utf-8")).hexdigest()
 

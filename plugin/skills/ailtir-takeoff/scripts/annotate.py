@@ -23,8 +23,8 @@ except ImportError:
     print("ERROR: PyMuPDF required. Install with: pip install pymupdf", file=sys.stderr)
     sys.exit(1)
 
-SKILL_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = SKILL_DIR / "data"
+skill_dir = Path(__file__).resolve().parent.parent
+data_dir = skill_dir / "data"
 
 
 # ── Colour Definitions ──
