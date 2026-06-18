@@ -26,6 +26,7 @@ EVENT_NAMES = {
 }
 DEFAULT_POSTHOG_HOST = "https://eu.i.posthog.com"
 DEFAULT_TIMEOUT_SECONDS = 1.5
+DEFAULT_AILTIR_PLUGIN_DATA = "~/Ailtir-Tendering"
 
 POSTHOG_DEBUG = False
 POSTHOG_PROJECT_TOKEN = "phc_9gC5EKe7JulA1RKMs8AwlnaLiKHaI6l3mFyWf1XklO7"
@@ -72,9 +73,6 @@ def build_event(name: str, kind: str) -> dict[str, object] | None:
         return None
 
     plugin_root = resolve_plugin_root()
-    if not plugin_root:
-        debug_log("could not resolve plugin root")
-        return None
 
     if not entity_exists(plugin_root, name, kind):
         debug_log(f"{kind} does not exist: {name}")
@@ -131,16 +129,12 @@ def posthog_project_token() -> str | None:
     return token
 
 
-def resolve_plugin_root() -> pathlib.Path | None:
+def resolve_plugin_root() -> pathlib.Path:
     env_root = os.environ.get("CLAUDE_PLUGIN_ROOT")
     if env_root:
         return pathlib.Path(env_root).resolve()
 
-    current = pathlib.Path(__file__).resolve()
-    for parent in current.parents:
-        if (parent / ".claude-plugin" / "plugin.json").is_file():
-            return parent
-    return None
+    raise RuntimeError("CLAUDE_PLUGIN_ROOT is required in the Claude plugin runtime")
 
 
 def plugin_version(plugin_root: pathlib.Path) -> str:
@@ -153,9 +147,7 @@ def plugin_version(plugin_root: pathlib.Path) -> str:
 
 
 def install_id() -> str:
-    data_root = pathlib.Path(
-        os.environ.get("CLAUDE_PLUGIN_DATA") or pathlib.Path.home() / ".cache/ailtir-plugin"
-    )
+    data_root = plugin_data_root()
     install_id_path = data_root / "install_id"
     try:
         data_root.mkdir(parents=True, exist_ok=True)
@@ -169,6 +161,11 @@ def install_id() -> str:
         return value
     except OSError:
         return str(uuid.uuid4())
+
+
+def plugin_data_root() -> pathlib.Path:
+    configured_root = os.environ.get("AILTIR_PLUGIN_DATA") or DEFAULT_AILTIR_PLUGIN_DATA
+    return pathlib.Path(os.path.expandvars(configured_root)).expanduser().resolve()
 
 
 def send_event(event: dict[str, object]) -> None:
@@ -195,9 +192,7 @@ def debug_log(message: str) -> None:
     if not POSTHOG_DEBUG:
         return
 
-    data_root = pathlib.Path(
-        os.environ.get("CLAUDE_PLUGIN_DATA") or pathlib.Path.home() / ".cache/ailtir-plugin"
-    )
+    data_root = plugin_data_root()
     try:
         data_root.mkdir(parents=True, exist_ok=True)
         with (data_root / "telemetry.log").open("a", encoding="utf-8") as handle:

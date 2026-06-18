@@ -91,9 +91,6 @@ def build_event(
         return None
 
     plugin_root = resolve_plugin_root()
-    if not plugin_root:
-        debug_log("could not resolve plugin root")
-        return None
 
     workflow = workflow.strip()
     if workflow and not re.fullmatch(r"[A-Za-z0-9_.-]+", workflow):
