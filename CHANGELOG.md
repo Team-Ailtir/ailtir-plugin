@@ -3,6 +3,18 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.10.0 - 2026-06-18
+
+Commit: pending - `Bump version to 2.10.0`
+
+- Made the Ailtir workspace root configurable with `AILTIR_PLUGIN_DATA`.
+- Moved anonymous install ID storage under `AILTIR_PLUGIN_DATA`.
+- Removed user-facing documentation for Claude runtime-only plugin variables.
+- Made telemetry fail fast when Claude does not provide the plugin root runtime
+  environment.
+- Bundled telemetry configuration in the plugin so users no longer configure
+  PostHog project token, host, timeout, or debug environment variables.
+
 ## 2.9.0 - 2026-06-17
 
 Commit: `b6fd577` - `Bump version to 2.9.0`
