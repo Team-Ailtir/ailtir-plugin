@@ -5,7 +5,7 @@ version. Entries use those version bumps as release boundaries.
 
 ## 2.10.0 - 2026-06-18
 
-Commit: pending - `Bump version to 2.10.0`
+Commit: `eb86ab9` - `Bump version to 2.10.0`
 
 - Made the Ailtir workspace root configurable with `AILTIR_PLUGIN_DATA`.
 - Moved anonymous install ID storage under `AILTIR_PLUGIN_DATA`.
