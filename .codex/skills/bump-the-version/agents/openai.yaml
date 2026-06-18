@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bump The Version"
+  short_description: "Bump this repo plugin version, changelog, commit, and tag."
+  default_prompt: "Bump the Ailtir plugin version, update the changelog, commit the release, and tag the version."
