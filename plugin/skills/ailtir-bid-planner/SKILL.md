@@ -120,5 +120,5 @@ If they agree, run the `ailtir-intelligence-builder` skill in Interview Mode.
 - [ ] Go/No-Go score is based on actual scoring criteria from `references/go-no-go-criteria.md`, not a guess.
 - [ ] All mandatory gates (CIRI, Safe-T-Cert, turnover) explicitly checked.
 - [ ] Compliance Matrix captures every evaluation criterion with exact weighting from the ITT.
-- [ ] Bid folder created at `~/Ailtir-Tendering/Bids/[BID]/` with all 9 sections.
+- [ ] Bid folder created under the workspace root (`AILTIR_PLUGIN_DATA` or `~/Ailtir-Tendering`) at `Bids/[BID]/` with all 9 sections.
 - [ ] Bid logged to Notion Bid Pipeline with correct status and return date.

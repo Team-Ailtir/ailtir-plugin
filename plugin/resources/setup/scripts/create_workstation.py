@@ -1,8 +1,16 @@
 import os
 import argparse
 
+DEFAULT_WORKSTATION_PATH = "~/Ailtir-Tendering"
+
+
+def default_root_dir():
+    return os.environ.get("AILTIR_PLUGIN_DATA") or DEFAULT_WORKSTATION_PATH
+
+
 def create_workstation(root_dir):
     """Creates the definitive Ailtir workstation folder structure."""
+    root_dir = os.path.abspath(os.path.expanduser(os.path.expandvars(root_dir)))
     
     # Define the core directories
     directories = [
@@ -38,7 +46,11 @@ def create_workstation(root_dir):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Create Ailtir Workstation structure")
-    parser.add_argument("--path", default=".", help="Root path for the workstation (defaults to current directory)")
+    parser.add_argument(
+        "--path",
+        default=None,
+        help="Root path for the workstation (defaults to AILTIR_PLUGIN_DATA or ~/Ailtir-Tendering)",
+    )
     args = parser.parse_args()
-    
-    create_workstation(args.path)
+
+    create_workstation(args.path or default_root_dir())

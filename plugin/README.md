@@ -87,6 +87,7 @@ environment variables:
 | `M365_TENANT_ID` | Optional | `.mcp.json` Microsoft 365 MCP server | Identifies the Microsoft 365 tenant for SharePoint/OneDrive access. |
 | `M365_CLIENT_ID` | Optional | `.mcp.json` Microsoft 365 MCP server | Identifies the Microsoft 365 application/client. |
 | `M365_CLIENT_SECRET` | Optional | `.mcp.json` Microsoft 365 MCP server | Authenticates the Microsoft 365 application/client. |
+| `AILTIR_PLUGIN_DATA` | Optional | `commands/setup.md`, `resources/setup/scripts/create_workstation.py` | Sets the Ailtir workspace root. Defaults to `~/Ailtir-Tendering`. |
 | `CLAUDE_PLUGIN_ROOT` | Runtime | Commands, skills, telemetry scripts | Provided by Claude Code for installed plugins. Points to the plugin package root. |
 | `CLAUDE_PLUGIN_DATA` | Runtime | `scripts/report_usage.py`, `scripts/report_feedback.py` | Optional Claude/plugin data directory. Stores the anonymous install ID and telemetry debug log. Defaults to `~/.cache/ailtir-plugin`. |
 
