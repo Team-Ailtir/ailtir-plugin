@@ -3,6 +3,10 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.12.1 - 2026-06-29
+
+- Removed the diagnostic `telemetry-test` skill. Its job (proving Cowork's sandbox blocks outbound network and doesn't substitute `${CLAUDE_PLUGIN_ROOT}`) is done; future revisits can resurrect it from git history if needed. The plugin now ships with zero telemetry surface and 32 user-invocable skills.
+
 ## 2.12.0 - 2026-06-29
 
 Cowork-first refactor. The Cowork sandbox blocks outbound network at DNS, does not substitute `${CLAUDE_PLUGIN_ROOT}` or `${CLAUDE_SKILL_DIR}`, and `cwd` at skill invocation is the session root rather than the skill directory — so every `${CLAUDE_PLUGIN_ROOT}`-anchored bash block in the plugin had been silently failing in production. This release fixes that.
