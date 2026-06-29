@@ -3,6 +3,14 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.11.0 - 2026-06-29
+
+- Unified commands and skills into a single `skills/` tree. The `commands/` and `resources/` folders are removed.
+- Dropped the redundant `ailtir-` prefix from all skill folders; the plugin namespace already supplies it. Slash commands stay `/ailtir-cowork-plugin:<name>`.
+- Folded `commands/setup.md`, `commands/prime.md`, and `commands/enable-monitor.md` into new skills under `skills/setup/`, `skills/prime/`, and `skills/enable-monitor/`.
+- Moved setup templates and the workstation creator into `skills/setup/`, the Notion cache sync script into `skills/prime/scripts/`, and the brand reference into `skills/dashboard/references/`.
+- Added a `telemetry-test` skill that probes whether relative-path bundled scripts execute in Cowork and whether PostHog egress is reachable. Use it once per deployment to determine whether the per-skill telemetry pattern can function.
+
 ## 2.10.3 - 2026-06-29
 
 Commit: `09a6d3d` - `Fix telemetry on Python 3.14 and bump to 2.10.3 (#3)`

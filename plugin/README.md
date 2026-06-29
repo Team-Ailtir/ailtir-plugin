@@ -6,9 +6,8 @@ Use [INSTALL.md][install] for setup and [CONTRIBUTING.md][contributing] for deve
 
 ## What It Provides
 
-- Scoped Claude commands under `/ailtir-cowork-plugin:*`.
-- Hidden workflow skills that commands invoke behind the scenes.
-- Bundled Python helpers for workbooks, project indexing, PDF processing, and takeoff support.
+- Scoped Claude skills under `/ailtir-cowork-plugin:*` covering the full tender lifecycle.
+- Bundled Python helpers (per-skill) for workbooks, project indexing, PDF processing, and takeoff support.
 - MCP server definitions for Notion and Microsoft 365 integrations.
 - Irish-market calibration for CWMF, PW-CF, RIAI, SEO, SCSI, ARM4, NRM2, CIRI, and Safe-T-Cert workflows.
 
@@ -95,6 +94,13 @@ failures do not block plugin workflows. Events set `$process_person_profile:
 false` and use an anonymous install ID.
 
 ## Release Notes
+
+### v2.11
+
+- Commands and skills unified — every workflow is now a skill under `skills/<name>/SKILL.md` and the slash command is `/ailtir-cowork-plugin:<name>`.
+- The old `commands/` and `resources/` folders are removed. Setup templates, the workstation creator, the Notion cache sync script, and brand references now live inside the skill that uses them.
+- New skills: `setup`, `prime`, `enable-monitor` (previously command-only).
+- Skill folders no longer carry the `ailtir-` prefix — the plugin namespace already supplies it.
 
 ### v2.7
 
