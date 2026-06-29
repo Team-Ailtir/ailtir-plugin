@@ -3,22 +3,44 @@ name: telemetry-test
 description: Diagnostic probe for Cowork sandbox capabilities. Runs a relative-path bundled Python script that tests DNS, TCP/TLS, and HTTP egress to PostHog, then prints a verdict. Use this once to confirm whether telemetry can work before standardising the per-skill telemetry pattern.
 ---
 
-# Telemetry Reachability Probe
+# Telemetry & Sandbox Probes
 
-This skill exists to answer two questions about the current Cowork sandbox:
+This skill bundles two diagnostic probes for the Cowork sandbox.
 
-1. **Do relative-path bundled scripts execute?** (`scripts/test_posthog.py` referenced relatively, not via `${CLAUDE_PLUGIN_ROOT}`.)
-2. **Is PostHog reachable from this sandbox?** (DNS, TCP/TLS, and HTTP capture all tested independently.)
+**Probe #1 (`test_posthog.py`)** — answered: PostHog is blocked, relative paths don't resolve from cwd.
 
-## What to do
+**Probe #2 (`test_egress_and_paths.py`)** — answers two follow-up questions:
 
-Run the bundled probe script:
+1. **Path resolution.** Is `${CLAUDE_SKILL_DIR}` or `${CLAUDE_PLUGIN_ROOT}` exported as an environment variable to the script? Where is cwd actually pointing? What's the reliable way to anchor a path to the skill's own directory?
+2. **Egress allowlist.** Which common SaaS / cloud hostnames does Cowork's proxy actually allow outbound to? Tested independently so a single PASS unlocks the option of routing telemetry through a relay on that domain.
+
+## How to run
+
+The script's location must be resolved relative to the skill's directory. The portable way:
 
 ```bash
-python scripts/test_posthog.py
+python3 "$(dirname "$0" 2>/dev/null || pwd)/scripts/test_egress_and_paths.py"
 ```
 
-If `python` is not on PATH, try:
+If that doesn't work (because `$0` isn't bound in the skill invocation context), fall back to the absolute path Claude already knows for this skill:
+
+```bash
+python3 <ABSOLUTE_PATH_TO_THIS_SKILL>/scripts/test_egress_and_paths.py
+```
+
+## How to read the output
+
+Three sections:
+
+- **Path resolution** — lists cwd, sys.argv[0], `__file__`, and every env var with "CLAUDE" in it. Tells us how to write reliable bundled-file references.
+- **Egress allowlist test** — for each host: DNS resolves and HTTP HEAD succeeds (PASS) or proxy blocks it (FAIL). Any single PASS means we have a viable telemetry destination if we relay through that domain.
+- **Verdict** — names reachable hosts (if any) and whether `${CLAUDE_SKILL_DIR}` / `${CLAUDE_PLUGIN_ROOT}` are exported as env vars.
+
+Paste the full output back so we can finalise the telemetry strategy.
+
+## Probe #1 (original PostHog reachability test)
+
+Still bundled; not needed to rerun. Result: DNS+egress blocked, relative paths failed.
 
 ```bash
 python3 scripts/test_posthog.py

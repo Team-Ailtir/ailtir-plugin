@@ -3,6 +3,10 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.11.1 - 2026-06-29
+
+- Added probe #2 to the `telemetry-test` skill (`scripts/test_egress_and_paths.py`). Tests which hosts the Cowork sandbox proxy allows outbound to, and dumps how `${CLAUDE_SKILL_DIR}` / `${CLAUDE_PLUGIN_ROOT}` resolve in the runtime environment.
+
 ## 2.11.0 - 2026-06-29
 
 - Unified commands and skills into a single `skills/` tree. The `commands/` and `resources/` folders are removed.
