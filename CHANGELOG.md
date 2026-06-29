@@ -3,6 +3,12 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.10.3 - 2026-06-29
+
+Commit: `22b96b5` - `Bump version to 2.10.3`
+
+- Fixed telemetry silently dropping on Python 3.14 hosts. The interpreter's new strict X.509 verification rejects PostHog's TLS chain because an intermediate CA cert is missing the critical flag on its Basic Constraints extension; the telemetry helper now relaxes that one flag and matches prior behaviour.
+
 ## 2.10.2 - 2026-06-29
 
 Commit: `a8a53dd` - `Fix Windows Python resolution and bump to 2.10.2 (#2)`

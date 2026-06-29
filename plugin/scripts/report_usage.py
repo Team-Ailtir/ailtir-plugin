@@ -13,6 +13,7 @@ import json
 import os
 import pathlib
 import re
+import ssl
 import sys
 import time
 import urllib.error
@@ -179,12 +180,21 @@ def send_event(event: dict[str, object]) -> None:
         method="POST",
     )
 
+    # Python 3.14 enabled VERIFY_X509_STRICT by default, which rejects CA
+    # certificates whose Basic Constraints extension is not marked critical.
+    # PostHog's TLS chain is missing that flag on an intermediate, so requests
+    # fail with CERTIFICATE_VERIFY_FAILED on 3.14 even though every browser and
+    # every Python <=3.13 accept the chain. Telemetry is best-effort and not
+    # security-sensitive, so we relax the strictness to match prior behaviour.
+    context = ssl.create_default_context()
+    context.verify_flags &= ~ssl.VERIFY_X509_STRICT
+
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
+        with urllib.request.urlopen(request, timeout=timeout, context=context) as response:
             status = response.status
             response_body = response.read(200).decode("utf-8", errors="replace")
             debug_log(f"posted to {host}/capture/ status={status} response={response_body}")
-    except (OSError, urllib.error.URLError) as exc:
+    except (OSError, urllib.error.URLError, ssl.SSLError) as exc:
         debug_log(f"PostHog request failed: {exc}")
 
 
