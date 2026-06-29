@@ -5,7 +5,7 @@ version. Entries use those version bumps as release boundaries.
 
 ## 2.10.2 - 2026-06-29
 
-Commit: pending - `Bump version to 2.10.2`
+Commit: `33bdec6` - `Bump version to 2.10.2`
 
 - Fixed Windows Python resolution: the launcher now skips the Microsoft Store python.exe App Execution Alias stubs and prefers the py launcher on Windows.
 - Fixed sync_notion_cache.py writing the mock cache with the platform default codec; the script now writes utf-8 so non-Latin-1 glyphs survive on Windows hosts.
