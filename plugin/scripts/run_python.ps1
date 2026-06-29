@@ -10,26 +10,31 @@ if ($args.Count -lt 1) {
     exit 2
 }
 
-$candidates = @(
-    @("python3"),
-    @("python"),
-    @("py", "-3")
-)
+function Resolve-RealPython {
+    param([string]$Name)
+    $cmd = Get-Command $Name -ErrorAction SilentlyContinue
+    if (-not $cmd) { return $null }
+    # Skip Windows App Execution Alias stubs under WindowsApps that print
+    # "Python was not found..." and exit non-zero.
+    if ($cmd.Source -and $cmd.Source -match "[\\/]WindowsApps[\\/]") { return $null }
+    return $cmd.Source
+}
 
-foreach ($candidate in $candidates) {
-    $command = $candidate[0]
-    $prefixArgs = @()
-    if ($candidate.Count -gt 1) {
-        $prefixArgs = $candidate[1..($candidate.Count - 1)]
-    }
+# Prefer the py launcher on Windows — it sidesteps PATH-ordering issues with
+# the App Execution Alias stubs entirely.
+$pyLauncher = Get-Command py -ErrorAction SilentlyContinue
+if ($pyLauncher) {
+    & py -3 @args
+    exit $LASTEXITCODE
+}
 
-    try {
-        & $command @prefixArgs @args
+foreach ($name in @("python3", "python")) {
+    $exe = Resolve-RealPython $name
+    if ($exe) {
+        & $exe @args
         exit $LASTEXITCODE
-    } catch {
-        continue
     }
 }
 
-Write-Error "Python 3 was not found. Install Python 3 and ensure python3, python, or py is on PATH."
+Write-Error "Python 3 was not found. Install Python 3 and ensure python3, python, or py is on PATH (and disable the Microsoft Store python.exe App Execution Aliases on Windows)."
 exit 127

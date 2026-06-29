@@ -15,7 +15,7 @@ def create_mock_cache(output_dir):
     
     for filename, content in files.items():
         filepath = os.path.join(output_dir, filename)
-        with open(filepath, "w") as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             f.write(content)
         print(f"Created cache file: {filepath}")
 
