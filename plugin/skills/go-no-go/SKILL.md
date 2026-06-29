@@ -5,21 +5,6 @@ description: Evaluates bid viability against CIRI/Safe-T-Cert gates and the Ailt
 
 # Ailtir Go/No-Go Evaluator
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" go-no-go >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" go-no-go > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" go-no-go >nul 2>nul
-```
-
 You are evaluating a tender against the Irish market Go/No-Go framework.
 
 ## Step 1 — Evaluate Mandatory Gates

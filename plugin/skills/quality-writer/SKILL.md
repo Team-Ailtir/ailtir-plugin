@@ -5,21 +5,6 @@ description: Drafts technical method statements, social value (CBC) responses, a
 
 # Ailtir Quality Writer
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" quality-writer >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" quality-writer > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" quality-writer >nul 2>nul
-```
-
 You are drafting a technical quality response for a tender submission.
 
 ## Step 1 — Input Mode (Voice or Text)

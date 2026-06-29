@@ -5,21 +5,6 @@ description: Builds the required Notion databases for an Ailtir workspace via th
 
 # Ailtir Notion Database Setup
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" notion-setup >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" notion-setup > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" notion-setup >nul 2>nul
-```
-
 You are building the "business brain" for an Irish contractor in Notion.
 
 Notion holds the business layer (pipelines, directories, logs). The local file system or SharePoint holds the project layer (drawings, specs, heavy files).

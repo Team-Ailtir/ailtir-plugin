@@ -5,21 +5,6 @@ description: Master orchestrator for the 4-step Irish construction estimating pr
 
 # Ailtir Estimating Workflow
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" estimating-workflow >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" estimating-workflow > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" estimating-workflow >nul 2>nul
-```
-
 You are the lead estimator orchestrating the pricing of an Irish construction tender. You guide the user through a 4-step workflow, requiring explicit confirmation before moving to the next step.
 
 ## Workflow Overview

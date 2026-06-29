@@ -5,32 +5,13 @@ description: Extracts elemental quantities from construction drawings (PDF) into
 
 # Ailtir Takeoff
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" takeoff >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" takeoff > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" takeoff >nul 2>nul
-```
-
 You are measuring construction quantities from tender drawings. This skill runs the Python takeoff scripts to extract counts, lengths, and areas, and formats them into an Excel register aligned with Irish estimating practice.
 
 ## Step 1 — Verify the Request
 Ask the user which drawing(s) they want measured and what elements they are looking for (e.g., "count all Type A doors on drawing A-101", "measure the blockwork walls on the ground floor plan").
 
 ## Step 2 — Run the Extraction Script
-Run the `extract.py` script on the specified drawing. The script uses PDF vector extraction and geometry reconstruction to find elements.
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/takeoff/scripts/extract.py" [drawing.pdf] -o takeoff.json
-```
+Run the bundled `scripts/extract.py` helper in this skill's directory on the specified drawing. The script uses PDF vector extraction and geometry reconstruction to find elements. Invoke it with `python3`, pass the drawing PDF path as the positional argument, and pass `-o takeoff.json` for output.
 
 ## Step 3 — Format for Irish Practice
 The script outputs raw JSON. You must read the JSON and format it into a table that follows the SCSI / NRM2 elemental structure (e.g., Substructure, Superstructure, Internal Finishes, Services).
@@ -43,11 +24,7 @@ For each item, list:
 - **Drawing Ref:**
 
 ## Step 4 — Run the Excel Output Script
-Run the `excel_output.py` script to generate the final Ailtir-branded workbook.
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/takeoff/scripts/excel_output.py" takeoff.json -o takeoff_register.xlsx
-```
+Run the bundled `scripts/excel_output.py` helper in this skill's directory to generate the final Ailtir-branded workbook. Invoke it with `python3`, pass `takeoff.json` as the positional argument, and pass `-o takeoff_register.xlsx` for output.
 
 Present the Excel file to the user.
 

@@ -5,21 +5,6 @@ description: "Captures lightweight user feedback for an Ailtir workflow: first a
 
 # Ailtir Feedback
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" feedback >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" feedback > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" feedback >nul 2>nul
-```
-
 You collect feedback without turning it into a long survey. The goal is to understand why the last Ailtir workflow was or was not useful.
 
 ## Privacy Guardrail
@@ -80,39 +65,23 @@ Each option should include a short human-readable description.
 
 If `AskUserQuestion` is unavailable in the current host, ask the same three questions in plain text with three numbered options each.
 
-## Step 5 - Report Feedback
+## Step 5 - Write Feedback to the Workspace
 
-Report the feedback with the platform-appropriate launcher and ignore failures.
+Append the collected rating, reason, workflow, and the three follow-up answers to the local feedback log at `<workspace-root>/Daily/feedback.md` (create the file if it doesn't exist). Workspace root resolves from `AILTIR_PLUGIN_DATA` or defaults to `~/Ailtir-Tendering`.
 
-Use the collected rating, reason, workflow name, workflow kind, and the three selected follow-up answers:
+Use this entry format (Markdown, newest entry at the top):
 
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/scripts/report_feedback.py" \
-  --rating "[1-10]" \
-  --reason "[reason]" \
-  --workflow "[command-or-skill-name]" \
-  --workflow-kind "command" \
-  --answer "output_quality=[selected-option]" \
-  --answer "context_fit=[selected-option]" \
-  --answer "time_impact=[selected-option]" >/dev/null 2>&1 || true
+```markdown
+## [YYYY-MM-DD HH:MM] [workflow-name]
+
+- Rating: [1-10]
+- Reason: [reason or "(none)"]
+- output_quality: [selected-option]
+- context_fit: [selected-option]
+- time_impact: [selected-option]
 ```
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\run_python.ps1" "$env:CLAUDE_PLUGIN_ROOT\scripts\report_feedback.py" `
-  --rating "[1-10]" `
-  --reason "[reason]" `
-  --workflow "[command-or-skill-name]" `
-  --workflow-kind "command" `
-  --answer "output_quality=[selected-option]" `
-  --answer "context_fit=[selected-option]" `
-  --answer "time_impact=[selected-option]" > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\run_python.cmd" "%CLAUDE_PLUGIN_ROOT%\scripts\report_feedback.py" --rating "[1-10]" --reason "[reason]" --workflow "[command-or-skill-name]" --workflow-kind "command" --answer "output_quality=[selected-option]" --answer "context_fit=[selected-option]" --answer "time_impact=[selected-option]" >nul 2>nul
-```
-
-Then briefly thank the user and stop. Do not continue asking feedback questions.
+After writing, briefly thank the user and stop. Do not continue asking feedback questions.
 
 ## Anti-Patterns
 

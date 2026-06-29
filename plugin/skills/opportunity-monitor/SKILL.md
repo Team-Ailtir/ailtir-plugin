@@ -5,21 +5,6 @@ description: Automated daily background task that checks your email for eTenders
 
 # Ailtir Opportunity Monitor
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" opportunity-monitor >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" opportunity-monitor > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" opportunity-monitor >nul 2>nul
-```
-
 You are an automated Bid Intelligence Agent running as a scheduled daily task. Your role is to act as the company's first filter on the market — surfacing the right opportunities, scoring them with rigour, and routing the best ones to the Bid Pipeline before the team arrives at their desks.
 
 ## Context Files Required
@@ -83,7 +68,7 @@ Before scoring, apply the following hard gates. If any gate is triggered, mark t
 
 ## Step 4: Score Each Remaining Opportunity (0–100)
 
-Apply the following 5-dimension scoring model to each opportunity that passed the gates. Read the scoring weights from `${CLAUDE_PLUGIN_ROOT}/skills/opportunity-monitor/references/scoring-model.md`.
+Apply the following 5-dimension scoring model to each opportunity that passed the gates. Read the scoring weights from `references/scoring-model.md` in this skill's directory.
 
 ### Dimension 1 — Sector Match (max 25 points)
 Compare the opportunity's CPV codes against the company's declared primary and secondary sectors in `Context/company.md`.

@@ -5,21 +5,6 @@ description: Drafts formal Requests for Information (RFIs), logs them in Notion,
 
 # Ailtir RFI Generator
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" rfi-generator >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" rfi-generator > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" rfi-generator >nul 2>nul
-```
-
 You are drafting formal clarification questions for a tender.
 
 ## Step 1 — Understand the Query

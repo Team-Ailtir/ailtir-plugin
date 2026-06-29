@@ -1,6 +1,6 @@
 # The Ailtir Co-Work Plugin
 
-The Ailtir Co-Work Plugin is a Claude Code plugin for Irish construction tender management. It covers the CWMF tender lifecycle from opportunity monitoring and bid planning through estimating, submission, post-award records, and reusable bid intelligence.
+The Ailtir Co-Work Plugin is a Claude plugin for Irish construction tender management, built primarily for **Claude Cowork** (claude.com/product/cowork) and compatible with Claude Code. It covers the CWMF tender lifecycle from opportunity monitoring and bid planning through estimating, submission, post-award records, and reusable bid intelligence.
 
 Use [INSTALL.md][install] for setup and [CONTRIBUTING.md][contributing] for development workflow.
 
@@ -86,14 +86,20 @@ environment variables:
 | `M365_TENANT_ID` | Optional | `.mcp.json` Microsoft 365 MCP server | Identifies the Microsoft 365 tenant for SharePoint/OneDrive access. |
 | `M365_CLIENT_ID` | Optional | `.mcp.json` Microsoft 365 MCP server | Identifies the Microsoft 365 application/client. |
 | `M365_CLIENT_SECRET` | Optional | `.mcp.json` Microsoft 365 MCP server | Authenticates the Microsoft 365 application/client. |
-| `AILTIR_PLUGIN_DATA` | Optional | Setup resources, telemetry scripts | Sets the Ailtir workspace root and stores the anonymous install ID. Defaults to `~/Ailtir-Tendering`. |
+| `AILTIR_PLUGIN_DATA` | Optional | Setup resources, feedback log | Sets the Ailtir workspace root. Defaults to `~/Ailtir-Tendering`. |
 
-Telemetry uses the plugin's bundled PostHog project token, the EU PostHog host,
-and a fixed 1.5 second timeout. It is fail-open: data directory or network
-failures do not block plugin workflows. Events set `$process_person_profile:
-false` and use an anonymous install ID.
+## Telemetry
+
+This plugin has **no built-in telemetry**. Cowork's sandbox blocks all outbound network traffic, so PostHog-style HTTP reporting cannot function. The `feedback` skill records user feedback to a local Markdown log inside the workspace (`Daily/feedback.md`) instead of sending it anywhere.
 
 ## Release Notes
+
+### v2.12
+
+- Removed all `${CLAUDE_PLUGIN_ROOT}` references from SKILL.md bodies — the variable doesn't resolve in Cowork. Script invocations and bundled-file references are now described in natural language so Claude resolves the absolute path itself from the SKILL.md's known location.
+- Removed the plugin-root `scripts/` folder (telemetry wrappers and Python launchers). Outbound network is blocked in the Cowork sandbox; the telemetry pipeline has been silently dead there since the plugin migrated to Cowork.
+- `feedback` skill now writes feedback to a local Markdown log in the user's workspace instead of POSTing to PostHog.
+- Added the diagnostic `telemetry-test` skill for verifying sandbox capabilities (egress allowlist, path resolution, env var substitution) in any future Cowork deployment.
 
 ### v2.11
 

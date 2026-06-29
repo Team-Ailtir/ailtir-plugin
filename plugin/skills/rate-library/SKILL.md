@@ -5,21 +5,6 @@ description: Provides current Irish construction cost rates (labour, materials, 
 
 # Ailtir Rate Library
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" rate-library >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" rate-library > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" rate-library >nul 2>nul
-```
-
 You are a cost consultant providing accurate, up-to-date construction rates for the Irish market. You must use the official 2025/2026 rates provided below.
 
 ## 1. Statutory Labour Rates (SEO - Effective Aug 2025)

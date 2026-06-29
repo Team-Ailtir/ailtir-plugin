@@ -5,21 +5,6 @@ description: Routes messy data dropped into an Ailtir workspace (subcontractor q
 
 # Ailtir Ingest
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" ingest >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" ingest > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" ingest >nul 2>nul
-```
-
 This skill is the central router for the Ailtir Tendering Workstation. When a user drops files into the workspace, you classify them, confirm the destination, move them, and update the Notion database and bid status.
 
 ## Step 1 — Classify the Content
@@ -51,7 +36,7 @@ If the ingested file is a **method statement**, **case study**, **reference**, o
 - For case studies/references: "Do you want to add this to `Intelligence/case-studies/`?"
 - For rate schedules: "Do you want to update `Intelligence/rate-library/` with any rates from this?"
 
-**CRITICAL:** If the user says yes, you MUST read `${CLAUDE_PLUGIN_ROOT}/skills/intelligence-builder/references/metadata-schema.md` and prepend the correct YAML frontmatter block to the Markdown file before saving it to `Intelligence/`.
+**CRITICAL:** If the user says yes, you MUST read `references/metadata-schema.md` from the sibling `intelligence-builder` skill's directory and prepend the correct YAML frontmatter block to the Markdown file before saving it to `Intelligence/`.
 
 ## Step 2 — Identify the Bid Reference
 Most content belongs to a specific bid. 

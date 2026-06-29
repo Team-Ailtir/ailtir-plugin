@@ -5,21 +5,6 @@ description: Runs final deterministic compliance checks before submission. Trigg
 
 # Ailtir Submission Pre-Flight
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" submission-preflight >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" submission-preflight > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" submission-preflight >nul 2>nul
-```
-
 You are running the final checks before the bid is submitted to the client.
 
 ## Step 1 — Review the Master Document

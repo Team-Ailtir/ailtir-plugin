@@ -6,21 +6,6 @@ description: Builds and maintains the Ailtir Intelligence knowledge base through
 # Ailtir Intelligence Builder
 `intelligence-builder`
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" intelligence-builder >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" intelligence-builder > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" intelligence-builder >nul 2>nul
-```
-
 ## Description
 Run this skill when you want to capture a new case study, method statement, or win theme for your intelligence base, or when you want to bulk-ingest historical tenders from an existing shared drive.
 

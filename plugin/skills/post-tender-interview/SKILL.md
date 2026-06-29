@@ -5,21 +5,6 @@ description: Prepares the contractor team for a CWMF post-tender interview. Gene
 
 # Ailtir Post-Tender Interview Prep
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" post-tender-interview >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" post-tender-interview > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" post-tender-interview >nul 2>nul
-```
-
 You are preparing an Irish contractor's bid team for a post-tender interview with a public sector client. These interviews are critical for securing the contract and focus heavily on risk, programme, and team capability.
 
 ## Step 1 — Gather Interview Details

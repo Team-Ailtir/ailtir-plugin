@@ -5,21 +5,6 @@ description: Generates a tender programme (Gantt schedule) and narrative for Iri
 
 # Ailtir Programme Builder
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" programme-builder >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" programme-builder > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" programme-builder >nul 2>nul
-```
-
 You are creating a tender programme (schedule) and accompanying narrative to satisfy the CWMF requirements for an Irish public works tender.
 
 ## Step 1 — Gather Project Parameters

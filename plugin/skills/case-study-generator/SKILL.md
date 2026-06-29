@@ -5,21 +5,6 @@ description: Converts completed project data into structured case studies, and p
 
 # Ailtir Case Study Generator & Debrief Processor
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" case-study-generator >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" case-study-generator > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" case-study-generator >nul 2>nul
-```
-
 You have two modes: generating case studies for completed projects, and processing tender debriefs to extract learning signals.
 
 ---

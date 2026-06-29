@@ -5,29 +5,10 @@ description: Session initialization. Syncs Notion databases to local markdown ca
 
 # Ailtir Session Prime
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" prime >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" prime > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" prime >nul 2>nul
-```
-
 This skill prepares the workspace for a new session.
 
 ## Step 1 — Sync Notion Cache
-Run the `sync_notion_cache.py` script to pull the latest data from the Notion databases (Bid Pipeline, Subcontractor Directory, CRM, RFI Log) into the local `Context/notion-cache/` folder.
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/prime/scripts/sync_notion_cache.py" --output-dir Context/notion-cache/
-```
+Run the bundled `scripts/sync_notion_cache.py` helper in this skill's directory with `python3`. Pass `--output-dir Context/notion-cache/`. This pulls the latest data from the Notion databases (Bid Pipeline, Subcontractor Directory, CRM, RFI Log) into the local cache folder.
 
 ## Step 2 — Read Context
 Read `Context/company.md`, `CLAUDE.md`, and the newly synced `Context/notion-cache/bid-pipeline.md`.

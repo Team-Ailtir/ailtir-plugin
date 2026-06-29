@@ -5,21 +5,6 @@ description: Index a construction project folder into three reusable markdown co
 
 # Project Indexer
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" project-indexer >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" project-indexer > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" project-indexer >nul 2>nul
-```
-
 Transforms a construction project folder into three durable markdown context files that downstream Claude sessions can read cheaply, instead of repeatedly re-parsing PDFs, specifications, and drawings.
 
 ## Why this skill exists
@@ -47,11 +32,7 @@ Follow these steps in order. Show the user what you're doing at each step — es
 
 ### Step 1 — Discover the project
 
-Walk the project root and build a complete inventory. Use `scripts/discover.py`:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/project-indexer/scripts/discover.py" "<project_root>" -o /tmp/project_inventory.json
-```
+Walk the project root and build a complete inventory. Run the bundled `scripts/discover.py` helper in this skill's directory with `python3`. Pass `<project_root>` as the positional argument and `-o /tmp/project_inventory.json` for output.
 
 This produces a JSON inventory listing every file, its size, its folder, and (for PDFs) quick stats that help classify it as a drawing vs a document.
 
@@ -61,11 +42,7 @@ Show the user the folder tree and a short summary (e.g. "Found 142 PDFs across 7
 
 ### Step 2 — Classify each PDF
 
-For every PDF, decide whether it's a **drawing** or a **document**. Use `scripts/classify.py`:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/project-indexer/scripts/classify.py" /tmp/project_inventory.json -o /tmp/project_classified.json
-```
+For every PDF, decide whether it's a **drawing** or a **document**. Run the bundled `scripts/classify.py` helper in this skill's directory with `python3`. Pass `/tmp/project_inventory.json` as the positional argument and `-o /tmp/project_classified.json` for output.
 
 The classifier uses vector statistics (page orientation, line count, text density, aspect ratio) to split drawings from documents. It's fast and local — no vision calls. Borderline cases get flagged for human confirmation.
 
@@ -156,13 +133,9 @@ Record the chosen perspective. It goes in `CLAUDE.md` and at the top of `drawing
 
 #### Step 5b — Split every drawing PDF into single-sheet PDFs
 
-Run `scripts/process_drawing.py` against every drawing PDF, sending output into `0. AI Context/drawings_split/<source_stem>/`:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/project-indexer/scripts/process_drawing.py" "<drawing_path>" \
-  -o "<project_root>/0. AI Context/drawings_split/<source_stem>" \
-  --dpi 200
-```
+Run the bundled `scripts/process_drawing.py` helper in this skill's directory against every drawing PDF, sending output into `0. AI Context/drawings_split/<source_stem>/`. Invoke with `python3`, pass the drawing PDF path as the positional argument, and pass:
+- `-o "<project_root>/0. AI Context/drawings_split/<source_stem>"`
+- `--dpi 200`
 
 For each input PDF this produces, per page:
 - `<stem>_sheet<N>.pdf` — durable single-sheet PDF (kept; this is the persistent artefact)

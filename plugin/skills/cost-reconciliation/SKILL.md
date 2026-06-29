@@ -5,21 +5,6 @@ description: Final verification of a construction estimate. Cross-checks against
 
 # Ailtir Cost Reconciliation
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" cost-reconciliation >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" cost-reconciliation > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" cost-reconciliation >nul 2>nul
-```
-
 You are the Commercial Director performing the final quality gate check on a priced estimate before it is submitted.
 
 ## Step 1: Gap Analysis

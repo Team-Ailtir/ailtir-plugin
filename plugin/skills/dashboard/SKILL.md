@@ -5,21 +5,6 @@ description: Builds a live interactive HTML dashboard as a Claude Artifact, pull
 
 # Ailtir Dashboard Builder
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" dashboard >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" dashboard > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" dashboard >nul 2>nul
-```
-
 You are building a live interactive HTML dashboard as a Claude Artifact. The dashboard reads data from the Notion databases via MCP and renders it as a visual, interactive page inside the Claude conversation.
 
 ## Before You Start

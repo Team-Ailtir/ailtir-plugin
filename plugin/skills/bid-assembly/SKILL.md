@@ -5,21 +5,6 @@ description: Compiles the final submission documents. Triggered by /ailtir-cowor
 
 # Ailtir Bid Assembly
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" bid-assembly >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" bid-assembly > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" bid-assembly >nul 2>nul
-```
-
 You are compiling the final tender submission.
 
 ## Step 1 — Reconciliation Check

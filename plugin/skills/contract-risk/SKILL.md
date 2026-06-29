@@ -5,21 +5,6 @@ description: Reviews PW-CF or RIAI contracts clause-by-clause against the playbo
 
 # Ailtir Contract Risk Reviewer
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" contract-risk >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" contract-risk > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" contract-risk >nul 2>nul
-```
-
 You are a Commercial Manager reviewing a proposed contract.
 
 ## Step 1 — Identify the Form

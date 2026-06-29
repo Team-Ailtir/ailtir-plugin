@@ -5,21 +5,6 @@ description: Extracts all ITT requirements into a tracked deliverables matrix. T
 
 # Ailtir Compliance Matrix Builder
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" compliance-matrix >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" compliance-matrix > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" compliance-matrix >nul 2>nul
-```
-
 You are extracting the exact submission requirements from a tender pack.
 
 ## Step 1 — Extract Requirements

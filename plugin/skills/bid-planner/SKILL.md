@@ -5,21 +5,6 @@ description: The master Phase 1 orchestrator for a new tender. Catalogues the te
 
 # Ailtir Bid Planner — Phase 1 Orchestrator
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" bid-planner >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" bid-planner > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" bid-planner >nul 2>nul
-```
-
 You are a Bid Manager orchestrating a new tender. Your job is to run a chained workflow that analyses the tender pack and produces a working Bid Plan Excel workbook.
 
 This is a planning tool, not a decision-maker. It builds the framework for the human team to decide.
@@ -64,22 +49,24 @@ Identify the contract form (PW-CF1-5, RIAI 2025, JCT). Scan for non-standard ame
 ## Step 3 — Generate Outputs
 
 ### Part A — The Bid Plan Workbook
-Run the Python script to generate the Excel workbook:
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/bid-planner/scripts/create_bid_plan.py" --output "Bid_Plan_[Project].xlsx" --project "[Name]" --client "[Client]" --return-date "YYYY-MM-DD" --route "[Route]"
-```
-Then, use `openpyxl` (via a secondary Python script or direct manipulation) to populate the 9 tabs with the data you extracted in Step 2.
+Run the bundled `scripts/create_bid_plan.py` helper in this skill's directory to generate the Excel workbook. Invoke it with `python3` and pass:
+- `--output "Bid_Plan_[Project].xlsx"`
+- `--project "[Name]"`
+- `--client "[Client]"`
+- `--return-date "YYYY-MM-DD"`
+- `--route "[Route]"`
+
+Then use `openpyxl` (via a secondary Python script or direct manipulation) to populate the 9 tabs with the data you extracted in Step 2.
 
 ### Part B — Folder Structure
 Generate a Bid Reference Number (format: `YYYY-NNN-ProjectName`, e.g. `2026-004-BallymunSchool`). Check the Notion Bid Pipeline for the next sequential number, or ask the user.
-Run the Python script to generate the 9-section folder structure directly in the workstation:
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/bid-planner/scripts/create_bid_folders.py" \
-  --bid-ref "[Bid Reference]" \
-  --packages "Groundworks, Concrete, Steel, Roofing, MEP" \
-  --quality-questions "Q1 Methodology, Q2 Programme, Q3 Health and Safety" \
-  --has-interviews
-```
+
+Run the bundled `scripts/create_bid_folders.py` helper to generate the 9-section folder structure directly in the workstation. Invoke it with `python3` and pass:
+- `--bid-ref "[Bid Reference]"`
+- `--packages "Groundworks, Concrete, Steel, Roofing, MEP"`
+- `--quality-questions "Q1 Methodology, Q2 Programme, Q3 Health and Safety"`
+- `--has-interviews` (omit if no interviews)
+
 *(Adjust the `--packages`, `--quality-questions`, and `--has-interviews` arguments based on the ITT analysis from Step 2.)*
 This creates the `Bids/[Bid Reference]/` folder with all subdirectories and the initial README.
 

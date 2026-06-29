@@ -3,6 +3,17 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.12.0 - 2026-06-29
+
+Cowork-first refactor. The Cowork sandbox blocks outbound network at DNS, does not substitute `${CLAUDE_PLUGIN_ROOT}` or `${CLAUDE_SKILL_DIR}`, and `cwd` at skill invocation is the session root rather than the skill directory — so every `${CLAUDE_PLUGIN_ROOT}`-anchored bash block in the plugin had been silently failing in production. This release fixes that.
+
+- Removed `${CLAUDE_PLUGIN_ROOT}` from every SKILL.md. Script invocations and bundled-file references are now described in natural language; Claude resolves the absolute path from the SKILL.md's known location.
+- Deleted the plugin-root `scripts/` folder. The telemetry wrappers (`report_skill_usage.*`, `report_command_usage.*`), the PostHog reporter (`report_usage.py`, `report_feedback.py`), and the Python launchers (`run_python.*`) are all gone. The PostHog pipeline cannot function in Cowork (egress blocked) and was unused after the SKILL.md rewrites.
+- Stripped the `## Usage Reporting` bash block from all 33 SKILL.md files.
+- `feedback` skill now writes feedback to a local `Daily/feedback.md` in the workspace instead of POSTing to PostHog.
+- `setup`, `prime`, `bid-planner`, `bid-leveling`, `package-breakdown`, `takeoff`, `project-indexer` rewrote their Python-helper invocations as natural-language instructions.
+- Updated AGENTS.md and CONTRIBUTING.md to document the Cowork runtime constraints and the new script-invocation pattern.
+
 ## 2.11.1 - 2026-06-29
 
 - Added probe #2 to the `telemetry-test` skill (`scripts/test_egress_and_paths.py`). Tests which hosts the Cowork sandbox proxy allows outbound to, and dumps how `${CLAUDE_SKILL_DIR}` / `${CLAUDE_PLUGIN_ROOT}` resolve in the runtime environment.

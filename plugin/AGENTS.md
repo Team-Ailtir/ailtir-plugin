@@ -2,40 +2,60 @@
 
 This file is the agent-facing contributor guide for the Ailtir Co-Work Plugin. `CLAUDE.md` is a symlink to this file so Claude-oriented tooling and agent-oriented tooling share one source of truth.
 
+This plugin targets **Claude Cowork** as its primary runtime (claude.com/product/cowork). It also works in Claude Code where the runtime is more permissive, but every convention here is set for Cowork's constraints.
+
 ## Agent Responsibilities
 
 - Keep user-facing behavior documented in [README.md][readme].
-- Keep install, Python, and MCP setup instructions in [INSTALL.md][install].
+- Keep install and MCP setup instructions in [INSTALL.md][install].
 - Keep human contribution workflow in [CONTRIBUTING.md][contributing].
 - Do not duplicate those documents here.
 
 ## Project Structure
 
 - `.claude-plugin/` contains the `plugin.json` manifest. Only `plugin.json` belongs here.
-- `skills/` contains every user-invocable workflow and reference skill, plus its workflow-local `scripts/`, `references/`, and `templates/`. Each skill is a folder with a `SKILL.md`.
-- `scripts/` at plugin root contains shared infrastructure: the platform-specific Python launcher (`run_python.*`) and the fail-open telemetry wrappers (`report_skill_usage.*` and the now-unused `report_command_usage.*` retained for back-compat).
+- `skills/` contains every user-invocable workflow, plus each skill's workflow-local `scripts/`, `references/`, and `templates/`. Each skill is a folder with a `SKILL.md`.
 - `.mcp.json` declares bundled Notion and Microsoft 365 MCP server integrations.
 
-There is **no** `commands/` folder and **no** `resources/` folder. Slash commands and skills have been unified — every skill at `skills/<name>/SKILL.md` is the slash command `/ailtir-cowork-plugin:<name>`. Setup templates, bundled scripts, and brand references live inside the skill that uses them.
+There is **no** `commands/` folder, **no** `resources/` folder, and **no** plugin-root `scripts/` folder. Slash commands and skills are unified — every skill at `skills/<name>/SKILL.md` is the slash command `/ailtir-cowork-plugin:<name>`. Setup templates, bundled scripts, and brand references live inside the skill that uses them.
+
+## Cowork Runtime Constraints (Important)
+
+Empirical evidence from `/ailtir-cowork-plugin:telemetry-test` (2026-06-29) on the Cowork sandbox:
+
+- **No outbound internet.** All 13 candidate hosts blocked at DNS — including anthropic.com, github.com, pypi.org, posthog.com, vercel.app, ailtir.ai. No telemetry POST, package install, or external API call from a skill's script will succeed.
+- **`${CLAUDE_PLUGIN_ROOT}` does NOT resolve in Cowork.** Documented for Claude Code only. Never use it in SKILL.md bodies.
+- **`${CLAUDE_SKILL_DIR}` does NOT resolve in Cowork.** Not exported as an env var. Don't rely on it.
+- **`cwd` at skill invocation is the session root, NOT the skill directory.** Relative paths like `scripts/foo.py` from a bash block will fail.
+- **`__file__` in Python and `$0` in bash (when called with an absolute path) ARE reliable.** Anchor any bundled-file resolution off these.
+
+The working pattern: SKILL.md describes the work in natural language and names bundled scripts and references by skill-relative path (e.g. `scripts/create_workstation.py`, `references/scoring-model.md`, `templates/CLAUDE.md`). Claude reads SKILL.md from a known absolute path, so it can construct the absolute path to each bundled file itself.
 
 ## Editing Rules
 
 Add new user-visible workflows as `skills/<short-name>/SKILL.md`. The folder name becomes the slash command (`/ailtir-cowork-plugin:<short-name>`). Do NOT prefix folder names with `ailtir-` — the plugin namespace already supplies that.
 
-Use `${CLAUDE_PLUGIN_ROOT}` for bundled file references inside SKILL.md bodies — for example `${CLAUDE_PLUGIN_ROOT}/skills/setup/templates/CLAUDE.md`. The newer `${CLAUDE_SKILL_DIR}` variable resolves to the current skill's own directory and is preferred for skill-local files; both work in skill content.
+**For script invocations in SKILL.md, do NOT use bash code blocks with `${CLAUDE_PLUGIN_ROOT}/...` paths.** Instead, write natural-language instructions like:
 
-Never hard-code local absolute paths such as `/home/...` or `/tmp/...` unless the output is intentionally temporary.
+> Run the bundled `scripts/foo.py` helper in this skill's directory with `python3`. Pass `--output "..."` and `--project "..."`.
 
-Invoke bundled Python helpers through the platform launchers in `scripts/`:
-`run_python.sh` for macOS/Linux, `run_python.ps1` for PowerShell, and
-`run_python.cmd` for cmd. Use the telemetry-specific `report_skill_usage.*`
-wrappers at the top of every SKILL.md for fail-open usage reporting.
+Claude will construct the absolute path itself.
+
+For bundled references, refer to them by skill-relative path:
+
+> Read `references/scoring-model.md` from this skill's directory.
+
+For cross-skill references, name the sibling skill explicitly:
+
+> Read `references/metadata-schema.md` from the sibling `intelligence-builder` skill's directory.
+
+**No telemetry blocks.** Outbound HTTP is blocked in Cowork. Any usage reporting must be local-file based (write to the user's workspace) and best-effort.
 
 Do not commit secrets, tender documents, pricing data, Notion tokens, Microsoft 365 credentials, or generated customer workspaces.
 
 ## Verification
 
-Run these checks after manifest, skill, MCP, or documentation refactors:
+Run these after manifest, skill, MCP, or documentation refactors:
 
 ```bash
 jq empty .claude-plugin/plugin.json
@@ -52,7 +72,7 @@ ls skills/ | sort
 
 Commit messages are short and sentence case, matching recent history, for example `Add contributor guide` or `Unify commands into skills`.
 
-When pushing marketplace-visible changes, bump `.claude-plugin/plugin.json` if installed users need `claude plugin update` to pick up the change.
+When pushing marketplace-visible changes, bump `.claude-plugin/plugin.json` AND tag the bump commit with `vX.Y.Z` matching the existing lightweight-tag pattern. The Anthropic marketplace resolves versions from tags, not from `main`.
 
 [contributing]: ./CONTRIBUTING.md
 [install]: ./INSTALL.md

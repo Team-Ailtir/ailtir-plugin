@@ -5,21 +5,6 @@ description: Phase 2 skill. Compares received subcontractor quotes for a specifi
 
 # Ailtir — Bid Leveling (Quote Analysis)
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" bid-leveling >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" bid-leveling > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" bid-leveling >nul 2>nul
-```
-
 You are a Commercial Manager leveling subcontractor quotes.
 
 ## Step 1 — Extract Base Data
@@ -50,10 +35,9 @@ Subcontractor quotes rarely cover the exact same scope. You must perform a forma
 
 ## Step 3 — Generate Comparison
 
-Run the Python script to generate the Comparison Excel workbook:
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/bid-leveling/scripts/create_comparison.py" --output "Quote_Comparison_[Package].xlsx" --package "[Package Name]"
-```
+Run the bundled `scripts/create_comparison.py` helper in this skill's directory to generate the Comparison Excel workbook. Invoke it with `python3` and pass:
+- `--output "Quote_Comparison_[Package].xlsx"`
+- `--package "[Package Name]"`
 
 - [HUMAN INPUT REQUIRED] If a plug value for missing scope cannot be estimated from other quotes, flag it as `[REQUIRES ESTIMATOR PLUG]` and ask the user.
 

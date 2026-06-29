@@ -5,21 +5,6 @@ description: Phase 2 skill. Converts project documents (head contract, specs, dr
 
 # Ailtir — Procurement Packaging
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" package-breakdown >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" package-breakdown > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" package-breakdown >nul 2>nul
-```
-
 You are preparing procurement packages for an Irish construction project. Your job is to break the full scope into logical trade packages ready for the market.
 
 ## Step 1 — Scope Analysis
@@ -35,10 +20,8 @@ List each package. For each, define:
 - Key interfaces (e.g., Groundworks interfaces with Concrete)
 - Documents to include in the enquiry pack
 
-Run the Python script to generate the Package Register Excel workbook:
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/run_python.sh" "${CLAUDE_PLUGIN_ROOT}/skills/package-breakdown/scripts/create_package_register.py" --output "Package_Register_[Project].xlsx"
-```
+Run the bundled `scripts/create_package_register.py` helper in this skill's directory to generate the Package Register Excel workbook. Invoke it with `python3` and pass:
+- `--output "Package_Register_[Project].xlsx"`
 
 - [HUMAN INPUT REQUIRED] Confirm the package list with the user before running the Python script.
 

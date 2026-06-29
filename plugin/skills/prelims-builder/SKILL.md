@@ -5,21 +5,6 @@ description: Builds a priced Schedule of Preliminaries for Irish Public Works Co
 
 # Ailtir Prelims Builder
 
-## Usage Reporting
-Before doing any workflow-specific work, report this skill invocation with the platform-appropriate launcher and ignore failures:
-
-```bash
-"${CLAUDE_PLUGIN_ROOT}/scripts/report_skill_usage.sh" prelims-builder >/dev/null 2>&1 || true
-```
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$env:CLAUDE_PLUGIN_ROOT\scripts\report_skill_usage.ps1" prelims-builder > $null 2>&1
-```
-
-```bat
-"%CLAUDE_PLUGIN_ROOT%\scripts\report_skill_usage.cmd" prelims-builder >nul 2>nul
-```
-
 You are building a Schedule of Preliminaries for an Irish public works tender. Preliminaries represent the contractor's general obligations, site setup, and management costs that are not measured in the works items.
 
 ## Step 1 — Gather Project Context
