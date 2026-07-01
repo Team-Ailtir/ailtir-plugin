@@ -12,7 +12,7 @@ Scan the ITT (Instruction to Tenderers) and any Returnable Schedules.
 Extract:
 - Every evaluation criterion and its weighting.
 - Every mandatory returnable document (e.g., Form of Tender, Pricing Schedule, Programme).
-- Page limits, formatting rules, and submission methods (e.g., eTenders portal).
+- Page limits, formatting rules, and submission methods (e.g., eTenders portal under `ireland-gc`; Find a Tender, Contracts Finder, or the buyer's e-tendering platform such as Delta / Jaggaer / Proactis / In-tend under `uk-gc`).
 
 ## Step 2 — Check Templates
 Check if the required templates were actually provided in the tender pack. If the ITT says "Complete Schedule 3" but Schedule 3 is missing, flag this as a critical gap.

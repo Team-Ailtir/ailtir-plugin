@@ -1,6 +1,6 @@
 # The Ailtir Co-Work Plugin
 
-The Ailtir Co-Work Plugin is a Claude plugin for Irish construction tender management, built primarily for **Claude Cowork** (claude.com/product/cowork) and compatible with Claude Code. It covers the CWMF tender lifecycle from opportunity monitoring and bid planning through estimating, submission, post-award records, and reusable bid intelligence.
+The Ailtir Co-Work Plugin is a Claude plugin for construction tender management, built primarily for **Claude Cowork** (claude.com/product/cowork) and compatible with Claude Code. It covers the full tender lifecycle — opportunity monitoring, bid planning, estimating, submission, post-award records, and reusable bid intelligence — across the Irish and UK construction markets, using a profile architecture designed to expand to further markets and verticals.
 
 Use [INSTALL.md][install] for setup and [CONTRIBUTING.md][contributing] for development workflow.
 
@@ -9,7 +9,9 @@ Use [INSTALL.md][install] for setup and [CONTRIBUTING.md][contributing] for deve
 - Scoped Claude skills under `/ailtir-cowork-plugin:*` covering the full tender lifecycle.
 - Bundled Python helpers (per-skill) for workbooks, project indexing, PDF processing, and takeoff support.
 - MCP server definitions for Notion and Microsoft 365 integrations.
-- Irish-market calibration for CWMF, PW-CF, RIAI, SEO, SCSI, ARM4, NRM2, CIRI, and Safe-T-Cert workflows.
+- **Profile-based market calibration** — `/ailtir-cowork-plugin:setup` writes `Context/profile.json`; every skill loads the reference file matching the active profile:
+  - **`ireland-gc`** — CWMF, PW-CF, RIAI, SEO, SCSI, ARM4, NRM2, CIRI, Safe-T-Cert, BCAR, PSDP/PSCS.
+  - **`uk-gc`** — Procurement Act 2023, JCT 2024, NEC4, CIJC, BCIS, NRM1/NRM2, SSIP (CHAS/SafeContractor/Constructionline), CDM 2015, PPN 06/20 (Carbon Reduction Plan), PPN 06/21 (Social Value), Modern Slavery Act, and Building Safety Act 2022 gates for Higher-Risk Buildings.
 
 ## Core Workflow
 
@@ -93,6 +95,17 @@ environment variables:
 This plugin has **no built-in telemetry**. Cowork's sandbox blocks all outbound network traffic, so PostHog-style HTTP reporting cannot function. The `feedback` skill records user feedback to a local Markdown log inside the workspace (`Daily/feedback.md`) instead of sending it anywhere.
 
 ## Release Notes
+
+### v2.13
+
+- **Profile architecture (`ireland-gc` + `uk-gc`).** `/ailtir-cowork-plugin:setup` now asks the user for Region (Ireland or UK) and Vertical (General Contractor), writes `Context/profile.json`, and picks the matching workspace `CLAUDE.md` variant so currency, dates, terminology, and standards apply automatically to every prompt.
+- **Per-skill profile references.** Skills that were coupled to Irish market data (`contract-risk`, `contract-admin`, `opportunity-monitor`, `rate-library`, `estimating-workflow`, `go-no-go`) now load from `references/{profile_key}/…`. Existing Irish content is preserved under `ireland-gc/`; UK counterparts live under `uk-gc/`.
+- **UK content.** JCT SBC/DB 2024 and NEC4 ECC playbooks, Early Warning / Compensation Event / EOT / Loss & Expense notice templates, Procurement Act 2023 opportunity scoring model, Find a Tender + Contracts Finder alert-source config, CIJC/BCIS rates for 2026, and CDM 2015 + Building Safety Act 2022 gap checks in estimating-workflow.
+- **UK opportunity parser.** New `parse_fts_email.py` sibling to the existing eTenders parser; SKILL.md picks the parser by `profile_key`.
+- **Profile-aware Excel generator.** `create_estimate.py` accepts `--profile-key` and emits £ or € number formats and profile-appropriate sample prelims rates.
+- **Setup pre-flight.** Setup now detects an existing workspace and offers Update / Full reset / Cancel rather than silently overwriting.
+- **Prime briefing header.** `/ailtir-cowork-plugin:prime` shows the active profile at the top of every session briefing.
+- **Notion schema** extended with UK procurement routes (Procurement Act 2023 notice and procedure taxonomy) and UK subcontractor accreditation checkboxes (SSIP, CHAS, SafeContractor, Constructionline, ISO tiers, Modern Slavery statement).
 
 ### v2.12
 

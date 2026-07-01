@@ -21,13 +21,13 @@ Read `references/win-themes.md` and `Context/company.md`. Select the win themes 
 Before selecting case studies or method statements from the `Intelligence/` folder, you MUST read the YAML frontmatter of the files first.
 1. Scan the frontmatter of all files in `Intelligence/case-studies/`.
 2. Filter by matching `sector`, `procurement_route`, and `outcome: Won`.
-3. Select the top 2-3 case studies whose `value_eur` is closest to the current bid value.
+3. Select the top 2-3 case studies whose `value` (in the same currency as the current bid, per `value_currency` and the active `profile_key`) is closest to the current bid value.
 4. Only then read the full content of those selected files to weave into your draft.
 
 **If the question is about Social Value, ESG, or Community Benefit Clauses (CBC):**
-- For Irish CWMF tenders, focus on employment targets, apprenticeships, and local supply chain spend.
-- For UK/NI tenders, align with National TOMs (Themes, Outcomes, Measures) or PPN 06/20.
-- Extract any existing social value commitments from `Context/company.md` and quantify them (e.g., "We will deliver X apprenticeship weeks per €1M spend").
+- Under `ireland-gc` (Irish CWMF tenders), focus on employment targets, apprenticeships, and local supply chain spend as measured under the CBC guidance.
+- Under `uk-gc` (UK Procurement Act 2023 tenders), align with PPN 06/21 (Social Value Model — Themes, Policy Outcomes, MACs) and the Carbon Reduction Plan under PPN 06/20. National TOMs (Themes, Outcomes, Measures) remain common in local authority procurements.
+- Extract any existing social value commitments from `Context/company.md` and quantify them in the profile's currency (e.g., "We will deliver X apprenticeship weeks per {{currency-symbol}}1M spend").
 
 ## Step 4 — Draft the Response
 Draft the response using professional, persuasive, and evidence-backed language. Ensure that:

@@ -25,7 +25,7 @@ Ask the user which view they want:
 |---|---|---|
 | 1 | **Bid Pipeline** | All active bids by stage, value, deadline, and strategic fit score |
 | 2 | **BD KPIs** | Win rate, pipeline coverage ratio, bids by sector and region |
-| 3 | **Subcontractor Register** | All subs by trade, CIRI/Safe-T-Cert status, and last used date |
+| 3 | **Subcontractor Register** | All subs by trade, profile-appropriate accreditation status (CIRI/Safe-T-Cert under `ireland-gc`; SSIP/Constructionline under `uk-gc`), and last used date |
 | 4 | **RFI Tracker** | Open RFIs by bid, age, and status |
 
 ---
@@ -208,7 +208,7 @@ Create an HTML artifact with the following structure:
 
 ### Dashboard 1: Bid Pipeline
 
-**KPIs to show:** Total pipeline value (€), Active bids, Bids due this week, Win rate (rolling 12 months from Notion data).
+**KPIs to show:** Total pipeline value (in the currency from `Context/profile.json` — € for `ireland-gc`, £ for `uk-gc`), Active bids, Bids due this week, Win rate (rolling 12 months from Notion data).
 
 **Primary view:** Kanban-style stage columns (Lead → Go/No-Go → Active Bid → Submitted → Won/Lost) with bid cards showing value and deadline.
 
@@ -229,9 +229,9 @@ Create an HTML artifact with the following structure:
 
 ### Dashboard 3: Subcontractor Register
 
-**KPIs to show:** Total subs, CIRI registered %, Safe-T-Cert %, Subs used in last 12 months.
+**KPIs to show:** Total subs, Subs used in last 12 months, plus the accreditation percentages appropriate to the active profile. Under `ireland-gc`: CIRI registered %, Safe-T-Cert %. Under `uk-gc`: SSIP %, Constructionline Gold+ %, Modern Slavery statement current %.
 
-**Primary view:** Table with CIRI/Safe-T-Cert status badges (green = valid, red = expired/missing).
+**Primary view:** Table with the profile-appropriate accreditation status badges (green = valid, red = expired/missing). Read `Context/profile.json` to decide which columns to render.
 
 ### Dashboard 4: RFI Tracker
 

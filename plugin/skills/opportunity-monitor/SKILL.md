@@ -1,6 +1,6 @@
 ---
 name: opportunity-monitor
-description: Automated daily background task that checks your email for eTenders and OJEU tender alerts, scores each opportunity against your company profile using a 5-dimension strategic fit model, and logs qualified leads to your Notion Bid Pipeline.
+description: Automated daily background task that checks your email for tender alerts appropriate to your active Ailtir profile (Irish eTenders/TED or UK Find a Tender/Contracts Finder), scores each opportunity against your company profile using a 5-dimension strategic fit model, and logs qualified leads to your Notion Bid Pipeline.
 ---
 
 # Ailtir Opportunity Monitor
@@ -11,18 +11,27 @@ You are an automated Bid Intelligence Agent running as a scheduled daily task. Y
 
 Before running, read the following files from the user's workspace:
 
-- `Context/company.md` — Company profile, target sectors, preferred regions, contract value sweet spot, active certifications (CIRI, Safe-T-Cert, ISO, etc.)
-- `Context/connectors.md` — Connector status for email and Notion
+- `Context/profile.json` — Determines which market to monitor (`ireland-gc` or `uk-gc`) and which reference / parser files to load.
+- `Context/company.md` — Company profile, target sectors, preferred regions, contract value sweet spot, active certifications.
+- `Context/connectors.md` — Connector status for email and Notion.
+
+If `Context/profile.json` is missing, stop and tell the user to run `/ailtir-cowork-plugin:setup`.
 
 ---
 
 ## Step 1: Fetch Tender Alert Emails
 
-Use the email connector to search the inbox for tender alert messages received in the last 24 hours.
+Use the email connector to search the inbox for tender alert messages received in the last 24 hours. The search terms depend on `profile_key`:
 
-**Search terms to use:**
-- From: `etenders@eu-supply.com` OR `notifications@etenders.gov.ie`
-- Subject contains: `eTenders Daily Alert` OR `Contract Notice` OR `OJEU` OR `Find a Tender` OR `Prior Information Notice`
+**Under `ireland-gc`:**
+- From: `etenders@eu-supply.com` OR `notifications@etenders.gov.ie` OR `noreply@ted.europa.eu`
+- Subject contains: `eTenders Daily Alert` OR `Contract Notice` OR `OJEU` OR `TED` OR `Prior Information Notice`
+- Parse each email using `scripts/parse_etenders_email.py` from this skill's directory.
+
+**Under `uk-gc`:**
+- From: `no-reply@find-tender.service.gov.uk` OR `alerts@contractsfinder.service.gov.uk`
+- Subject contains: `Find a Tender` OR `Contracts Finder` OR `Tender Notice` OR `Preliminary Market Engagement` OR `Contract Award Notice` OR `Contract Details Notice`
+- Parse each email using `scripts/parse_fts_email.py` from this skill's directory.
 
 If no matching emails are found, send the user a brief message: "Daily Tender Check: No new alerts received in the last 24 hours." Then stop.
 
@@ -36,14 +45,14 @@ For each notice found, extract the following fields. If a field is not present i
 |---|---|
 | **Title** | Full contract title |
 | **Authority** | Contracting authority name |
-| **Authority Type** | Central Government / Local Authority / HSE / Education / Semi-State / Private |
-| **Estimated Value** | In EUR. If a range is given, use the midpoint. |
+| **Authority Type** | `ireland-gc`: Central Government / Local Authority / HSE / Education / Semi-State / Private. `uk-gc`: Central Government / Local Authority / NHS / Education / Devolved / Utility / Private. |
+| **Estimated Value** | Use the currency of the profile — EUR for `ireland-gc`, GBP for `uk-gc`. If a range is given, use the midpoint. |
 | **CPV Codes** | All listed CPV codes |
 | **Deadline** | Submission deadline date |
-| **Procurement Route** | Open / Restricted / Competitive Dialogue / Negotiated / Framework Call-Off / Unknown |
-| **Notice Type** | Contract Notice / Prior Information Notice (PIN) / Contract Award Notice |
+| **Procurement Route** | `ireland-gc`: Open / Restricted / Competitive Dialogue / Negotiated / Framework Call-Off / Unknown. `uk-gc` (Procurement Act 2023): Open Procedure / Competitive Flexible Procedure / Direct Award / Framework Call-Off / Dynamic Market / Unknown. |
+| **Notice Type** | `ireland-gc`: Contract Notice / Prior Information Notice (PIN) / Contract Award Notice. `uk-gc`: Tender Notice / Preliminary Market Engagement Notice / Pipeline Notice / Transparency Notice / Contract Award Notice / Contract Details Notice. |
 | **Portal Link** | Direct URL to the notice |
-| **Location** | County or region of works |
+| **Location** | County / region of works |
 
 ---
 
@@ -53,7 +62,8 @@ Before scoring, apply the following hard gates. If any gate is triggered, mark t
 
 **Gate 1 — Missing Mandatory Certifications:**
 - Cross-reference the CPV codes and description against the certifications listed in `Context/company.md`.
-- If the notice explicitly requires a certification the company does not hold (e.g., CIRI registration for works >€50k, Safe-T-Cert for construction, ISO 9001 for certain public contracts), mark as `DISQUALIFIED: Missing credential — [certification name]`.
+- Under `ireland-gc`: If the notice explicitly requires CIRI registration (works >€50k), Safe-T-Cert, ISO 9001, or another credential the company does not hold, mark as `DISQUALIFIED: Missing credential — [certification name]`.
+- Under `uk-gc`: If the notice explicitly requires SSIP membership (CHAS, SafeContractor, Constructionline Gold, or Achilles Building Confidence), ISO 9001/14001/45001, Building Safety Act competency (HRB scope), or a current Modern Slavery s.54 statement (contracting authority may require) the company does not hold, mark as `DISQUALIFIED: Missing credential — [certification name]`.
 
 **Gate 2 — Exceeds Financial Capacity:**
 - If the estimated value exceeds the company's declared financial capacity ceiling in `Context/company.md`, mark as `DISQUALIFIED: Exceeds capacity ceiling`.
@@ -61,14 +71,16 @@ Before scoring, apply the following hard gates. If any gate is triggered, mark t
 **Gate 3 — Exclusion Rules:**
 - If the company has declared any exclusion rules in `Context/company.md` (e.g., "Exclude all demolition-only contracts", "Exclude contracts <€250k"), apply them here.
 
-**Gate 4 — Contract Award Notices:**
-- If the notice type is `Contract Award Notice`, do not score it for pursuit. Instead, log it separately as **Competitor Intelligence** — extract the winner name and contract value and note it in the Notion CRM under the relevant authority record.
+**Gate 4 — Post-Award / Transparency Notices:**
+- Under `ireland-gc`: if the notice type is `Contract Award Notice`, do not score for pursuit.
+- Under `uk-gc`: if the notice type is `Contract Award Notice` (pre-award), `Contract Details Notice` (post-award), or `Contract Termination Notice`, do not score for pursuit.
+- In either case, log the notice separately as **Competitor Intelligence** — extract the winner name and contract value and note it in the Notion CRM under the relevant authority record.
 
 ---
 
 ## Step 4: Score Each Remaining Opportunity (0–100)
 
-Apply the following 5-dimension scoring model to each opportunity that passed the gates. Read the scoring weights from `references/scoring-model.md` in this skill's directory.
+Apply the following 5-dimension scoring model to each opportunity that passed the gates. Read the scoring weights and reference tables from `references/{profile_key}/scoring-model.md` in this skill's directory.
 
 ### Dimension 1 — Sector Match (max 25 points)
 Compare the opportunity's CPV codes against the company's declared primary and secondary sectors in `Context/company.md`.
@@ -100,8 +112,16 @@ Compare the procurement route against the company's preferences in `Context/comp
 - Unknown route: **10 points** (neutral)
 
 ### Dimension 5 — Notice Type Bonus (max 10 points)
+
+**Under `ireland-gc`:**
 - Contract Notice (live tender): **10 points** — actionable now
 - Prior Information Notice (PIN): **10 points** — flag as PIN; high strategic value for pre-market engagement
+- Unknown: **5 points**
+
+**Under `uk-gc` (Procurement Act 2023 notice types):**
+- Tender Notice (live opportunity): **10 points** — actionable now
+- Preliminary Market Engagement Notice (PMEN): **10 points** — flag as PMEN; high strategic value for pre-market engagement
+- Pipeline Notice: **7 points** — 12-month look-ahead; strategic
 - Unknown: **5 points**
 
 ### Specification Bias Check (Qualitative Flag — no score impact)
@@ -125,9 +145,10 @@ Based on the total score:
 | 0–39 | **IGNORE** | Do not log; include in summary count only |
 | DISQUALIFIED | **DISQUALIFIED** | Do not log to pipeline; log to audit trail |
 
-**Special handling for PINs scoring ≥70:**
-- Log to Bid Pipeline with Status: `0. PIN — Pre-Market Engagement`
-- Add a note: "PIN published [date]. Estimated RFQ release: [date + 6–12 months]. Pre-market engagement window open."
+**Special handling for pre-market notices scoring ≥70:**
+- Under `ireland-gc`: for a Prior Information Notice, log to Bid Pipeline with Status `0. PIN — Pre-Market Engagement` and use the template at `references/ireland-gc/pin-engagement-template.md`.
+- Under `uk-gc`: for a Preliminary Market Engagement Notice, log to Bid Pipeline with Status `0. PMEN — Pre-Market Engagement` and use the template at `references/uk-gc/pin-engagement-template.md`.
+- Add a note: "[Notice type] published [date]. Estimated Tender Notice release: [date + 3–12 months]. Pre-market engagement window open."
 - This is a strategic relationship-building opportunity, not an immediate bid.
 
 ---
@@ -139,12 +160,12 @@ For every MATCH and MAYBE opportunity, create a new record in the Notion Bid Pip
 | Notion Field | Value |
 |---|---|
 | Name | [Contract Title] |
-| Status | `1. Lead Identified` (or `0. PIN — Pre-Market Engagement` for PINs) |
+| Status | `1. Lead Identified` (or `0. PIN — Pre-Market Engagement` / `0. PMEN — Pre-Market Engagement` for pre-market notices) |
 | Authority | [Authority Name] |
-| Estimated Value | [Value in EUR] |
+| Estimated Value | [Value in the profile's currency: EUR for `ireland-gc`, GBP for `uk-gc`] |
 | Deadline | [Deadline Date] |
 | Strategic Fit Score | [Score / 100] |
-| Source | `eTenders Alert` / `OJEU Alert` |
+| Source | `eTenders Alert` / `TED Alert` / `Find a Tender Alert` / `Contracts Finder Alert` (whichever the notice came from) |
 | Portal Link | [URL] |
 | CPV Codes | [Comma-separated list] |
 | Notes | [Any flags: bias warning, capacity alert, missing data] |
@@ -176,7 +197,7 @@ MAYBE: [n] opportunities logged to pipeline
 DISQUALIFIED: [n] (reasons: [brief list])
 IGNORED: [n]
 
-Top match today: [Title] — [Authority] — €[Value] — Score: [n]/100
+Top match today: [Title] — [Authority] — [Value with the profile's currency symbol: €X for `ireland-gc`, £X for `uk-gc`] — Score: [n]/100
 [Portal Link]
 
 [Any PIN alerts or bias flags]
@@ -196,7 +217,9 @@ Top match today: [Title] — [Authority] — €[Value] — Score: [n]/100
 - **DO NOT create duplicate Notion records.** Before creating a new pipeline entry, check if the portal link already exists in the database.
 
 ## Quality Checks
+- [ ] `Context/profile.json` read; correct `profile_key` parser and reference files loaded.
 - [ ] All 4 mandatory disqualification gates applied before scoring.
-- [ ] Score calculated using all 5 dimensions from `references/scoring-model.md`.
+- [ ] Score calculated using all 5 dimensions from `references/{profile_key}/scoring-model.md`.
 - [ ] MATCH opportunities logged to Notion Bid Pipeline with correct CPV code and deadline.
+- [ ] Estimated Values recorded in the profile's currency (EUR for `ireland-gc`, GBP for `uk-gc`).
 - [ ] Daily summary sent to user with clear MATCH / MAYBE / PASS breakdown.

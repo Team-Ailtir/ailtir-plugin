@@ -5,7 +5,7 @@ description: Builds the required Notion databases for an Ailtir workspace via th
 
 # Ailtir Notion Database Setup
 
-You are building the "business brain" for an Irish contractor in Notion.
+You are building the "business brain" for a construction contractor in Notion. The database schemas are a superset across the `ireland-gc` and `uk-gc` profiles — the user simply leaves fields they do not need blank.
 
 Notion holds the business layer (pipelines, directories, logs). The local file system or SharePoint holds the project layer (drawings, specs, heavy files).
 
@@ -26,7 +26,7 @@ Use `notion-create-database` to build these four databases, setting the hub page
 
 1. **CRM (Clients & Architects)** — Build this first.
 2. **Bid Pipeline** — Build this second. It needs a Relation property pointing to the CRM.
-3. **Subcontractor Directory** — Build this third. Needs fields for CIRI and Safe-T-Cert.
+3. **Subcontractor Directory** — Build this third. Needs the profile-aware accreditation fields defined in `references/database-schemas.md` (CIRI, Safe-T-Cert, SSIP, CHAS, SafeContractor, Constructionline, ISO tiers, Modern Slavery statement, insurance expiry).
 4. **RFI Log** — Build this fourth. Needs a Relation property pointing to the Bid Pipeline.
 
 ## Step 4 — Confirm
@@ -48,4 +48,4 @@ When you run `/ailtir-cowork-plugin:bid-planner` on a new tender, I will automat
 - [ ] All 4 databases created: CRM, Bid Pipeline, Subcontractor Directory, RFI Log.
 - [ ] Bid Pipeline has a Relation property pointing to CRM.
 - [ ] RFI Log has a Relation property pointing to Bid Pipeline.
-- [ ] Subcontractor Directory includes CIRI and Safe-T-Cert checkbox fields.
+- [ ] Subcontractor Directory includes the full accreditation superset from `references/database-schemas.md` (Irish CIRI/Safe-T-Cert plus UK SSIP/CHAS/SafeContractor/Constructionline/ISO tiers/Modern Slavery).

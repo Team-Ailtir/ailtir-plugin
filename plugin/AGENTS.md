@@ -19,6 +19,18 @@ This plugin targets **Claude Cowork** as its primary runtime (claude.com/product
 
 There is **no** `commands/` folder, **no** `resources/` folder, and **no** plugin-root `scripts/` folder. Slash commands and skills are unified — every skill at `skills/<name>/SKILL.md` is the slash command `/ailtir-cowork-plugin:<name>`. Setup templates, bundled scripts, and brand references live inside the skill that uses them.
 
+## Profile Architecture
+
+From v2.13 the plugin is calibrated per **profile**. The `setup` skill writes `Context/profile.json` in the user's workspace with fields `region`, `vertical`, `currency`, `date_format`, `profile_key`, `created`, `schema_version`. `profile_key` is the concatenation `{region}-{vertical}` — currently `ireland-gc` or `uk-gc`.
+
+Skills that need to branch on jurisdiction follow this contract:
+
+- Read `Context/profile.json` early in the skill body. If it is missing, stop and direct the user to `/ailtir-cowork-plugin:setup`.
+- Load market-specific data from `references/{profile_key}/<file>.md` inside the same skill (or from a named sibling skill's references, as `go-no-go` does with the `bid-planner` skill's references).
+- Never mix content across profiles in a single output — currency, terminology, standards, and gate lists must all come from the active profile.
+
+When adding a new skill, if it has any jurisdiction-specific content: place references in `references/ireland-gc/` and `references/uk-gc/` subfolders from the start, and load them by `profile_key`. When adding a new profile (e.g. `uk-civil`, `us-gc`), add a sibling folder under each affected skill's `references/` — do not centralise profiles at the plugin root.
+
 ## Cowork Runtime Constraints (Important)
 
 Empirical evidence from `/ailtir-cowork-plugin:telemetry-test` (2026-06-29) on the Cowork sandbox:

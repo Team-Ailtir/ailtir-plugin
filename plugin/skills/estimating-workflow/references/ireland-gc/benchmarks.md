@@ -1,6 +1,6 @@
 # Estimating Benchmarks — Irish Construction
 
-*See `ailtir-rate-library/references/irish-rates-2025.md` for full rate data.*
+*See `rate-library/references/ireland-gc/rates-2026.md` for full rate data.*
 
 ## Standard Gap Checklist (Irish PW-CF Context)
 

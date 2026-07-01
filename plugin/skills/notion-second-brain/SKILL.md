@@ -14,8 +14,8 @@ Explain to the user that a "Second Brain" allows Ailtir to learn their specific 
 Present the proposed Notion architecture:
 1. **Company HQ:** Mission, vision, branding guidelines, team directory.
 2. **Standard Operating Procedures (SOPs):** How we estimate, how we run sites, how we manage safety.
-3. **Cost History Database:** A searchable database of past project costs (e.g., €/m2 for schools, €/m3 for concrete).
-4. **Contract Playbook:** Our standard amendments and risk positions for PW-CF and RIAI contracts.
+3. **Cost History Database:** A searchable database of past project costs — e.g., cost/m² for schools, cost/m³ for concrete — recorded in the currency of the source project (EUR for `ireland-gc` records, GBP for `uk-gc` records).
+4. **Contract Playbook:** Our standard amendments and risk positions for the contract forms in use — PW-CF and RIAI under `ireland-gc`; JCT SBC/DB 2024 and NEC4 ECC under `uk-gc`.
 5. **Lessons Learned Log:** What went wrong on past jobs and how we avoid it next time.
 6. **Supply Chain Directory:** Subcontractors rated by performance and safety compliance.
 

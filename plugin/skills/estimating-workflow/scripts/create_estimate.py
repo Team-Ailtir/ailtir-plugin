@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 """
 Ailtir Estimating Workflow — Main Estimate Workbook Generator
-Produces a 6-sheet Excel workbook following Irish NRM2/ARM4 structure.
-Usage: python create_estimate.py --project "School Extension" --value 5000000 --output estimate.xlsx
+
+Produces a 6-sheet Excel workbook following NRM2 elemental structure. The
+workbook is currency- and profile-aware — pass --profile-key to select the
+sample prelims rates and currency symbol:
+
+  --profile-key ireland-gc  →  € labour @ SEO 2025 (default; backwards-compatible)
+  --profile-key uk-gc       →  £ labour @ CIJC 2026
+
+Usage: python create_estimate.py --project "School Extension" --value 5000000 \
+           --profile-key uk-gc --output estimate.xlsx
 """
 import sys
 import json
@@ -37,6 +45,39 @@ THIN_BORDER = Border(
     bottom=Side(style='thin', color=BORDER_COLOUR)
 )
 
+# ── Profile-driven currency and sample-rate defaults ──
+# The script's per-cell number_format strings and sample prelims rates are
+# populated from this table at runtime so the same workbook generator can
+# emit an Irish estimate or a UK estimate.
+PROFILE_DEFAULTS = {
+    "ireland-gc": {
+        "currency_symbol": "€",
+        "number_format": '€#,##0.00',
+        "prelims_samples": [
+            # (item_no, description, unit, qty, rate)
+            ("1.1", "Site Management (Project Manager — 52 weeks @ €1,600/wk)", "wk", 52, 1600),
+            ("1.2", "Site Manager — 52 weeks @ €1,400/wk", "wk", 52, 1400),
+            ("1.3", "Welfare Facilities (cabins, sanitation)", "wk", 52, 300),
+            ("1.4", "Performance Bond (10% of contract value @ 1.5%)", "item", 1, 0),
+        ],
+    },
+    "uk-gc": {
+        "currency_symbol": "£",
+        "number_format": '£#,##0.00',
+        "prelims_samples": [
+            # UK CIJC-derived management rates (mid-2026 baseline; user should refresh)
+            ("1.1", "Site Management (Contract Manager — 52 weeks @ £1,850/wk)", "wk", 52, 1850),
+            ("1.2", "Site Manager — 52 weeks @ £1,550/wk", "wk", 52, 1550),
+            ("1.3", "Welfare Facilities (cabins, sanitation)", "wk", 52, 320),
+            ("1.4", "Performance Bond (10% of contract value @ 1.0%)", "item", 1, 0),
+        ],
+    },
+}
+
+# Populated by create_estimate_workbook() before any cells are written.
+_ACTIVE_NUMBER_FORMAT = '€#,##0.00'
+_ACTIVE_CURRENCY_SYMBOL = "€"
+
 def header_style(cell, bg=AILTIR_NAVY):
     """Primary header row — navy background, white text, Space Grotesk."""
     cell.font = Font(bold=True, color=WHITE, size=11, name="Space Grotesk")
@@ -55,7 +96,7 @@ def total_style(cell):
     cell.font = Font(bold=True, color=WHITE, size=10, name="Space Grotesk")
     cell.fill = PatternFill("solid", fgColor=AILTIR_PURPLE)
     cell.border = THIN_BORDER
-    cell.number_format = '€#,##0.00'
+    cell.number_format = _ACTIVE_NUMBER_FORMAT
 
 def data_style(cell, bold=False, currency=False, alt_row=False):
     """Standard data cell."""
@@ -65,14 +106,14 @@ def data_style(cell, bold=False, currency=False, alt_row=False):
     if alt_row:
         cell.fill = PatternFill("solid", fgColor=AILTIR_LIGHT)
     if currency:
-        cell.number_format = '€#,##0.00'
+        cell.number_format = _ACTIVE_NUMBER_FORMAT
 
 def amber_style(cell):
     """Amber highlight for key cost figures."""
     cell.font = Font(bold=True, size=10, name="Space Grotesk", color=AILTIR_NAVY)
     cell.fill = PatternFill("solid", fgColor=AILTIR_AMBER)
     cell.border = THIN_BORDER
-    cell.number_format = '€#,##0.00'
+    cell.number_format = _ACTIVE_NUMBER_FORMAT
 
 def auto_width(ws):
     for col in ws.columns:
@@ -86,7 +127,14 @@ def auto_width(ws):
                 pass
         ws.column_dimensions[col_letter].width = min(max_len + 4, 50)
 
-def create_estimate_workbook(project_name, contract_value, output_path):
+def create_estimate_workbook(project_name, contract_value, output_path, profile_key="ireland-gc"):
+    global _ACTIVE_NUMBER_FORMAT, _ACTIVE_CURRENCY_SYMBOL
+    profile = PROFILE_DEFAULTS.get(profile_key)
+    if profile is None:
+        raise SystemExit(f"Unknown --profile-key: {profile_key!r}. Expected one of: {sorted(PROFILE_DEFAULTS)}")
+    _ACTIVE_NUMBER_FORMAT = profile["number_format"]
+    _ACTIVE_CURRENCY_SYMBOL = profile["currency_symbol"]
+
     wb = Workbook()
 
     # ── Sheet 1: Summary ──
@@ -112,7 +160,7 @@ def create_estimate_workbook(project_name, contract_value, output_path):
     ws1['A4'].fill = PatternFill("solid", fgColor=AILTIR_AMBER)
 
     ws1.append([])
-    headers = ["Section", "Amount (€)"]
+    headers = ["Section", f"Amount ({_ACTIVE_CURRENCY_SYMBOL})"]
     ws1.append(headers)
     for cell in ws1[ws1.max_row]:
         header_style(cell)
@@ -154,17 +202,29 @@ def create_estimate_workbook(project_name, contract_value, output_path):
     ws2.column_dimensions['E'].width = 12
     ws2.column_dimensions['F'].width = 14
 
-    ws2.append(["Item No", "Description", "Unit", "Qty", "Rate (€)", "Amount (€)"])
+    ws2.append([
+        "Item No",
+        "Description",
+        "Unit",
+        "Qty",
+        f"Rate ({_ACTIVE_CURRENCY_SYMBOL})",
+        f"Amount ({_ACTIVE_CURRENCY_SYMBOL})",
+    ])
     for cell in ws2[1]:
         header_style(cell)
 
-    # Sample structure — NRM2/ARM4 Irish elemental format
+    # Sample structure — NRM2 elemental format. Rates and rows come from PROFILE_DEFAULTS
+    # so the same workbook generator emits an Irish or UK sample without a code change.
+    prelims_rows = []
+    for row_offset, (item_no, desc, unit, qty, rate) in enumerate(profile["prelims_samples"]):
+        # Rows begin at spreadsheet row 3 (after the "1 PRELIMINARIES" header row on row 2).
+        excel_row = 3 + row_offset
+        formula = f"=D{excel_row}*E{excel_row}" if rate else "[CALCULATE]"
+        prelims_rows.append((item_no, desc, unit, qty, rate, formula))
+
     sample_items = [
         ("1", "PRELIMINARIES", "", "", "", ""),
-        ("1.1", "Site Management (Project Manager — 52 weeks @ €1,600/wk)", "wk", 52, 1600, "=D3*E3"),
-        ("1.2", "Site Manager — 52 weeks @ €1,400/wk", "wk", 52, 1400, "=D4*E4"),
-        ("1.3", "Welfare Facilities (cabins, sanitation)", "wk", 52, 300, "=D5*E5"),
-        ("1.4", "Performance Bond (10% of contract value @ 1.5%)", "item", 1, 0, "[CALCULATE]"),
+        *prelims_rows,
         ("2", "SUBSTRUCTURE", "", "", "", ""),
         ("2.1", "[Add items from takeoff]", "", "", "", ""),
         ("3", "SUPERSTRUCTURE", "", "", "", ""),
@@ -181,12 +241,23 @@ def create_estimate_workbook(project_name, contract_value, output_path):
             for cell in ws2[row]:
                 cell.border = THIN_BORDER
         if item[5] and item[5] != "" and item[5] != "[CALCULATE]":
-            ws2.cell(row, 6).number_format = '€#,##0.00'
-            ws2.cell(row, 5).number_format = '€#,##0.00'
+            ws2.cell(row, 6).number_format = _ACTIVE_NUMBER_FORMAT
+            ws2.cell(row, 5).number_format = _ACTIVE_NUMBER_FORMAT
 
     # ── Sheet 3: Detailed Workings ──
     ws3 = wb.create_sheet("Workings")
-    ws3.append(["Item No", "Description", "Pricing Basis", "Labour €", "Materials €", "Plant €", "Subbie €", "Total €", "Source", "Assumptions"])
+    ws3.append([
+        "Item No",
+        "Description",
+        "Pricing Basis",
+        f"Labour {_ACTIVE_CURRENCY_SYMBOL}",
+        f"Materials {_ACTIVE_CURRENCY_SYMBOL}",
+        f"Plant {_ACTIVE_CURRENCY_SYMBOL}",
+        f"Subbie {_ACTIVE_CURRENCY_SYMBOL}",
+        f"Total {_ACTIVE_CURRENCY_SYMBOL}",
+        "Source",
+        "Assumptions",
+    ])
     for cell in ws3[1]:
         header_style(cell)
     ws3.column_dimensions['B'].width = 35
@@ -196,7 +267,7 @@ def create_estimate_workbook(project_name, contract_value, output_path):
 
     # ── Sheet 4: Subcontractor Register ──
     ws4 = wb.create_sheet("Subcontractor Register")
-    ws4.append(["Subcontractor", "Trade", "Quote Ref", "Amount (€)", "Scope", "Exclusions", "Valid Until"])
+    ws4.append(["Subcontractor", "Trade", "Quote Ref", f"Amount ({_ACTIVE_CURRENCY_SYMBOL})", "Scope", "Exclusions", "Valid Until"])
     for cell in ws4[1]:
         header_style(cell)
     ws4.column_dimensions['A'].width = 25
@@ -213,7 +284,7 @@ def create_estimate_workbook(project_name, contract_value, output_path):
 
     # ── Sheet 6: Rate Library Used ──
     ws6 = wb.create_sheet("Rates Used")
-    ws6.append(["Rate Code", "Description", "Unit", "Rate (€)", "Applied To"])
+    ws6.append(["Rate Code", "Description", "Unit", f"Rate ({_ACTIVE_CURRENCY_SYMBOL})", "Applied To"])
     for cell in ws6[1]:
         header_style(cell)
     ws6.column_dimensions['B'].width = 35
@@ -237,7 +308,7 @@ def create_estimate_workbook(project_name, contract_value, output_path):
         if i % 2 == 1:
             for cell in ws6[row]:
                 cell.fill = PatternFill("solid", fgColor=AILTIR_LIGHT)
-        ws6.cell(row, 4).number_format = '€#,##0.00'
+        ws6.cell(row, 4).number_format = _ACTIVE_NUMBER_FORMAT
 
     auto_width(ws6)
 
@@ -249,6 +320,12 @@ if __name__ == "__main__":
     parser.add_argument("--project", default="New Project", help="Project name")
     parser.add_argument("--value", type=float, default=0, help="Estimated contract value")
     parser.add_argument("--output", default="estimate.xlsx", help="Output file path")
+    parser.add_argument(
+        "--profile-key",
+        default="ireland-gc",
+        choices=sorted(PROFILE_DEFAULTS.keys()),
+        help="Ailtir profile controlling currency and sample prelims rates.",
+    )
     args = parser.parse_args()
 
-    create_estimate_workbook(args.project, args.value, args.output)
+    create_estimate_workbook(args.project, args.value, args.output, profile_key=args.profile_key)

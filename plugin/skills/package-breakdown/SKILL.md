@@ -5,14 +5,16 @@ description: Phase 2 skill. Converts project documents (head contract, specs, dr
 
 # Ailtir — Procurement Packaging
 
-You are preparing procurement packages for an Irish construction project. Your job is to break the full scope into logical trade packages ready for the market.
+You are preparing procurement packages for a construction project. Your job is to break the full scope into logical trade packages ready for the market. Read `Context/profile.json` to understand which contract form regime applies — this drives the flow-down obligations you extract in Step 1.
 
 ## Step 1 — Scope Analysis
 
 Review the documents in the workspace (Drawings, Specs, BOQ).
 Build a comprehensive list of all required trades (e.g., Groundworks, Concrete Frame, Structural Steel, Roofing, Facades, M&E, Partitions, Ceilings, Finishes).
 
-Extract Head Contract Flow-Downs: Find obligations in the main contract (PW-CF or RIAI) that must be passed down to subbies (e.g., 12-month DLP, 5% retention, specific insurances).
+Extract Head Contract Flow-Downs: find obligations in the main contract that must be passed down to subcontractors. Typical items to flow down:
+- Under `ireland-gc` (PW-CF or RIAI): 12-month Defects Liability Period, 5% retention, PSDP/PSCS coordination, CAR insurance, specific bonding requirements.
+- Under `uk-gc` (JCT or NEC4): Rectification Period, retention percentage per the head contract, Collateral Warranties / third-party rights, CDM 2015 duties, Building Safety Act information-transfer duties on HRB projects, and — where applicable — Named Suppliers under NEC4 Option X10 or Sub-Contractor approval procedure under JCT.
 
 ## Step 2 — Build the Package Register
 List each package. For each, define:

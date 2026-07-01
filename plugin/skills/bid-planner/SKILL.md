@@ -1,6 +1,6 @@
 ---
 name: bid-planner
-description: The master Phase 1 orchestrator for a new tender. Catalogues the tender pack, runs Go/No-Go analysis, extracts compliance requirements, flags PW-CF/RIAI contract risks, and generates a 9-tab Bid Plan Workbook and folder structure. Triggered by /ailtir-cowork-plugin:bid-planner.
+description: The master Phase 1 orchestrator for a new tender. Catalogues the tender pack, runs Go/No-Go analysis, extracts compliance requirements, flags contract risks against the active Ailtir profile's playbook (Irish PW-CF/RIAI or UK JCT/NEC4), and generates a 9-tab Bid Plan Workbook and folder structure. Triggered by /ailtir-cowork-plugin:bid-planner.
 ---
 
 # Ailtir Bid Planner — Phase 1 Orchestrator
@@ -17,6 +17,9 @@ Pause at three points:
 
 ---
 
+## Step 0 — Read the Profile
+Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir-cowork-plugin:setup`. The `profile_key` value drives Steps 2B and 2D and — through the downstream skills — every other analysis in this orchestrator.
+
 ## Step 1 — Gather Context
 
 Ask conversationally:
@@ -24,7 +27,7 @@ Ask conversationally:
 2. Client / Employer?
 3. Tender return date and time?
 4. What documents have you uploaded?
-5. Procurement route (e.g., CWMF Restricted, Private D&B)?
+5. Procurement route? Under `ireland-gc` — CWMF Restricted, CWMF Open, Private Negotiated, Private D&B, Framework. Under `uk-gc` — Open Procedure, Competitive Flexible Procedure, Direct Award, Framework Call-Off, Dynamic Market, Private Traditional / D&B.
 
 ---
 
@@ -36,13 +39,13 @@ Run these four analysis steps in sequence. Store the results in memory to feed t
 Catalogue every document. Extract all dates (return, site visit, clarification deadline). Cross-reference BOQ references against the document list to find missing files. Flag critical gaps.
 
 ### B. Go/No-Go Assessment (Invoke `go-no-go` logic)
-Read `references/go-no-go-criteria.md`. Evaluate the tender against the Irish market criteria. Calculate a preliminary score. Flag any mandatory gate failures (e.g., missing CIRI).
+Read `references/{profile_key}/go-no-go-criteria.md` from this skill's directory. Evaluate the tender against the profile-appropriate criteria. Calculate a preliminary score. Flag any mandatory gate failures — under `ireland-gc` these include missing CIRI or Safe-T-Cert; under `uk-gc` these include missing SSIP membership, missing Modern Slavery statement (if applicable), and missing Building Safety Act competency where the project is a Higher-Risk Building.
 
 ### C. Compliance Matrix (Invoke `compliance-matrix` logic)
 Extract every submission requirement, evaluation criterion, and mandatory returnable document from the ITT. Note if templates were provided.
 
 ### D. Contract Risk (Invoke `contract-risk` logic)
-Identify the contract form (PW-CF1-5, RIAI 2025, JCT). Scan for non-standard amendments, unusual retention, high liquidated damages, or harsh time bars. Flag top 5 risks.
+Identify the contract form (under `ireland-gc`: PW-CF1-5, RIAI 2025, JCT, or bespoke; under `uk-gc`: JCT 2024 SBC/DB, NEC4 ECC, FIDIC, or bespoke). The `contract-risk` skill will load the correct profile-scoped playbook. Scan for non-standard amendments, unusual retention, high liquidated damages, or harsh time bars. Flag top 5 risks.
 
 ---
 
@@ -101,9 +104,10 @@ If they agree, run the `intelligence-builder` skill in Interview Mode.
 - [HUMAN INPUT REQUIRED] Do not log the bid to Notion without confirming the contract value and return date with the user.
 
 ## Quality Checks
+- [ ] `Context/profile.json` read; downstream skills invoked with the correct `profile_key`.
 - [ ] Bid reference follows format YYYY-NNN-ProjectName.
-- [ ] Go/No-Go score is based on actual scoring criteria from `references/go-no-go-criteria.md`, not a guess.
-- [ ] All mandatory gates (CIRI, Safe-T-Cert, turnover) explicitly checked.
+- [ ] Go/No-Go score is based on actual scoring criteria from `references/{profile_key}/go-no-go-criteria.md`, not a guess.
+- [ ] All mandatory gates for the active profile explicitly checked (CIRI/Safe-T-Cert/turnover for `ireland-gc`; SSIP/turnover/BSA/Modern Slavery for `uk-gc`).
 - [ ] Compliance Matrix captures every evaluation criterion with exact weighting from the ITT.
 - [ ] Bid folder created under the workspace root (`AILTIR_PLUGIN_DATA` or `~/Ailtir-Tendering`) at `Bids/[BID]/` with all 9 sections.
 - [ ] Bid logged to Notion Bid Pipeline with correct status and return date.

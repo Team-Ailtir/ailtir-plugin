@@ -13,16 +13,16 @@ Classify it into one of these categories:
 
 | Content Type | Signals | Destination |
 |---|---|---|
-| ITT / Tender Notice | "Instructions to Tenderers", "Contract Notice", eTenders reference | `Bids/[BID]/1. Tender Documents/1.1 ITT/` |
+| ITT / Tender Notice | "Instructions to Tenderers", "Contract Notice", "Tender Notice", eTenders / Find a Tender / Contracts Finder reference | `Bids/[BID]/1. Tender Documents/1.1 ITT/` |
 | Drawing set | PDF with title block, drawing number, revision | `Bids/[BID]/1. Tender Documents/1.2 Drawings/` |
-| Specification | Spec section numbers, NBS format, RIAI spec | `Bids/[BID]/1. Tender Documents/1.3 Specification/` |
-| Draft contract | "PW-CF", "RIAI", "Conditions of Contract" | `Bids/[BID]/1. Tender Documents/1.4 Contract/` |
-| Bill of Quantities / Pricing doc | BQ, schedule of rates, pricing schedule | `Bids/[BID]/1. Tender Documents/1.5 Pricing Document/` |
+| Specification | Spec section numbers, NBS format, RIAI spec, or CIBSE / MEP spec sections | `Bids/[BID]/1. Tender Documents/1.3 Specification/` |
+| Draft contract | "PW-CF", "RIAI", "JCT", "NEC4", "FIDIC", "Conditions of Contract" | `Bids/[BID]/1. Tender Documents/1.4 Contract/` |
+| Bill of Quantities / Pricing doc | BQ, schedule of rates, pricing schedule, NRM2 elemental cost plan | `Bids/[BID]/1. Tender Documents/1.5 Pricing Document/` |
 | Reports and Surveys | Ground investigation, site survey, asbestos report | `Bids/[BID]/1. Tender Documents/1.6 Reports and Surveys/` |
 | Addendum | "Addendum No.", "Clarification", issued during tender period | `Bids/[BID]/1. Tender Documents/1.7 Addenda/` |
 | Subcontractor quote | PDF/Excel from sub, contains pricing | `Bids/[BID]/5. Estimating/5.4 Subcontractor Quotes/` |
 | RFI response | Response to a previously sent RFI | `Bids/[BID]/4. Clarifications/Responses Received/` |
-| Certificate / credential | ISO cert, Safe-T-Cert, insurance schedule | `Context/credentials/` |
+| Certificate / credential | ISO cert, Safe-T-Cert (Ireland) or SSIP/CHAS/Constructionline (UK), Modern Slavery statement (UK), insurance schedule | `Context/credentials/` |
 | Case study / reference | Completion cert, client reference letter | `Intelligence/case-studies/` |
 | Method statement (approved) | Post-award, signed off | `Intelligence/method-statements/` |
 | Contact | Name, company, email, phone | `Context/team.md` or CRM |
