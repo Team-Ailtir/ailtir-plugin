@@ -1,5 +1,5 @@
 ---
-name: pqq-manager
+name: ailtir:pqq-manager
 description: Auto-fills PQQs/SQ documents from the company context, or evaluates incoming subcontractor PQQs, applying the accreditation and disclosure requirements of the active Ailtir profile (Irish CIRI/Safe-T-Cert or UK SSIP/Modern Slavery/Carbon Reduction Plan). Triggered by /ailtir-cowork-plugin:pqq-manager.
 ---
 

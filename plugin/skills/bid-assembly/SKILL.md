@@ -1,5 +1,5 @@
 ---
-name: bid-assembly
+name: ailtir:bid-assembly
 description: Compiles the final submission documents. Triggered by /ailtir-cowork-plugin:bid-assembly.
 ---
 

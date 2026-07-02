@@ -1,5 +1,5 @@
 ---
-name: project-indexer
+name: ailtir:project-indexer
 description: Index a construction project folder into three reusable markdown context files (CLAUDE.md, project.md, and drawings.md) so future sessions can reason about the project from cheap text instead of re-parsing PDFs every time. Triggered by /ailtir-cowork-plugin:project-indexer, or during bid-planner execution.
 ---
 

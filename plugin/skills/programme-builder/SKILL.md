@@ -1,5 +1,5 @@
 ---
-name: programme-builder
+name: ailtir:programme-builder
 description: Generates a tender programme (Gantt schedule) and narrative. Adapts phrasing to the active Ailtir profile — CWMF requirements for Ireland, Procurement Act 2023 / JCT / NEC4 requirements for UK. Triggered by /ailtir-cowork-plugin:programme-builder or when the user asks for a project schedule.
 ---
 

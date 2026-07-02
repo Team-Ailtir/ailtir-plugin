@@ -1,5 +1,5 @@
 ---
-name: cost-reconciliation
+name: ailtir:cost-reconciliation
 description: Final verification of a construction estimate. Cross-checks against requirements, benchmarks against the active Ailtir profile's cost guides (SCSI for Ireland; BCIS for UK), and identifies gaps. Triggered by /ailtir-cowork-plugin:cost-reconciliation or step 4 of the estimating workflow.
 ---
 

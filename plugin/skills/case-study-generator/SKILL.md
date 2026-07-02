@@ -1,5 +1,5 @@
 ---
-name: case-study-generator
+name: ailtir:case-study-generator
 description: Converts completed project data into structured case studies, and processes tender debriefs to extract learning signals. Triggered by /ailtir-cowork-plugin:case-study-generator or debrief mode.
 ---
 

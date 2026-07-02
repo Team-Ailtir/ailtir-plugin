@@ -1,5 +1,5 @@
 ---
-name: ingest
+name: ailtir:ingest
 description: Routes messy data dropped into an Ailtir workspace (subcontractor quotes, tender addendums, RFIs, emails) into the right project folder and updates Notion databases. Always confirms before writing. Triggered by /ailtir-cowork-plugin:ingest or when the user drops files into the workspace without clear instructions.
 ---
 

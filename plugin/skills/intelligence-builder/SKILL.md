@@ -1,5 +1,5 @@
 ---
-name: intelligence-builder
+name: ailtir:intelligence-builder
 description: Builds and maintains the Ailtir Intelligence knowledge base through interviews or bulk ingestion of historical tender material.
 ---
 

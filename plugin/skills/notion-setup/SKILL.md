@@ -1,5 +1,5 @@
 ---
-name: notion-setup
+name: ailtir:notion-setup
 description: Builds the required Notion databases for an Ailtir workspace via the Notion MCP connector. Creates the Bid Pipeline, Subcontractor Directory, RFI Log, and CRM databases with the correct properties and relations. USE THIS when the user runs /ailtir-cowork-plugin:notion-setup or asks to set up their Notion databases.
 ---
 

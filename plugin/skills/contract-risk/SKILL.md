@@ -1,5 +1,5 @@
 ---
-name: contract-risk
+name: ailtir:contract-risk
 description: Reviews the tendered contract clause-by-clause against the playbook for the active Ailtir profile (Irish PW-CF/RIAI or UK JCT/NEC4). Triggered by /ailtir-cowork-plugin:contract-risk or when bid-planner runs.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: subcontractor-enquiry
+name: ailtir:subcontractor-enquiry
 description: Prepares subcontractor enquiry packs based on the package breakdown. Triggered by /ailtir-cowork-plugin:subcontractor-enquiry.
 ---
 

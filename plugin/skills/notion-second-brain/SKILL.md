@@ -1,5 +1,5 @@
 ---
-name: notion-second-brain
+name: ailtir:notion-second-brain
 description: An advanced setup skill that builds a complete construction company "second brain" in Notion, including SOPs, cost history, and lessons learned. Triggered by /ailtir-cowork-plugin:notion-second-brain.
 ---
 

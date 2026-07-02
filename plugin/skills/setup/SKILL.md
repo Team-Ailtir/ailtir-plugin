@@ -1,5 +1,5 @@
 ---
-name: setup
+name: ailtir:setup
 description: First-time Ailtir workspace setup. Runs the onboarding interview and builds your local Context folder. Triggered by /ailtir-cowork-plugin:setup.
 ---
 

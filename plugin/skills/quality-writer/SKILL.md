@@ -1,5 +1,5 @@
 ---
-name: quality-writer
+name: ailtir:quality-writer
 description: Drafts technical method statements, social value (CBC) responses, and self-scores drafts against ITT evaluation descriptors. Triggered by /ailtir-cowork-plugin:quality-writer.
 ---
 

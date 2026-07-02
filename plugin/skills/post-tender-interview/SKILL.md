@@ -1,5 +1,5 @@
 ---
-name: post-tender-interview
+name: ailtir:post-tender-interview
 description: Prepares the contractor team for a post-tender interview (CWMF interview under `ireland-gc`; UK public/private post-submission clarification interview under `uk-gc`). Generates presentation outlines, Q&A prep, and key talking points. Triggered by /ailtir-cowork-plugin:post-tender-interview or when the user asks to prep for a tender interview.
 ---
 

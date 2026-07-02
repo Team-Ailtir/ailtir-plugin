@@ -1,5 +1,5 @@
 ---
-name: contract-admin
+name: ailtir:contract-admin
 description: Drafts contractual notices (Delay, Early Warning, Compensation Event, Loss & Expense, Additional Cost) with correct time bars for the active Ailtir profile. Triggered by /ailtir-cowork-plugin:contract-admin.
 ---
 

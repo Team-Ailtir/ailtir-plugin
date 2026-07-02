@@ -1,5 +1,5 @@
 ---
-name: prime
+name: ailtir:prime
 description: Session initialization. Syncs Notion databases to local markdown cache and presents a briefing. Triggered by /ailtir-cowork-plugin:prime.
 ---
 

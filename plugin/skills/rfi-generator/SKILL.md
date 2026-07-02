@@ -1,5 +1,5 @@
 ---
-name: rfi-generator
+name: ailtir:rfi-generator
 description: Drafts formal Requests for Information (RFIs), logs them in Notion, and processes incoming RFI answers to flag impacts on other bid documents. Triggered by /ailtir-cowork-plugin:rfi-generator or when the user says "draft an RFI" or "process these RFI answers".
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: bid-leveling
+name: ailtir:bid-leveling
 description: Phase 2 skill. Compares received subcontractor quotes for a specific trade package. Normalises pricing, scopes, and exclusions into a multi-tab Excel comparison. Triggered by /ailtir-cowork-plugin:bid-leveling.
 ---
 

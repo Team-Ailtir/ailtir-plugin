@@ -1,5 +1,5 @@
 ---
-name: bid-planner
+name: ailtir:bid-planner
 description: The master Phase 1 orchestrator for a new tender. Catalogues the tender pack, runs Go/No-Go analysis, extracts compliance requirements, flags contract risks against the active Ailtir profile's playbook (Irish PW-CF/RIAI or UK JCT/NEC4), and generates a 9-tab Bid Plan Workbook and folder structure. Triggered by /ailtir-cowork-plugin:bid-planner.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: enable-monitor
+name: ailtir:enable-monitor
 description: Configures the daily automated opportunity monitor. Connects your email and Notion, and schedules the background task to run every morning. Triggered by /ailtir-cowork-plugin:enable-monitor.
 ---
 

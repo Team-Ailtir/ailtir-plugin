@@ -1,5 +1,5 @@
 ---
-name: compliance-matrix
+name: ailtir:compliance-matrix
 description: Extracts all ITT requirements into a tracked deliverables matrix. Triggered by /ailtir-cowork-plugin:compliance-matrix or when bid-planner runs.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: go-no-go
+name: ailtir:go-no-go
 description: Evaluates bid viability against the accreditation gates and weighted scoring matrix appropriate to the active Ailtir profile (Irish CIRI/Safe-T-Cert or UK SSIP). Triggered by /ailtir-cowork-plugin:go-no-go or when bid-planner runs.
 ---
 

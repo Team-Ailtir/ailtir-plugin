@@ -1,5 +1,5 @@
 ---
-name: prelims-builder
+name: ailtir:prelims-builder
 description: Builds a priced Schedule of Preliminaries using the measurement structure of the active Ailtir profile (Irish ARM4 for PW-CF, UK NRM1 for JCT/NEC4). Triggered by /ailtir-cowork-plugin:prelims-builder or when the user asks to price prelims.
 ---
 

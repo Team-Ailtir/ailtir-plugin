@@ -1,5 +1,5 @@
 ---
-name: rate-library
+name: ailtir:rate-library
 description: Provides current construction cost rates (labour, materials, m² benchmarks) for the active Ailtir profile (Irish SEO/SCSI or UK CIJC/BCIS). Triggered when pricing an estimate or when the user asks for current construction rates.
 ---
 

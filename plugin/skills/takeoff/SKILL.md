@@ -1,5 +1,5 @@
 ---
-name: takeoff
+name: ailtir:takeoff
 description: Extracts elemental quantities from construction drawings (PDF) into an NRM2 elemental Excel register. NRM2 is common across `ireland-gc` and `uk-gc` profiles. Triggered by /ailtir-cowork-plugin:takeoff or when the user asks to measure drawings.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: opportunity-monitor
+name: ailtir:opportunity-monitor
 description: Automated daily background task that checks your email for tender alerts appropriate to your active Ailtir profile (Irish eTenders/TED or UK Find a Tender/Contracts Finder), scores each opportunity against your company profile using a 5-dimension strategic fit model, and logs qualified leads to your Notion Bid Pipeline.
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: estimating-workflow
+name: ailtir:estimating-workflow
 description: Master orchestrator for the 4-step construction estimating process, calibrated to the active Ailtir profile (Irish ARM4/NRM2 or UK NRM1/NRM2). Triggered by /ailtir-cowork-plugin:estimating-workflow or when the user asks to estimate or price a tender.
 ---
 

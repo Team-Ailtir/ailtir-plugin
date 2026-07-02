@@ -1,5 +1,5 @@
 ---
-name: package-breakdown
+name: ailtir:package-breakdown
 description: Phase 2 skill. Converts project documents (head contract, specs, drawings) into a subcontractor trade package register and scope matrix. Triggered by /ailtir-cowork-plugin:package-breakdown.
 ---
 

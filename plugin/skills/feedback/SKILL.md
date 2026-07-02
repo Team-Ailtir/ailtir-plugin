@@ -1,5 +1,5 @@
 ---
-name: feedback
+name: ailtir:feedback
 description: "Captures lightweight user feedback for an Ailtir workflow: first a 1-10 rating, then the reason, then three structured AskUserQuestion follow-ups derived from the current session."
 ---
 

@@ -1,5 +1,5 @@
 ---
-name: submission-preflight
+name: ailtir:submission-preflight
 description: Runs final deterministic compliance checks before submission, targeting the portal appropriate to the active Ailtir profile (Irish eTenders or UK Find a Tender / Contracts Finder). Triggered by /ailtir-cowork-plugin:submission-preflight.
 ---
 

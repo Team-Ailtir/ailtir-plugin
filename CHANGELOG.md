@@ -3,6 +3,10 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.13.1 - 2026-07-02
+
+- Rebranded skill display names to surface Ailtir attribution in Cowork's skill picker. Every SKILL.md `name:` frontmatter is now `ailtir:<skill>` (e.g. `ailtir:bid-assembly`, `ailtir:bid-leveling`). Slash-command invocation paths are unchanged — `name:` is only a display label; the command comes from the directory name.
+
 ## 2.12.1 - 2026-06-29
 
 - Removed the diagnostic `telemetry-test` skill. Its job (proving Cowork's sandbox blocks outbound network and doesn't substitute `${CLAUDE_PLUGIN_ROOT}`) is done; future revisits can resurrect it from git history if needed. The plugin now ships with zero telemetry surface and 32 user-invocable skills.
