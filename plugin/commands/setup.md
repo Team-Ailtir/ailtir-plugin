@@ -74,9 +74,9 @@ Setup complete. Your workspace is configured for [Company Name].
 
 To get the most out of the quality-writer from day one, we should add 2-3 case studies and your top win themes to the `Intelligence/` folder. I can interview you for 10 minutes to write them up, or you can point me to a folder of old CVs and tenders and I'll extract them automatically.
 
-If you want to do that now, run `/ailtir-cowork-plugin:intelligence-builder`.
-If you are using Notion, run `/ailtir-cowork-plugin:notion-setup` to build your databases.
-Otherwise, drop a tender pack into the workspace and run `/ailtir-cowork-plugin:bid-planner` to begin.
+If you want to do that now, run `/ailtir-cowork-plugin:ailtir_intelligence-builder`.
+If you are using Notion, run `/ailtir-cowork-plugin:ailtir_notion-setup` to build your databases.
+Otherwise, drop a tender pack into the workspace and run `/ailtir-cowork-plugin:ailtir_bid-planner` to begin.
 ```
 
 ## Quality Checks

@@ -61,19 +61,19 @@ Use Notion when you want Ailtir to create or update CRM, Bid Pipeline, Subcontra
 Run the setup command:
 
 ```text
-/ailtir-cowork-plugin:setup
+/ailtir-cowork-plugin:ailtir_setup
 ```
 
 If using Notion, create the workspace databases:
 
 ```text
-/ailtir-cowork-plugin:notion-setup
+/ailtir-cowork-plugin:ailtir_notion-setup
 ```
 
 To enable automated opportunity monitoring, connect email and Notion first, then run:
 
 ```text
-/ailtir-cowork-plugin:enable-monitor
+/ailtir-cowork-plugin:ailtir_enable-monitor
 ```
 
 If a connector is unavailable, workflows should fall back to local Markdown or CSV outputs and tell the user what was skipped.

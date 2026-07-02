@@ -25,7 +25,7 @@ From v2.13 the plugin is calibrated per **profile**. The `setup` skill writes `C
 
 Skills that need to branch on jurisdiction follow this contract:
 
-- Read `Context/profile.json` early in the skill body. If it is missing, stop and direct the user to `/ailtir-cowork-plugin:setup`.
+- Read `Context/profile.json` early in the skill body. If it is missing, stop and direct the user to `/ailtir-cowork-plugin:ailtir_setup`.
 - Load market-specific data from `references/{profile_key}/<file>.md` inside the same skill (or from a named sibling skill's references, as `go-no-go` does with the `bid-planner` skill's references).
 - Never mix content across profiles in a single output — currency, terminology, standards, and gate lists must all come from the active profile.
 

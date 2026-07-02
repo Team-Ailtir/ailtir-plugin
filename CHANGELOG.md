@@ -3,9 +3,18 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.14.0 - 2026-07-02
+
+Rebranded skill invocation to surface Ailtir attribution in Cowork's skill picker. **Breaking change to slash-command paths.**
+
+- Renamed every skill directory from `<name>` to `ailtir_<name>` (e.g. `bid-assembly` → `ailtir_bid-assembly`). Cowork's skill picker labels skills by directory name — not by SKILL.md `name:` frontmatter — so folder renames are required to affect the picker display. Underscore separator chosen because `:` is illegal in Windows/git paths and `-` would collide with the plugin namespace prefix.
+- Every slash command changed accordingly: `/ailtir-cowork-plugin:bid-assembly` → `/ailtir-cowork-plugin:ailtir_bid-assembly`. Any external references (bookmarks, docs, workflows) must be updated.
+- Updated 40 in-repo slash-command references across SKILL.md files, `README.md`, `INSTALL.md`, `AGENTS.md`, `commands/setup.md`, and the Ireland/UK CLAUDE.md templates.
+- Updated `name:` frontmatter in all 33 SKILL.md files to match the new directory names.
+
 ## 2.13.1 - 2026-07-02
 
-- Rebranded skill display names to surface Ailtir attribution in Cowork's skill picker. Every SKILL.md `name:` frontmatter is now `ailtir:<skill>` (e.g. `ailtir:bid-assembly`, `ailtir:bid-leveling`). Slash-command invocation paths are unchanged — `name:` is only a display label; the command comes from the directory name.
+- Rebranded skill display names in SKILL.md `name:` frontmatter to `ailtir:<skill>`. Superseded by 2.14.0 — Cowork ignores the `name:` field and reads directory names instead.
 
 ## 2.12.1 - 2026-06-29
 
