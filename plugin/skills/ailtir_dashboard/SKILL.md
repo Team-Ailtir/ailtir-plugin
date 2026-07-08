@@ -15,6 +15,8 @@ Read the Notion database IDs from `Context/notion-cache/databases.md`. You need:
 - CRM database ID
 - RFI Log database ID
 
+**Also read every bid's phase state.** Run the sibling `ailtir_conductor` skill's `scripts/scan_bids.py` helper with `python3` and `--bids-dir Bids/`. Parse the JSON it prints — each record has `bid_id`, `frontmatter.phase`, `frontmatter.next_action.skill`, and `frontmatter.blockers`. Hold this in memory as `bidState` for use in the Bid Pipeline dashboard (Step 4, Dashboard 1). This gives the dashboard a live view of each bid's phase/next action that mirrors what `ailtir_conductor` recommends. If `scripts/scan_bids.py` returns an empty array or errors, fall back gracefully — render the Notion data alone and skip the Phase/Next column.
+
 ---
 
 ## Step 1 — Ask Which Dashboard
@@ -139,8 +141,16 @@ Create an HTML artifact with the following structure:
     <div id="primary-view"></div>
   </div>
 
+  <div class="section" style="padding-top:0;">
+    <div style="background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.3); border-radius: 8px; padding: 14px 18px; font-size: 13px; color: var(--text-body);">
+      <strong style="color: var(--white);">Next actions</strong> — to act on these recommendations, run
+      <code style="background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; color: var(--purple-400);">/ailtir-cowork-plugin:ailtir_conductor</code>
+      in your Claude session.
+    </div>
+  </div>
+
   <footer>
-    <span>Sources: Notion · Loaded <span id="footer-time">just now</span></span>
+    <span>Sources: Notion + local bid frontmatter · Loaded <span id="footer-time">just now</span></span>
     <a href="#" id="debug-toggle" style="font-size:11px;opacity:0.5;margin-left:12px;">debug</a>
   </footer>
   <div id="debug-panel" style="display:none;margin:0 32px 32px;padding:12px;background:#f4f4f4;
@@ -214,7 +224,25 @@ Create an HTML artifact with the following structure:
 
 **Secondary view:** Bar chart of pipeline value by sector.
 
-**Status badge logic:**
+**Tertiary view — Phase & Next Action table.** Below the Kanban, render a table with one row per bid from the `bidState` array (from `ailtir_conductor`'s `scan_bids.py`). Columns:
+
+| Bid | Phase | Next Action | Blockers |
+|-----|-------|-------------|----------|
+
+Colour-code the `Phase` cell using the Ailtir brand palette only:
+- `opportunity` → `--purple-400` background
+- `pre-bid`     → `--purple-500` background
+- `estimating`  → `--purple-600` background
+- `submission`  → `--amber-400` background
+- `post-tender` → `--navy-700` background
+- `delivery`    → `--navy-800` background
+- `closed`      → muted `--text-muted` text, no background
+
+`Next Action` shows the value of `frontmatter.next_action.skill` as a purple pill badge (`.badge-muted` class). `Blockers` shows an amber pill for each blocker (`.badge-amber` — never red, per brand rules).
+
+If `bidState` is empty (no bids, or `scan_bids.py` unavailable), omit this table entirely.
+
+**Status badge logic (deadline column):**
 - Deadline > 14 days: green
 - Deadline 7–14 days: amber
 - Deadline < 7 days: red

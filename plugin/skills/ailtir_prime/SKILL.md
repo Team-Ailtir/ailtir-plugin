@@ -33,4 +33,14 @@ Then present:
 - **Pending Tasks:** List any outstanding items from recent Daily notes.
 - **Suggested Focus:** Recommend what the user should focus on today.
 
-Ask: "What are we tackling first?"
+## Step 5 — Route to the Conductor
+
+Check whether any bid folders exist under `Bids/` in the workspace root.
+
+- **If at least one bid folder exists**, hand off to `ailtir_conductor` inline. Do not require a second slash command — proceed to run the conductor's flow now: read its SKILL.md, execute Step 1 (scan), Step 2 (backfill missing frontmatter), Step 3 (rank), Step 4 (recommend), and Step 5 (prompt) against the bids just surfaced in the briefing. The user should see one continuous experience: profile → briefing → "here's what to do next".
+- **If no bids exist yet** (first-time user post-setup), offer the three onboarding branches instead:
+  1. `/ailtir-cowork-plugin:ailtir_intelligence-builder` — capture case studies & win themes so quality-writer works from day one.
+  2. `/ailtir-cowork-plugin:ailtir_notion-setup` — build the Notion CRM/Pipeline/Sub Directory/RFI Log.
+  3. `/ailtir-cowork-plugin:ailtir_bid-planner` — start a bid on an ITT you already have.
+
+Then ask: "What are we tackling first?"
