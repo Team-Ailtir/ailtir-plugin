@@ -5,259 +5,284 @@ description: Index a construction project folder into three reusable markdown co
 
 # Project Indexer
 
-Transforms a construction project folder into three durable markdown context files that downstream Claude sessions can read cheaply, instead of repeatedly re-parsing PDFs, specifications, and drawings.
+This skill turns a bid folder — the atomic unit of Ailtir's estimating pipeline —
+into a durable set of markdown context files. Once produced, every downstream
+Ailtir skill that touches the same bid can reason from plain text rather than
+paying the vision and parsing cost of the source PDFs on every invocation.
 
 ## Why this skill exists
 
-In Cowork and other long-running Claude environments, a construction project folder typically contains hundreds of PDFs — contracts, specifications, drawings, correspondence, registers. Every time Claude needs to answer a question about the project, it ends up re-opening and re-analysing drawings and documents, burning tokens and slowing everything down.
+An Ailtir bid folder holds a small mountain of PDFs: tender correspondence,
+employer's requirements, specifications, drawing sets, the form of contract,
+prelims documents, and structured registers. The Cowork plugin then runs seven
+or eight skills against that same pack — `ailtir_bid-planner`,
+`ailtir_go-no-go`, `ailtir_compliance-matrix`, `ailtir_estimating-workflow`,
+`ailtir_contract-risk`, `ailtir_prelims-builder`, and others — each asking
+broadly similar questions of the tender. If every skill re-opens the PDFs on
+its own, token spend balloons and answers drift.
 
-This skill does that analysis **once** and writes the result to three markdown files. After that, downstream sessions can answer most questions by reading plain text — dropping to PDF-level analysis only when they need a specific detail the markdown didn't capture.
+`ailtir_project-indexer` pays that parse cost once and writes the digested
+result to disk. Every subsequent bid-scoped skill can then load cheap markdown
+instead. The generated files also carry the **active profile** (`ireland-gc`
+or `uk-gc`) and the chosen **trade perspective**, so profile-specific
+compliance framing and trade-specific emphasis persist across sessions.
 
 ## What gets produced
 
-Always produce:
-- **`CLAUDE.md`** — Folder structure guide. Explains what the project is, what's in each folder, and where Claude should look for what. Acts as the entry point / table of contents.
-- **`project.md`** — Synthesised project summary. Pulls the important information from every non-drawing document into one narrative reference.
+Every output lands inside `Bids/{BID}/0. AI Context/`. The `0.` prefix keeps
+the AI context folder at the top of Ailtir's numbered bid layout.
 
-Produce only if drawings are present:
-- **`drawings_split/`** — One single-sheet PDF per drawing sheet. Durable artefacts so downstream skills (e.g. `construction-takeoff`) can target a specific sheet without re-splitting.
-- **`drawings/`** — One `.md` file per drawing sheet, each an exhaustive description of that sheet from the chosen perspective (see Step 5).
-- **`drawings.md`** — Combined drawing register and index, linking to each per-sheet `.md` file in `drawings/`.
+- `CLAUDE.md` — short navigation guide. Names the bid, the active profile,
+  the trade perspective, the top-level folder layout, and a lookup table
+  pointing the model at the right file for common questions.
+- `project.md` — long-form narrative synthesising every non-drawing PDF,
+  organised by topic rather than by source.
+- `drawings.md` — drawing register and index (only when drawings exist).
+- `drawings/<sheet_id>.md` — one exhaustive per-sheet analysis. Named from
+  the title-block sheet ID where readable (e.g. `A-101.md`), otherwise the
+  source stem plus page number.
+- `drawings_split/<source_stem>/…` — durable single-sheet artefacts (PDF +
+  PNG + JSON) per page, consumed later by `ailtir_takeoff`.
 
-All outputs go in `Bids/[BID]/0. AI Context/`. The project root is ALWAYS the specific bid folder inside `Bids/` (e.g., `Bids/2026-004-ProjectName/`). Create the `0. AI Context/` folder if it doesn't exist.
+Templates for each output live in `references/output_templates.md`; that
+file also holds worked examples for both profiles.
 
 ## Workflow
 
-Follow these steps in order. Show the user what you're doing at each step — especially the folder tree and the PDF classification — so they can catch problems before you spend tokens on drawing analysis.
-
-### Step 1 — Discover the project
-
-Walk the project root and build a complete inventory. Run the bundled `scripts/discover.py` helper in this skill's directory with `python3`. Pass `<project_root>` as the positional argument and `-o /tmp/project_inventory.json` for output.
-
-This produces a JSON inventory listing every file, its size, its folder, and (for PDFs) quick stats that help classify it as a drawing vs a document.
-
-**Do not assume** the folder structure follows any particular convention. The user's folders may be `1. Contract / 2. Drawings / 3. Site` or `Admin / Design / Construction` or anything else. Read whatever is there.
-
-Show the user the folder tree and a short summary (e.g. "Found 142 PDFs across 7 top-level folders, of which 38 look like drawings") before proceeding.
-
-### Step 2 — Classify each PDF
-
-For every PDF, decide whether it's a **drawing** or a **document**. Run the bundled `scripts/classify.py` helper in this skill's directory with `python3`. Pass `/tmp/project_inventory.json` as the positional argument and `-o /tmp/project_classified.json` for output.
-
-The classifier uses vector statistics (page orientation, line count, text density, aspect ratio) to split drawings from documents. It's fast and local — no vision calls. Borderline cases get flagged for human confirmation.
-
-Show the user:
-- How many PDFs were classified as drawings vs documents
-- Any borderline cases the classifier is unsure about
-- Ask them to confirm or override before proceeding
-
-This is the cheapest possible point to correct mistakes. A misclassified spec sheet that gets analysed as a drawing wastes far more tokens downstream than a 10-second confirmation now.
-
-### Step 3 — Produce CLAUDE.md (always)
-
-CLAUDE.md is a navigation guide. It should be short enough for Claude to always keep in context when opening the project. Aim for under 300 lines.
-
-Required sections:
-
-```markdown
-# [Project Name] — Claude Context Guide
-
-## About this project
-[2–4 sentence description inferred from folder names and key documents]
-
-## Folder structure
-[Tree of top-level folders with 1-line description of what each holds]
-
-## Where to find what
-[Mini-index: for common questions, which file/folder to consult]
-- Contract terms & conditions → `2. Contract/...`
-- Drawings (architectural/structural/services) → `...`
-- Latest programme → `...`
-- RFIs, variations, transmittals → `...`
-
-## Related context files
-- `project.md` — full project summary from all documents
-- `drawings.md` — per-drawing breakdown (if present)
-
-## Notes for Claude
-- This index was generated on [date]
-- The user's project conventions: [anything distinctive observed]
-```
-
-Infer the project name from folder names, the most prominent document titles, or ask the user if genuinely unclear.
-
-### Step 4 — Produce project.md (always)
-
-For each non-drawing PDF, read it (use `scripts/read_pdf.py` or the `pdf-reading` skill if dealing with scanned content) and extract what matters. Then synthesise everything into a single narrative summary.
-
-**Do not just concatenate document summaries.** Group by topic, resolve contradictions, surface the important information. Use your judgment about what matters — but cover, where evidence exists in the documents:
-
-- **Project overview** — who (client, head contractor, principal consultants), what (building type, scope, value if stated), where (address, site details)
-- **Contract** — form of contract, key commercial terms, identified risks, unusual amendments, principal's project requirements
-- **Scope** — what is being built; inclusions and exclusions as documented
-- **Programme & key dates** — start, finish, practical completion targets, major milestones
-- **Commercial position** — contract sum, approved variations, claims status, retention, superintendent's determinations (if correspondence is in the folder)
-- **Open items** — outstanding RFIs, unresolved variations, pending approvals, overdue submittals
-- **Site conditions & constraints** — access, hours, environmental, heritage, services, neighbours — anything operationally relevant
-- **Anything else material** — unusual specifications, novated packages, long-lead items, known disputes
-
-Use clear markdown headers. Reference source documents where it aids traceability ("per Specification 03300 §4.2"). Do not invent information; if something would normally appear in a project brief but isn't in the folder, say so briefly.
-
-This file can be long — 2,000+ lines is fine if the project warrants it. It exists to replace re-reading 50+ PDFs.
-
-### Step 5 — Produce drawings (if drawings exist)
-
-Only run this step if Step 2 identified drawings.
-
-This step has three sub-steps that **must be done in order**: (a) decide perspective, (b) split every drawing PDF into individual single-sheet PDFs, (c) analyse each sheet exhaustively and produce one `.md` per sheet plus a combined index.
-
-#### Step 5a — Decide the analysis perspective
-
-Drawing analysis is tuned to a **trade perspective**. A general contractor cares about everything; an electrical estimator wants electrical depth and only contextual notes on the rest; a hydraulic estimator wants hydraulic depth, etc. The perspective drives what gets emphasised in every per-sheet write-up.
-
-Do both of the following before asking the user:
-
-1. **Infer the likely perspective from project context.** By this point you've already read the non-drawing PDFs for `project.md`. Use that. Look at:
-   - The folder name (e.g. "Pamment Electrical Tender")
-   - The contract / scope documents — is this a head-contract scope or a single-trade subcontract scope?
-   - The trade-specific specifications present (e.g. only Section 26 = electrical)
-   - The drawing disciplines present (electrical-only set vs full multi-discipline set)
-
-2. **Then ask the user** for confirmation and any additional context. Frame it like:
-
-   > "Based on the project docs this looks like an **[inferred trade]** estimate / scope. I'll analyse all drawings exhaustively but focus the lens on **[inferred trade]** scope. Confirm the perspective, or override (GC, electrical, hydraulic, mechanical, structural, civil, fire, communications, etc.). Anything else I should know about scope or focus?"
-
-Record the chosen perspective. It goes in `CLAUDE.md` and at the top of `drawings.md` so downstream sessions know how the analysis was framed.
-
-**All drawings get analysed exhaustively regardless of trade.** A non-GC perspective doesn't mean skipping off-trade sheets — it means analysing every sheet in full, with the lens tilted toward how the chosen trade will use it. For an electrical estimator: an architectural plan is still analysed in full, but with attention on ceiling types (relevant to fixture mounting), wall constructions (relevant to chasing/penetrations), slab thicknesses (relevant to floor boxes), ceiling space coordination, etc.
-
-#### Step 5b — Split every drawing PDF into single-sheet PDFs
-
-Run the bundled `scripts/process_drawing.py` helper in this skill's directory against every drawing PDF, sending output into `0. AI Context/drawings_split/<source_stem>/`. Invoke with `python3`, pass the drawing PDF path as the positional argument, and pass:
-- `-o "<project_root>/0. AI Context/drawings_split/<source_stem>"`
-- `--dpi 200`
-
-For each input PDF this produces, per page:
-- `<stem>_sheet<N>.pdf` — durable single-sheet PDF (kept; this is the persistent artefact)
-- `<stem>_sheet<N>.png` — high-DPI render for vision analysis (used in 5c)
-- `<stem>_sheet<N>.json` — extracted text and title-block hints (used in 5c)
-
-Plus a `manifest.json` summarising the split.
-
-**Why split first, before analysis?**
-- It's deterministic and cheap. Doing it as a discrete step means a partial run can be resumed.
-- Downstream skills (especially `construction-takeoff`) can target an individual sheet PDF without re-splitting.
-- It makes the per-sheet `.md` files traceable to a concrete single-sheet PDF.
-
-#### Step 5c — Exhaustive per-sheet analysis
-
-For each sheet (using its PNG render + JSON extraction as inputs), produce a dedicated `.md` file in `0. AI Context/drawings/`. Filename convention: `<sheet_id>.md` where `<sheet_id>` is the sheet number from the title block (e.g. `A-101.md`, `E-201.md`). If the sheet ID can't be read, fall back to `<source_stem>_sheet<N>.md`.
-
-The analysis must be **exhaustive** — the goal is that a downstream session can answer almost any question about that sheet from the `.md` alone, only opening the PDF for fine-grained spatial detail. Capture every one of the following that's present on the sheet:
-
-**Identification**
-- Sheet ID, title, discipline, scale(s), revision, revision date, drawn-by, checked-by, approval status
-- Source single-sheet PDF path (link to `drawings_split/...`)
-- Sheet number within the originating multi-sheet file (e.g. "sheet 4 of 12 of E-Series.pdf")
-
-**View and content (prose, exhaustive)**
-- Plan / section / elevation / detail / 3D — describe what view(s) are present
-- For plans: every room, zone, area, grid reference shown. Walk the sheet zone by zone.
-- For sections / elevations: levels shown, building elements depicted, what's foreground vs background
-- For details: what assembly is being detailed, scale of the detail, relationship to parent sheet
-
-**Systems and elements present**
-- Every system represented (structural frame, stormwater, sanitary drainage, cable trays, ductwork, sprinklers, fire mains, comms cabling, etc.)
-- For each system: routes, terminations, equipment locations, panel/board locations
-
-**Materials and specifications called out on the sheet**
-- Every material, grade, size, manufacturer, model number named on the sheet
-- Don't infer materials that aren't named — note the gap if a critical material is missing
-- Reference any spec section the sheet points to (e.g. "Refer Spec 26 05 19")
-
-**Schedules and tables on the sheet**
-- Type of schedule (door, window, fixture, panel, cable, fixture, finishes, equipment, etc.)
-- Number of rows
-- Full content of small schedules (under ~20 rows). For larger schedules, summarise structure and note row count; downstream sessions can open the PDF.
-
-**Annotations, notes, and callouts (every one)**
-- General notes verbatim or near-verbatim
-- Construction notes
-- Detail bubbles and what each refers to
-- Dimension callouts of significance (clearances, FFL, RL, key setouts) — note them but do not attempt full dimensional takeoff
-- Hold points, inspection points, NATA / authority requirements flagged on the sheet
-
-**Cross-references**
-- Every other sheet this drawing refers to (and what for)
-- Every spec section referenced
-- Any RFIs, variations, or revision clouds present and what they relate to
-
-**Trade-perspective lens (drives emphasis throughout the write-up)**
-
-Surface implications for the chosen trade even when the sheet is off-trade. Examples:
-
-- *Electrical perspective on an architectural plan:* call out ceiling types (T-bar vs set plaster vs exposed soffit) for fixture mounting, wall constructions for chasing, joinery locations for under-cabinet lighting, accessible roof spaces, riser locations, slab thicknesses where penetrations matter.
-- *Hydraulic perspective on a structural plan:* call out slab thicknesses and reinforcement zones (penetration coordination), set-downs in wet areas, riser shafts, slab edge conditions for floor wastes.
-- *Mechanical perspective on an architectural section:* call out ceiling space depth, plant room volumes, riser sizes, intake/exhaust locations, AHU access.
-- *Structural perspective on civil drawings:* foundation interfaces, retaining wall / slab connections, level transitions.
-- *GC perspective on any sheet:* coverage is even across all trades; identify scope of works, programme drivers, sequence dependencies, interface risks.
-
-State the perspective explicitly at the top of each per-sheet `.md` so the framing is obvious.
-
-**Quantities — explicitly skipped**
-
-> "Quantities are NOT extracted in this skill. For takeoffs, run the `construction-takeoff` skill against `drawings_split/<...>/<sheet>.pdf`."
-
-Trying to count things here is unreliable and wastes tokens.
-
-#### Step 5d — Combined drawings.md index
-
-After all per-sheet files are written, produce `drawings.md` as an **index**, not a duplicate. It should contain:
-
-1. Header noting the analysis perspective and date
-2. The drawing register table (Sheet ID, Title, Discipline, Rev, Date, link to per-sheet `.md`)
-3. A short discipline-by-discipline list with one-line summaries linking to each per-sheet `.md`
-
-Aim to keep `drawings.md` itself short (under ~500 lines for most projects). The depth lives in the per-sheet files.
-
-### Step 6 — Write outputs and summarise
-
-Create the `0. AI Context/` folder at the project root (`Bids/[BID]/0. AI Context/`). Inside it, ensure these exist:
-
-- `CLAUDE.md`
-- `project.md`
-- `drawings_split/` (if drawings) — one subfolder per source drawing PDF, each containing single-sheet PDFs + rendered PNGs + JSON
-- `drawings/` (if drawings) — one `.md` per sheet
-- `drawings.md` (if drawings) — index file
-
-Give the user a final summary:
-- Files written and their paths
-- PDF count processed (documents / drawings)
-- Sheet count split out of multi-page drawing PDFs
-- Analysis perspective used (e.g. "Electrical estimator")
-- Any PDFs that failed to parse and need their attention
-- Approximate token savings on future reads (CLAUDE.md + project.md + drawings.md size vs the source docs)
+Six steps, in the order below. Show your reasoning as you go — the folder
+tree after Step 1 and the classification result after Step 2 are the two
+cheapest points to correct a mistake before drawing analysis consumes real
+tokens.
+
+### Step 1 — Inventory the bid
+
+Run `scripts/discover.py <bid_root> -o /tmp/project_inventory.json` under
+`python3`. The helper walks the tree and pulls quick statistics from each
+PDF (page count, orientation, approximate ISO 216 sheet size, text density)
+so the next step can classify without reopening files.
+
+Do not assume the folder layout. Ailtir bids are typically numbered
+(`1. Brief`, `2. Contract`, `3. Drawings`, …) but tender packs often arrive
+as an unstructured dump. Print the tree and a short summary to the user —
+total PDF count, provisional drawing/document counts, any files that failed
+to open — and wait for acknowledgement before continuing.
+
+### Step 2 — Classify PDFs
+
+Run `scripts/classify.py /tmp/project_inventory.json -o /tmp/project_classified.json`
+under `python3`. The classifier scores each PDF against a suite of signals:
+ISO 19650 filename fields (see `research/drawing-conventions.md` for the
+convention), page media-box size against the ISO 216 A-series, orientation,
+text-to-vector ratio, and title-block hints. Every PDF is labelled
+`drawing`, `document`, or `unsure`.
+
+Present the outcome to the user:
+
+- Totals per class.
+- The full list of `unsure` items with the top two competing scores and the
+  reason each was assigned.
+- Any file whose ISO 19650 `Type` field (e.g. `DR` for drawing) contradicts
+  the vector-based classification — these are the highest-value confirmations.
+
+Confirm or override every borderline case before proceeding. This is the
+last cheap correction point; a spec sheet that survives here as a drawing
+will burn vision tokens for no gain, and a drawing misfiled as a document
+will never appear in the register.
+
+### Step 3 — Synthesise the document narrative
+
+For each PDF classified as a document, extract the text with
+`scripts/read_pdf.py`. If the helper exits with the image-only code, fall
+back to the `pdf-reading` skill or invite the user to supply an OCR pass —
+scanned tender packs are common on legacy jobs.
+
+Then produce two files together, because they share source material:
+
+- `CLAUDE.md`, kept under 300 lines. It is the navigation index and it
+  should fit comfortably in context alongside any downstream skill's own
+  prompt. Include the bid identifier, the active profile from the bid
+  README frontmatter, a compact tree of the top-level folders with one
+  line per folder, and a lookup table for the questions Ailtir skills
+  routinely ask ("form of contract", "employer's requirements", "latest
+  drawing register", "programme").
+- `project.md`, as long as the bid warrants. Group findings by topic
+  (contract, scope, programme, commercial position, site constraints,
+  outstanding items, unusual specifications), not by source PDF. Where the
+  active profile is `ireland-gc`, surface RIAI/GCCC-specific clauses;
+  where it is `uk-gc`, surface JCT/NEC-specific clauses. Cite source
+  documents inline for traceability. If a topic that would normally
+  appear in a tender brief is silent, say so — do not invent.
+
+Use the templates in `references/output_templates.md` verbatim as the
+starting shape for both files.
+
+### Step 4 — Confirm the trade perspective
+
+Decide the lens for drawing analysis before any sheets are opened. A GC
+bid on a full multi-discipline pack calls for even coverage; a subcontract
+bid — electrical, mechanical, groundworks — wants that trade's depth on
+every sheet, off-trade sheets included.
+
+Infer first, from what Step 3 already surfaced: the bid folder name, the
+scope documents, which specification sections are present (Section 26
+only vs full NBS coverage), which drawing disciplines the Step 2 register
+hints at, and any explicit statement in the invitation to tender.
+
+Then confirm with the user. Frame the question with your inferred answer
+so it can be accepted in one word, and offer the override list (GC,
+architectural, structural, civil, mechanical, electrical, hydraulic /
+public health, fire, communications, groundworks, external works). The
+vision tokens spent in Step 5b are the biggest single cost in the
+workflow — silent inference is not acceptable.
+
+The chosen perspective is recorded in `CLAUDE.md`, at the top of
+`drawings.md`, and at the top of every per-sheet analysis.
+
+### Step 5 — Drawing pipeline
+
+Only run this step if Step 2 found drawings. It has three sub-steps that
+must run in order.
+
+#### Step 5a — Split every drawing PDF
+
+For each drawing PDF, run `scripts/process_drawing.py <pdf> -o "<bid_root>/0. AI Context/drawings_split/<source_stem>" --dpi 200`
+under `python3`. Per input page the helper writes:
+
+- `<stem>_sheet<N>.pdf` — the durable single-sheet artefact. Kept
+  permanently and consumed later by `ailtir_takeoff` when quantities are
+  needed.
+- `<stem>_sheet<N>.png` — a 200-DPI render for vision analysis in Step 5b.
+- `<stem>_sheet<N>.json` — extracted text plus ISO 19650 title-block hints
+  (sheet ID, discipline role code, revision, suitability, scale, sheet
+  size against ISO 216).
+
+Every source PDF also produces a `manifest.json` naming the sheets it
+split into. The split is deterministic, so partial runs resume cleanly:
+if the process is interrupted after five drawings, the sixth is the only
+one that needs redoing.
+
+#### Step 5b — Analyse each sheet exhaustively
+
+For every single-sheet PDF, produce a dedicated `.md` file in
+`0. AI Context/drawings/`. Use the sheet ID from the title block for the
+filename (e.g. `A-101.md`, `E-201.md`); if the title block was
+unreadable, fall back to `<source_stem>_sheet<N>.md`.
+
+The write-up must be exhaustive enough that downstream skills can answer
+almost any question about the sheet without reopening the PDF. Cover
+whatever is present:
+
+- **Identification** — sheet ID, title, discipline role code (see
+  `research/drawing-conventions.md` for the ISO 19650 role letters),
+  scale(s) paired with sheet size, revision (P/C series for ISO 19650,
+  letter series for legacy BS 1192), suitability code (S0–S7, A, B),
+  issue date, drawn/checked/approved initials, path to the source
+  single-sheet PDF, position within the parent multi-sheet file.
+- **View content** — plan, section, elevation, detail, 3D — with a
+  zone-by-zone walk of every plan.
+- **Systems and elements shown** — every system that carries a route or
+  a symbol on the sheet.
+- **Materials, grades, sizes, manufacturers** — verbatim. Cite any spec
+  section the sheet points to. Do not backfill what the sheet does not
+  name.
+- **Schedules and tables** — type, row count, and full content for small
+  schedules (under ~20 rows); column summary and row count for larger
+  ones.
+- **Annotations, general notes, callouts, hold points** — near-verbatim.
+  Every detail bubble and what it refers to.
+- **Cross-references** — every other sheet, every spec section, every
+  RFI, every revision cloud, and what each is about.
+- **Trade-perspective lens** — surface implications for the trade chosen
+  in Step 4 on every sheet, off-trade ones included. State the
+  perspective explicitly at the top of each file.
+
+Quantities are out of scope. Counts, lengths, and areas are
+`ailtir_takeoff`'s responsibility — that skill runs against the
+single-sheet PDF in `drawings_split/` and produces auditable results.
+
+#### Step 5c — Combined register
+
+After every per-sheet file is written, produce `drawings.md`. It is an
+index, not a re-statement of the per-sheet content. Include:
+
+- A header naming the trade perspective, the active profile, and the
+  generation date.
+- The drawing register table: sheet ID, discipline (from the ISO 19650
+  role code), title, latest revision, latest suitability, issue date,
+  and a relative link to the per-sheet `.md`.
+- A short discipline-by-discipline summary — one line per sheet under
+  each discipline heading, each linking to the per-sheet file.
+
+Aim to keep `drawings.md` itself under 500 lines. The depth lives in the
+per-sheet files.
+
+### Step 6 — Handover
+
+Confirm the `0. AI Context/` folder now contains everything expected:
+`CLAUDE.md`, `project.md`, `drawings.md` (if drawings), `drawings/`
+(if drawings), `drawings_split/` (if drawings). Then produce a summary
+for the user:
+
+- Paths of every top-level output file written.
+- Counts: PDFs processed, documents synthesised, drawings split, sheets
+  analysed.
+- Active profile and trade perspective.
+- Any files that failed to parse and need manual attention.
+- Approximate token savings for downstream skills — the combined size of
+  `CLAUDE.md` + `project.md` + `drawings.md` against the aggregate size
+  of the source PDFs.
+
+Then run the two completion patterns at the tail of this file: update
+the bid README frontmatter via the Soul-Update pattern, and recommend
+the next skill from the conductor phase-map.
 
 ## Important constraints
 
-- **No quantity extraction from drawings.** Describe what's there; don't count. Point users at `construction-takeoff` for that — it can target the per-sheet PDFs in `drawings_split/`.
-- **Split drawings to PDF first, analyse second.** The single-sheet PDFs in `drawings_split/` are durable artefacts that must be persisted before per-sheet analysis begins. A partial run can then resume mid-way.
-- **Always confirm the analysis perspective before Step 5c.** Inferring is fine; assuming silently is not. Record the chosen perspective in `CLAUDE.md` and at the top of `drawings.md`.
-- **All sheets get exhaustive analysis regardless of perspective.** Off-trade sheets aren't skipped — they're analysed in full with the lens tilted toward the chosen trade.
-- **Don't invent information.** If a document or drawing doesn't say something, don't fill it in from assumption. Note the gap briefly.
-- **Preserve folder numbering conventions.** If the user's folders are `1. / 2. / 3.`, call the output folder `0. AI Context/` to sort first. If they're not numbered, just use `AI Context/`.
-- **Run classification before drawing analysis.** Vision-on-PDF is the expensive step. Make sure the user has signed off on the drawing list before you start that loop.
-- **Index incremental-friendly.** If `0. AI Context/` already exists with prior outputs, read them first. For re-runs, only re-process PDFs whose modified-date is newer than the last index, or that weren't previously indexed. Offer this to the user rather than always doing a full rebuild.
+- **No quantities from drawings in this skill.** If a downstream question
+  needs a count, a length, or an area, invoke `ailtir_takeoff` against
+  the appropriate `drawings_split/<stem>/<sheet>.pdf`.
+- **Split before analyse.** The single-sheet PDFs must be on disk before
+  any per-sheet write-up begins. A partial run then resumes from the
+  first unprocessed sheet.
+- **Perspective is confirmed, not assumed.** Silent inference is banned
+  before Step 5b; the vision spend justifies the one-line question.
+- **Every sheet is analysed in full.** Off-trade sheets are not
+  skipped; they are analysed exhaustively through the chosen trade's
+  lens.
+- **Never invent.** If a document or a sheet does not say something, note
+  the gap. Do not fill it from prior projects or from assumption.
+- **Preserve Ailtir folder numbering.** Ailtir bids use numbered
+  top-level folders; the AI context folder is `0. AI Context/` so it
+  sorts to the top. Do not rename or reorder existing bid subfolders.
+- **Never read from `.competitor-reference-quarantine/`.** That path is
+  reserved for legally quarantined material and must not appear in any
+  input list, prompt, or reference.
+- **Incremental by default on re-runs.** If `0. AI Context/` already
+  exists, only reprocess what has changed since the last generation.
+- **Respect the ISO 19650 status distinction.** A sheet at S0–S4 is not
+  for construction; a sheet at A1+ is. Record the code, and do not treat
+  a preliminary issue as if it were contractual.
 
 ## Re-running the skill
 
-If the user triggers this skill on a folder that's already been indexed (0. AI Context/ exists with outputs):
+If `0. AI Context/` already exists in the bid folder when this skill is
+triggered:
 
-1. Read the existing CLAUDE.md to see when it was last generated
-2. Compare the file inventory from Step 1 against the prior run
-3. Ask the user: "This project was indexed on [date]. I can (a) rebuild from scratch, or (b) update incrementally — only reprocess new or modified files." Default to (b) unless they say otherwise.
+1. Read the existing `CLAUDE.md` to find the previous generation date and
+   the previous file inventory.
+2. Compare the current Step 1 inventory against the prior one. Identify
+   new PDFs, modified PDFs (modification time newer than the CLAUDE.md
+   timestamp), and PDFs removed since the last run.
+3. Present the diff to the user and offer two paths: (a) incremental
+   update — process only the changed set, refreshing `project.md` and
+   the register in place; or (b) full rebuild — regenerate everything
+   from scratch. Default to (a) unless the user requests otherwise.
+4. Full rebuild is still the right choice when the trade perspective or
+   the active profile has changed since the last run — both change what
+   the drawing analysis should emphasise.
 
-- [HUMAN INPUT REQUIRED] Before starting drawing analysis (Step 5c), confirm the analysis perspective with the user.
+- [HUMAN INPUT REQUIRED] Confirm the trade perspective at Step 4 before
+  drawing analysis starts.
 
 ## Anti-Patterns (What NOT to do)
 - DO NOT skip the OCR step for drawings. The `process_drawing.py` script is mandatory for PDFs.
@@ -268,13 +293,14 @@ If the user triggers this skill on a folder that's already been indexed (0. AI C
 
 - `references/output_templates.md` — Full templates and worked examples for CLAUDE.md, project.md, and drawings.md. Read this when you're ready to write each file.
 - `references/classification_heuristics.md` — How the drawing vs document classifier works and how to handle edge cases.
+- `research/drawing-conventions.md` — ISO 19650 and BS 1192 filename fields, role/type/level codes, suitability and revision codes, RIBA stages, ISO 216 sheet sizes, title-block layout, US National CAD Standard. Consult before parsing any drawing filename or title block.
 
 ## Scripts
 
-- `scripts/discover.py` — Walks the project folder, produces file inventory with PDF stats.
-- `scripts/classify.py` — Classifies PDFs as drawings or documents from inventory stats.
-- `scripts/process_drawing.py` — For each page of a drawing PDF: writes a durable single-sheet PDF, a high-DPI PNG render, and a JSON of extracted text + title-block hints. The single-sheet PDFs live in `0. AI Context/drawings_split/` and are reusable by downstream skills (e.g. `construction-takeoff`).
-- `scripts/read_pdf.py` — Small helper for reading document PDFs to text.
+- `scripts/discover.py` — Walks the bid folder, produces a file inventory with PDF page count, orientation, ISO 216 sheet-size guess, and text density.
+- `scripts/classify.py` — Scores each PDF as drawing vs document using ISO 19650 filename signals, vector page statistics, and title-block hints.
+- `scripts/process_drawing.py` — For each page of a drawing PDF: writes a durable single-sheet PDF, a high-DPI PNG render, and an ISO 19650-aware JSON of extracted text plus title-block hints. The single-sheet PDFs are reused by `ailtir_takeoff`.
+- `scripts/read_pdf.py` — Text extraction for document PDFs, with a dedicated exit code when the file is image-only and needs OCR.
 
 ## Quality Checks
 - [ ] All PDFs classified as drawings or documents before analysis begins.

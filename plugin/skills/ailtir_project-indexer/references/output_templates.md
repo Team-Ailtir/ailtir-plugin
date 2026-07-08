@@ -1,292 +1,448 @@
-# Output Templates
+# Output Templates — `ailtir_project-indexer`
 
-Load this reference when you're ready to write the three output files.
-These are templates, not rigid forms — adapt sections to what the project actually contains.
+Reference loaded by `SKILL.md` for Steps 3–6: writing `CLAUDE.md`,
+`project.md`, per-sheet drawing `.md` files, and combined `drawings.md`.
+Every skeleton is Ailtir-specific — the nine-section bid folder layout
+from `create_bid_folders.py`, profile-aware currency and contract
+references from `Context/profile.json`, and ISO 19650 status/revision
+codes on every drawing artefact.
+
+## How to use these templates
+
+- Templates are not rigid forms — adapt sections to what the pack
+  contains. Sections marked `_[optional]_` may be dropped.
+- Markdown only. No emojis, no HTML. ATX headings, GitHub tables.
+- First line of every generated file:
+  `_Generated {YYYY-MM-DD} by ailtir_project-indexer. Re-run the skill to refresh._`
+- **Currency:** read `Context/profile.json` and render `€` for
+  `ireland-gc`, `£` for `uk-gc`. Never hardcode.
+- **Contract-form references:**
+  - `ireland-gc`: PW-CF1–5, RIAI Yellow/Blue/White, ARM4, SCSI, CWMF.
+  - `uk-gc`: JCT 2024 (SBC/DB/IC/MW), NEC4 Options A–F, NRM1/NRM2, BCIS.
+  - Never emit AS 4000 (Australia) or ConsensusDocs (US).
+- **Status / revision codes** — see `research/drawing-conventions.md`
+  for ISO 19650 S/A/B and P01/C01 tables. Cite the code; do not restate.
+- **Cross-skill hand-offs:** quantities to `ailtir_takeoff`, open
+  queries to `ailtir_rfi-generator`, evaluation criteria to
+  `ailtir_compliance-matrix`, rates to `ailtir_rate-library`, packages
+  to `ailtir_subcontractor-enquiry`.
 
 ---
 
-## CLAUDE.md template
+## Template 1 — `CLAUDE.md` (entry point, under 300 lines)
+
+Loaded into every downstream session under the bid. Keep it dense;
+push detail into `project.md`.
 
 ```markdown
-# [Project Name] — Claude Context Guide
+# {BidRef} — {ProjectName} — Claude Context Guide
 
-_Generated [YYYY-MM-DD] by project-indexer. Re-run the skill to refresh._
+_Generated {YYYY-MM-DD} by ailtir_project-indexer. Re-run the skill to refresh._
 
-## About this project
+## About this bid
 
-[2–4 sentences: what's being built, for whom, contracting model, location.
-Inferred from folder names and key documents. If unclear, say so.]
+{2–4 sentences: client, procurement route from profile, project type,
+approximate value, location, headline scope.}
+
+## Bid state at a glance
+
+| Field                | Value                                        |
+|----------------------|----------------------------------------------|
+| Phase                | {from Bids/{BidRef}/README.md frontmatter}   |
+| Next action          | {from README frontmatter}                    |
+| Blockers             | {from README frontmatter}                    |
+| Tender return        | {date + time from ITT}                       |
+| Site visit           | {date or "not scheduled"}                    |
+| Clarifications close | {date}                                       |
 
 ## Folder structure
 
 ```
-[project root]
-├── 1. Project Docs/          — [brief description of what's in here]
-├── 2. Contract/              — [brief description]
-├── 3. Estimate/              — [brief description]
-├── 4. Correspondence/        — [brief description]
-├── 5. Registers/             — [brief description]
-├── 6. Programme/             — [brief description]
-├── 7. Site/                  — [brief description]
-└── 0. AI Context/            — generated context files (this file, project.md, drawings.md)
+Bids/{BidRef}/
+├── 00_Bid_Management/   bid/no-bid, decision log, hand-off notes
+├── 01_Tender_Docs/      ITT, contract, drawings, specifications
+├── 02_Analysis/         compliance matrix, risk register, go/no-go
+├── 03_Estimate/         priced BoQ, rates, cost plan, backup
+├── 04_Enquiries/        sub-contractor RFQs, returns, comparisons
+├── 05_Submissions/      draft + final submission documents
+├── 06_Programme/        MSP/Asta files, milestone tracker
+├── 07_Correspondence/   RFIs sent/received, clarifications
+├── 08_Post-Award/       (populated after award)
+└── 0. AI Context/       indexer outputs
 ```
 
 ## Where to find what
 
-Use this as a mini-index when you need a specific piece of information:
+| Question                        | Location                                   |
+|---------------------------------|--------------------------------------------|
+| Contract terms and amendments   | `01_Tender_Docs/Contract/`                 |
+| ITT and evaluation criteria     | `01_Tender_Docs/ITT/`                      |
+| Drawings (originals / per-sheet)| `01_Tender_Docs/Drawings/`, `0. AI Context/drawings_split/` |
+| Compliance matrix               | `02_Analysis/Compliance_Matrix.xlsx`       |
+| Rates and benchmarks            | `03_Estimate/Rates/`                       |
+| Trade enquiries and returns     | `04_Enquiries/`                            |
+| Draft and final submissions     | `05_Submissions/`                          |
+| Programme and Gantt output      | `06_Programme/`                            |
+| Sent/received RFIs              | `07_Correspondence/RFIs/`                  |
 
-- **Head contract, GCs, amendments** → `2. Contract/`
-- **Drawings** (all disciplines) → [wherever they actually live]
-- **Current programme / Gantt** → `6. Programme/`
-- **RFIs, variations, transmittals** → `5. Registers/`
-- **Correspondence with principal/subcontractors** → `4. Correspondence/`
-- **[...etc]**
+## Related context files (in `0. AI Context/`)
 
-## Related context files
-
-- `project.md` — Narrative project summary synthesised from all documents. Read this before answering project-specific questions.
-- `drawings.md` — Drawings index (drawing register + per-discipline list with links). Read for the lay-of-the-land.
-- `drawings/<sheet_id>.md` — Per-sheet exhaustive description (one file per sheet). Read the relevant file before answering questions about a specific sheet.
-- `drawings_split/<source>/<sheet>.pdf` — Single-sheet PDFs split out from multi-sheet drawing files. Use these as inputs to the `construction-takeoff` skill.
+- `project.md` — narrative summary; contract clauses, scope, commercial position.
+- `drawings.md` — drawing register with per-discipline sub-sections.
+- `drawings_split/*.pdf` — one PDF per sheet.
+- `{sheet_id}.md` — one file per sheet, keyed by ISO 19650 drawing
+  number where available, else `<stem>_sheet<N>`.
 
 ## Analysis perspective
 
-Drawings were analysed from the **[e.g. Electrical estimator]** perspective. All sheets received exhaustive coverage; emphasis tilts toward the chosen trade. Re-run the skill with a different perspective if needed.
+{From Step 5a — "General Contractor (all-trade coverage)" for a
+main-contract bid, or a trade lens: Electrical / Hydraulic /
+Mechanical / Structural / Fire.}
+
+## Active profile
+
+- **Profile:** `{profile_id}` from `Context/profile.json`
+- **Currency:** `{€ | £}`
+- **Standards in scope:**
+  - `ireland-gc`: PW-CF suite, RIAI forms, ARM4, SCSI cost data, CWMF.
+  - `uk-gc`: JCT 2024, NEC4 (Options A–F), NRM1/NRM2, BCIS.
 
 ## Notes for Claude
 
-- Generated [date]. Files modified after this date may not be reflected.
-- For quantity takeoffs from drawings, use the `ailtir-takeoff` skill against `drawings_split/<...>/<sheet>.pdf` — this index does not contain quantities.
-- For document-level specifics (e.g. exact clause wording), open the source PDF; this index summarises but doesn't reproduce.
-- [Any user-specific conventions observed, e.g. "Rev letters mean A=initial issue, B=for construction"]
-- **Commercial sensitivity:** This is a live tender. All pricing, margin, risk positions, and bid strategy in this folder are commercially sensitive. Do not share or export this data outside the workspace without explicit user confirmation.
+- Generated `{YYYY-MM-DD}`. Re-run if the pack updates.
+- **Quantities:** route measurement questions to `ailtir_takeoff`.
+- **Open queries:** draft RFIs via `ailtir_rfi-generator`.
+- **Commercial sensitivity:** rates and margin under `03_Estimate/`
+  are confidential; do not surface in submission text.
 ```
 
-**Keep CLAUDE.md under ~300 lines.** It's the always-read entry point; bloat defeats its purpose.
+### Worked example — `2026-014-CorkLibrary` under `ireland-gc`
+
+```markdown
+# 2026-014-CorkLibrary — New Central Library, Cork — Claude Context Guide
+
+_Generated 2026-07-08 by ailtir_project-indexer. Re-run the skill to refresh._
+
+## About this bid
+
+Cork City Council are procuring a new 4,200 m² central library on
+Grand Parade under the CWMF Restricted route, using PW-CF1. Two-stage
+tender; this pack is the Stage 2 fully-priced return. Value stated
+€18.4m excl. VAT.
+
+## Bid state at a glance
+
+| Field                | Value                                           |
+|----------------------|-------------------------------------------------|
+| Phase                | pricing (Stage 2)                               |
+| Next action          | close Package 4 (M&E) enquiries                 |
+| Blockers             | RFI-011 fire-strategy zones outstanding         |
+| Tender return        | 2026-08-15 12:00 IST                            |
+| Site visit           | 2026-07-22 10:00                                |
+| Clarifications close | 2026-07-31 17:00                                |
+
+## Analysis perspective
+
+General Contractor (all-trade coverage).
+
+## Active profile
+
+- **Profile:** `ireland-gc`  •  **Currency:** `€`
+- **Standards in scope:** PW-CF1, ARM4, RIAI Working Drawings,
+  SCSI Q3 2026 tender-price data; BCAR Assigned Certifier required.
+
+## Notes for Claude
+
+- Fire-compartment query — route to `ailtir_takeoff` (FIRE-A-101 C01).
+- RFI-011 open at `07_Correspondence/RFIs/RFI-011.md`.
+- Tender target €17.9m — do not restate outward.
+```
 
 ---
 
-## project.md template
+## Template 2 — `project.md` (narrative summary)
+
+The deep record; may grow to 2,000+ lines on large packs — it exists
+precisely to replace re-reading 50+ PDFs on every downstream question.
 
 ```markdown
-# [Project Name] — Project Summary
+# {BidRef} — {ProjectName} — Project Summary
 
-_Generated [YYYY-MM-DD] from [N] documents across [N] folders._
+_Generated {YYYY-MM-DD} by ailtir_project-indexer. Re-run the skill to refresh._
 
 ## 1. Project overview
 
-- **Project name:** [from documents]
-- **Client / Principal:** [name]
-- **Head contractor:** [name, if applicable]
-- **Project manager / Superintendent:** [name]
-- **Architect / Lead designer:** [name]
-- **Other key consultants:** [list]
-- **Address / Site:** [full address]
-- **Project type:** [e.g. new-build commercial, refurbishment, civil infrastructure]
-- **Approximate value:** [if stated]
-- **Contracting model:** [e.g. lump sum, construct-only, D&C, ECI]
+- Project name, `{BidRef}`, client/employer + client rep
+- Procurement route ({`ireland-gc`: CWMF Restricted / Open / Private Negotiated / D&B / Framework;
+    `uk-gc`: Open / Competitive Flexible / Direct Award / Framework Call-Off / Dynamic Market / Private Traditional or D&B})
+- Principal consultants: architect, C&S, MEP, QS, PSDP / Principal Designer, fire, acoustic, sustainability
+- Project type, address (with ITM/OSGB coordinates), approximate value `{€|£}{amount}`
+- Contracting model ({`ireland-gc`: PW-CF1–5, RIAI Yellow/Blue/White, private D&B;
+    `uk-gc`: JCT SBC/DB/IC/MW 2024, NEC4 Option A–F, private D&B})
 
 ## 2. Contract
 
-- **Form of contract:** [e.g. AS 4000-1997 as amended]
-- **Contract date:** [date]
-- **Contract sum:** [amount]
-- **Key amendments to standard form:** [list]
-- **Notable risk allocations:** [e.g. site conditions, latent, time bar provisions]
-- **Security / retention:** [%]
-- **Liquidated damages:** [rate, cap]
-- **Defects liability period:** [months]
-- **[Other clauses worth flagging]**
+- Form of contract and edition; contract date / tender return date
+- Contract sum / tendered price `{€|£}{amount}`
+- Amendments to the standard form (every deviation with clause ref)
+- Notable risk allocations (ground, existing services, weather, contamination, TUPE, novation)
+- Security / retention, LDs `{€|£}{amount}` per {day|week} capped at `{%}`, DLP / rectification period
+- **Time-bar provisions:**
+  - `ireland-gc` — PW-CF Contractor's Claim Notice within 20 working days
+  - `uk-gc` NEC4 — Compensation Event notice within 8 weeks (Cl 61.3); JCT — Relevant Event notice "forthwith"
+- Payment terms: interim cycle, pay-less notice deadlines
 
 ## 3. Scope
 
-### Inclusions
-
-[Bullet list of what's being built. Group by trade or building element where helpful.]
-
-### Exclusions (as documented)
-
-[Bullet list]
-
-### Specification highlights
-
-[Material / system specifications worth knowing at-a-glance, with source reference.
-E.g.: "Concrete — N40, 80mm cover to reinforcement in-ground (Spec 03300 §4.2)"]
+Inclusions, exclusions, spec highlights. Every substantive statement
+cites source: `per Specification Section {N} §{clause}` or
+`per Drawing {SheetID} Rev {code}`. Sub-section by trade or BoQ section.
 
 ## 4. Programme & key dates
 
-| Event | Date | Source |
-|---|---|---|
-| Site possession | ... | ... |
-| Commencement | ... | ... |
-| Practical completion | ... | ... |
-| [Milestones] | ... | ... |
+| Milestone                        | Date         | Source            |
+|----------------------------------|--------------|-------------------|
+| Site visit                       | {YYYY-MM-DD} | ITT §{n}          |
+| Clarifications close             | {YYYY-MM-DD} | ITT §{n}          |
+| Tender return                    | {YYYY-MM-DD} | ITT §{n}          |
+| Interview / clarification        | {YYYY-MM-DD} | ITT §{n}          |
+| Expected start on site           | {YYYY-MM-DD} | ITT §{n}          |
+| Sectional / practical completion | {YYYY-MM-DD} | Contract Appendix |
 
 ## 5. Commercial position
 
-- **Contract sum:** [amount]
-- **Approved variations:** [count, total $, if tracked in correspondence/registers]
-- **Pending variations:** [count, total $]
-- **Claims to date:** [summary if available]
-- **Retention held:** [amount]
-- **[Other commercial notes]**
+**Live bid:** tender price, target margin _[internal]_, PS/PC sums,
+dayworks allowance, contingency.
+**Post-award (when `08_Post-Award/` populated):** contract sum,
+approved / pending variations, claims, retention, next valuation.
 
 ## 6. Open items
 
-Outstanding matters that downstream sessions should be aware of:
-
-- [ ] [Open RFI: number, subject, raised date]
-- [ ] [Pending variation: number, scope, value]
-- [ ] [Overdue submittal / approval]
-- [ ] [Unresolved correspondence thread]
+Outstanding RFIs, pending variations, overdue submittals. Draft new
+RFIs via `ailtir_rfi-generator`.
 
 ## 7. Site conditions & constraints
 
-- **Site access:** ...
-- **Working hours:** ...
-- **Environmental / heritage:** ...
-- **Services:** ...
-- **Neighbour constraints:** ...
+Access, working hours, environmental targets (BREEAM UK; Home
+Performance Index / NZEB IE; LEED; Passivhaus), heritage / archaeology
+(RPS IE; listed UK), utilities capacity, neighbour constraints,
+Section 106 (uk-gc) or Part V social housing (ireland-gc), site
+hazards from the pre-construction information.
 
-## 8. Other material information
+## 8. Compliance requirements
 
-[Anything the documents surface that doesn't fit above but matters — novated packages,
-long-lead items, known disputes, unusual specifications, commercial sensitivities.]
+Profile-specific — populate whichever block matches
+`Context/profile.json`. Cross-check via `ailtir_compliance-matrix`.
 
-## 9. Source documents
+**If `ireland-gc`:**
 
-| Document | Folder | Role |
-|---|---|---|
-| [filename] | [folder] | [e.g. "Head contract"] |
-| ... | ... | ... |
+- CIRI membership number
+- Safe-T-Cert accreditation and expiry
+- BCAR — Assigned Certifier appointment; Design Certifier if design
+  responsibility rests with the contractor
+- PSDP / PSCS appointments and competence evidence (SI 291/2013)
+- Revenue Tax Clearance Certificate (eTC)
+- PW-CF Suitability Assessment thresholds — turnover, personnel,
+  insurance, similar projects
+- CWMF form-of-tender declarations
 
-## 10. Gaps
+**If `uk-gc`:**
 
-Information a downstream session might expect but that isn't in this folder:
+- SSIP membership — CHAS, SafeContractor, or Constructionline (Gold)
+- CDM 2015 Principal Contractor / Principal Designer appointments
+- Building Safety Act 2022 — HRB Gateway 2 / 3 obligations if
+  Higher-Risk Building
+- Modern Slavery Act 2015 §54 statement (if turnover threshold met)
+- Carbon Reduction Plan aligned to PPN 06/20 (central-government)
+- Social Value response aligned to PPN 06/21 (central-government)
+- Fire Safety (England) Regulations 2022 (residential)
 
-- [e.g. "No current programme found — last dated 2024-08"]
-- [e.g. "Contract sum inferred from priced schedule; signed form of agreement not present"]
+## 9. Other material information
+
+Long-lead items with lead time and impact, novated packages, disputes
+on adjacent contracts, unusual specifications, single-source suppliers.
+
+## 10. Source documents
+
+| Filename            | Folder                     | Role                      | Read date    |
+|---------------------|----------------------------|---------------------------|--------------|
+| {tender-doc.pdf}    | `01_Tender_Docs/ITT/`      | Instructions to Tenderers | {YYYY-MM-DD} |
+| {contract.pdf}      | `01_Tender_Docs/Contract/` | Form of Contract          | {YYYY-MM-DD} |
+| {specification.pdf} | `01_Tender_Docs/Spec/`     | Specification             | {YYYY-MM-DD} |
+
+## 11. Gaps
+
+Information a downstream session might expect but that is absent from
+the folder. Flag each so `ailtir_rfi-generator` can pick it up.
 ```
 
 ---
 
-## Per-sheet drawing template (one .md per sheet, in `drawings/`)
+## Template 3 — Per-sheet drawing `.md`
 
-Each sheet gets its own `.md` file. Filename: `<sheet_id>.md` (e.g. `A-101.md`, `E-201.md`). Fall back to `<source_stem>_sheet<N>.md` if the sheet ID can't be read from the title block.
+Filename `<sheet_id>.md` where `sheet_id` is
+`title_block.hints.sheet_number` from `process_drawing.py` (e.g.
+`A-101.md`, `E-201.md`, or full ISO 19650 form
+`OFF-HEX-ZZ-01-DR-A-0001.md`). Fall back to `<source_stem>_sheet<N>.md`.
 
 ```markdown
-# [Sheet ID] — [Sheet Title]
+# {SheetID} — {SheetTitle}
 
-**Discipline:** [Architectural / Structural / Civil / Electrical / Hydraulic / Mechanical / Fire / Comms / Landscape / etc.]
-**Revision:** [Rev letter] dated [YYYY-MM-DD]
-**Scale(s):** [e.g. 1:100, details 1:20]
-**Drawn / Checked / Approved:** [as shown in title block]
-**Source single-sheet PDF:** `drawings_split/<source_stem>/<source_stem>_sheet<N>.pdf`
-**Originating file:** `<source_stem>.pdf` — sheet [N] of [total]
-**Analysis perspective:** [e.g. Electrical estimator] _(perspective drives emphasis below)_
+_Generated {YYYY-MM-DD} by ailtir_project-indexer. Re-run the skill to refresh._
 
-> Quantities are NOT extracted in this file. For takeoffs, run the `construction-takeoff` skill against the source single-sheet PDF above.
+## Header
+
+| Field                | Value                                                   |
+|----------------------|---------------------------------------------------------|
+| Sheet ID             | `{sheet_id}`                                            |
+| Title                | {as printed}                                            |
+| Discipline           | {mapped from role code — see `research/drawing-conventions.md`} |
+| Revision             | `{P01 / P02 / C01 / C02 …}` (drawing-conventions.md)    |
+| Status / Suitability | `{S0 / S1 / S2 / S3 / S4 / A1 / B1}` (drawing-conventions.md) |
+| Revision date        | `{YYYY-MM-DD}`                                          |
+| Scale(s)             | `1:{n} @ A{n}`                                          |
+| Drawn / Checked / Approved | {initials}                                        |
+
+## Source PDF
+
+- Single-sheet: `0. AI Context/drawings_split/{filename}.pdf`
+- Multi-sheet issue file: `01_Tender_Docs/Drawings/{filename}.pdf`
+
+## Analysis perspective
+
+{From Step 5a. Every content section below is written through this lens.}
+
+## Quantities notice
+
+This file describes what the sheet shows; it does not carry quantities.
+Invoke `ailtir_takeoff` for measurement, area, count, or length —
+that skill reads the split PDF, applies NRM2 rules of measurement,
+and writes results into the estimate template.
 
 ## View and content
 
-[Exhaustive prose. Walk the sheet zone-by-zone or view-by-view. For plans: every room, every grid reference, every visible system. For sections / elevations: levels, building elements, foreground vs background. For details: which assembly, scale, parent reference.]
+Exhaustive prose, zone by zone.
+
+- **Plans** — walk rooms / zones / grid intersections.
+- **Sections / elevations** — walk levels top-to-bottom, name each
+  storey, describe construction, foreground vs background.
+- **Details** — assembly name, scale, parent sheet reference,
+  layer-by-layer build-up.
 
 ## Systems and elements present
 
-[Every system shown — structural frame, stormwater, sanitary drainage, cable trays, sprinklers, mechanical ducts, etc. For each: routes, terminations, equipment locations.]
+Every system shown: structural, drainage, mechanical (heating /
+cooling / ventilation), electrical (power / lighting / small power),
+comms / data, fire (detection / suppression / compartmentation),
+lifts, controls.
 
 ## Materials and specifications called out
 
-[Every material/grade/size/manufacturer/model named ON the sheet. Don't infer. Note the spec section the sheet points to where applicable.]
+Only what is named ON the sheet. Reference the parent spec section:
+`per Spec §{n}`. Do not import from other sheets.
 
 ## Schedules on the sheet
 
-[For each schedule: type, row count, structure. Reproduce small schedules (under ~20 rows) in full. Summarise larger ones — the source PDF has the rows.]
+- Under ~20 rows: reproduce fully as a markdown table.
+- Larger: summarise (column names, row count, representatives) and
+  cite sheet + spec for full data.
 
-## Annotations, notes, and callouts
+## Annotations, notes, callouts
 
-[General notes, construction notes, detail bubbles, key dimensional callouts (clearances, FFL, RL, key setouts), hold points, NATA/inspection requirements. Capture every annotation visible on the sheet.]
+- General notes and construction notes: verbatim (load-bearing).
+- Detail bubbles: each with cross-reference.
+- Key dimensional callouts: FFL, RL, setout, benchmarks.
+- Hold points and inspection points.
 
 ## Cross-references
 
-- Other sheets: [list with what each is referenced for]
-- Specifications: [section numbers and what they cover]
-- RFIs / variations / revision clouds: [if any visible on the sheet]
+Other sheets referenced (with revision), spec sections, RFIs, revision
+clouds, addendum items.
 
-## [Perspective]-relevant implications
+## {Perspective}-relevant implications
 
-[Trade-perspective lens. Surface implications for the chosen trade even when this sheet is off-trade. Examples:
-- Electrical perspective on architectural plans → ceiling types for fixture mounting, wall constructions for chasing, joinery for under-cabinet lighting, riser locations.
-- Hydraulic perspective on structural plans → slab thicknesses, set-downs, riser shafts, slab edges for floor wastes.
-- Mechanical perspective on architectural sections → ceiling space depth, plant room volumes, riser sizes, intake/exhaust.
-- GC perspective → even coverage; scope, programme drivers, sequence dependencies, interface risks.]
+Trade-perspective lens — surface implications even on off-trade sheets.
+
+- **Electrical:** containment crossing fire compartment lines,
+  ceiling-void depth constraints, riser routing from elevations.
+- **Mechanical:** riser locations, plantroom clear headroom,
+  penetration coordination, external plant zones.
+- **Structural:** transfer conditions, load paths, temporary works,
+  setout tolerances.
+- **Hydraulic / public health:** drainage invert levels, riser
+  positions, water storage locations.
+- **GC (main contractor):** logistics, sequencing, trade interface
+  risks, temporary works, access hoist positions.
+- **Fire:** compartment lines, cavity barriers, smoke seals, escape
+  distances, means-of-escape widths.
 
 ## Gaps and notes for downstream sessions
 
-[Anything material missing from the sheet that a downstream session might reasonably expect — e.g. "No legend present; symbols not defined on this sheet." or "Cable sizes not shown — refer schedule on E-901."]
+Missing legends, cable sizes deferred to Contractor Design Portion,
+structural sizes tagged "TBC", spec references to sections not in the
+pack. Flag each so `ailtir_rfi-generator` can pick them up.
 ```
 
 ---
 
-## Combined drawings.md template (index file)
+## Template 4 — Combined `drawings.md` (register + index)
 
-The combined `drawings.md` is an **index**, not a duplicate of the per-sheet content. Keep it short — the depth lives in `drawings/<sheet_id>.md`.
+Target under 500 lines even on large packs — the register carries
+one-line pointers; depth lives in per-sheet files.
 
 ```markdown
-# [Project Name] — Drawings Index
+# {BidRef} — {ProjectName} — Drawings
 
-_Generated [YYYY-MM-DD] from [N] drawing files ([N] sheets total)._
-**Analysis perspective:** [e.g. Electrical estimator] _(applies to every per-sheet file)_
+_Generated {YYYY-MM-DD} by ailtir_project-indexer. {N} sheets indexed. Re-run the skill to refresh._
 
-> Per-sheet exhaustive write-ups live in `drawings/<sheet_id>.md`.
-> Single-sheet PDFs (durable artefacts for downstream skills) live in `drawings_split/<source_stem>/`.
-> Quantities are NOT extracted. For takeoffs, run the `construction-takeoff` skill against the relevant single-sheet PDF.
+## Analysis perspective
+
+{Same value as CLAUDE.md.}
+
+## Notice
+
+- Per-sheet detail lives in the `{sheet_id}.md` files alongside this file.
+- Split PDFs for single-sheet reading are in `0. AI Context/drawings_split/`.
+- Quantities are not derived here — invoke `ailtir_takeoff`.
 
 ## Drawing register
 
-| Sheet | Title | Discipline | Rev | Date | Per-sheet file |
-|---|---|---|---|---|---|
-| A-001 | Cover Sheet | Architectural | C | 2026-03-12 | [A-001.md](drawings/A-001.md) |
-| A-101 | Ground Floor Plan | Architectural | B | 2026-02-04 | [A-101.md](drawings/A-101.md) |
-| S-201 | Typical Slab Details | Structural | A | 2026-01-15 | [S-201.md](drawings/S-201.md) |
-| ... | ... | ... | ... | ... | ... |
+Sorted by discipline then sheet number. Status and revision codes per
+ISO 19650 (see `research/drawing-conventions.md`).
 
----
+| Sheet ID | Title                          | Discipline    | Rev | Status | Date       | File                |
+|----------|--------------------------------|---------------|-----|--------|------------|---------------------|
+| A-101    | Ground Floor GA Plan           | Architectural | C01 | A1     | 2026-06-14 | [A-101.md](A-101.md)|
+| A-201    | North & East Elevations        | Architectural | C01 | A1     | 2026-06-14 | [A-201.md](A-201.md)|
+| S-100    | General Notes & Foundations    | Structural    | C02 | A1     | 2026-06-28 | [S-100.md](S-100.md)|
+| M-201    | Ground Floor Ventilation Layout| Mechanical    | P03 | S2     | 2026-06-30 | [M-201.md](M-201.md)|
+| E-101    | Ground Floor Small Power       | Electrical    | P02 | S2     | 2026-06-30 | [E-101.md](E-101.md)|
 
 ## Architectural
 
-- **A-001 — Cover Sheet & Drawing Register** (Rev C, 2026-03-12). [A-001.md](drawings/A-001.md). Cover sheet listing all architectural drawings + general notes.
-- **A-101 — Ground Floor Plan** (Rev B, 2026-02-04). [A-101.md](drawings/A-101.md). Full ground-floor plan, grid A–G / 1–8, with structural overlay and door swings.
-- ...
+- **[A-101](A-101.md)** — Ground Floor GA Plan (C01, A1). Module grid,
+  primary circulation, FFL datum used by every other discipline.
+- **[A-201](A-201.md)** — North & East Elevations (C01, A1). Rainscreen
+  zones, glazing modules, plant-screen extent.
 
 ## Structural
 
-- ...
+- **[S-100](S-100.md)** — General Notes & Foundations (C02, A1).
+  Bearing capacity, transfer condition at grid D-4, pile schedule.
 
-## [Other disciplines as present]
+## Mechanical
 
-- ...
-```
+- **[M-201](M-201.md)** — Ground Floor Ventilation (P03, S2). AHU-01
+  supply layout; preliminary, awaiting fire-strategy sign-off.
 
-### Per-sheet description — what to include
+## Electrical
 
-The per-sheet `.md` files should be **exhaustive**. The reader should be able to answer almost any non-quantity question about the sheet from the `.md` alone. Cover, where present:
+- **[E-101](E-101.md)** — Ground Floor Small Power (P02, S2).
+  Sockets, dedicated circuits, containment; outstanding coordination
+  with mechanical riser at grid E-5.
 
-- View type (plan / section / elevation / detail) and what is shown zone-by-zone
-- Every system represented and its routes/locations
-- Every material, grade, size, manufacturer, model named on the sheet
-- Every schedule (full content for small schedules; structure + row count for large)
-- Every annotation, general note, construction note, detail bubble
-- All cross-references to other sheets and specs
-- Trade-perspective implications even on off-trade sheets
+## {Other disciplines present}
 
-### Per-sheet materials & specs — only what's called out ON the drawing
-
-Don't infer. If the drawing doesn't name the material, don't invent one. Reference the specification if the drawing points to it.
-
-### What to skip
-
-- Quantity counts (use `construction-takeoff` instead)
-- Exact full setout dimension takeoffs
-- Retyping specification clause wording in full
+_One H2 per discipline present on the register. Single-line entries —
+depth lives in the per-sheet `.md`._
 ```
