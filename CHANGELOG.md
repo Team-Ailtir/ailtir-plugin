@@ -5,7 +5,7 @@ version. Entries use those version bumps as release boundaries.
 
 ## 2.14.1 - 2026-07-10
 
-Commit: pending - `Bump version to 2.14.1`
+Commit: `dc878f2` - `Bump version to 2.14.1`
 
 - Bumped plugin version from 2.14.0 to 2.14.1.
 
