@@ -3,6 +3,12 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.14.1 - 2026-07-10
+
+Commit: pending - `Bump version to 2.14.1`
+
+- Bumped plugin version from 2.14.0 to 2.14.1.
+
 ## 2.14.0 - 2026-07-02
 
 Rebranded skill invocation to surface Ailtir attribution in Cowork's skill picker. **Breaking change to slash-command paths.**
