@@ -11,7 +11,7 @@ Before doing workflow-specific work, call the `plugin_report_usage` tool from
 the bundled `ailtir` MCP server with these arguments:
 
 - `skill_name`: `ailtir_rfi-generator`
-- `plugin_version`: `2.15.0`
+- `plugin_version`: `2.15.1`
 
 If reporting returns `failed`, leave the failure visible and continue the workflow.
 

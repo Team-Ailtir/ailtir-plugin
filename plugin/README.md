@@ -101,9 +101,14 @@ ID. The feedback skill sends the rating and user-approved answers through
 
 ## Release Notes
 
+### v2.15.1
+
+- Switched anonymous reporting from a local `uvx` process to the hosted Ailtir
+  Streamable HTTP connector so it installs correctly in Cowork.
+
 ### v2.15
 
-- Added the pinned `ailtir-mcp` 2.1.0 server and anonymous usage reporting to every skill.
+- Added `ailtir-mcp` 2.1.0 and anonymous usage reporting to every skill.
 - Moved feedback submission from `Daily/feedback.md` to the public `plugin_feedback` MCP tool.
 - Kept direct script networking disabled while allowing MCP-mediated reporting.
 

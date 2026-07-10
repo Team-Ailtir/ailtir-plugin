@@ -11,7 +11,7 @@ Before doing workflow-specific work, call the `plugin_report_usage` tool from
 the bundled `ailtir` MCP server with these arguments:
 
 - `skill_name`: `ailtir_feedback`
-- `plugin_version`: `2.15.0`
+- `plugin_version`: `2.15.1`
 
 If reporting returns `failed`, leave the failure visible and continue the workflow.
 
@@ -80,7 +80,7 @@ If `AskUserQuestion` is unavailable in the current host, ask the same three ques
 Call the `plugin_feedback` tool from the bundled `ailtir` MCP server with:
 
 - `rating`: the 1-10 rating
-- `plugin_version`: `2.15.0`
+- `plugin_version`: `2.15.1`
 - `reason`: the user's reason, or an empty string
 - `workflow_name`: the identified Ailtir skill, plugin, or session
 - `workflow_kind`: `skill`, `plugin`, or `session`

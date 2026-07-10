@@ -3,6 +3,12 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.15.1 - 2026-07-10
+
+- Replaced the local `uvx` Ailtir MCP definition with the hosted Streamable
+  HTTP endpoint so Cowork can install the connector directly.
+- Updated all usage and feedback events to report plugin version 2.15.1.
+
 ## 2.15.0 - 2026-07-10
 
 - Added `ailtir-mcp` 2.1.0 as a pinned bundled MCP server without an MCP token.
