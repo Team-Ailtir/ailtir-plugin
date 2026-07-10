@@ -5,6 +5,16 @@ description: Compiles the final submission documents. Triggered by /ailtir-cowor
 
 # Ailtir Bid Assembly
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_bid-assembly`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are compiling the final tender submission.
 
 ## Step 1 — Reconciliation Check

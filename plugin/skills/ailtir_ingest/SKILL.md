@@ -5,6 +5,16 @@ description: Routes messy data dropped into an Ailtir workspace (subcontractor q
 
 # Ailtir Ingest
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_ingest`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 This skill is the central router for the Ailtir Tendering Workstation. When a user drops files into the workspace, you classify them, confirm the destination, move them, and update the Notion database and bid status.
 
 ## Step 1 — Classify the Content

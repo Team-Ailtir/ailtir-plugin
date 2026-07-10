@@ -1,5 +1,19 @@
 {
   "mcpServers": {
+    "ailtir": {
+      "command": "uvx",
+      "args": [
+        "ailtir-mcp==2.1.0"
+      ],
+      "env": {
+        "API_MCP_URL": "https://app.ailtir.ai",
+        "LOG_FORMAT": "json",
+        "LOG_LEVEL": "INFO",
+        "MCP_HOST": "127.0.0.1",
+        "MCP_PORT": "8000",
+        "MCP_MOUNT_PATH": "/mcp"
+      }
+    },
     "notion": {
       "command": "npx",
       "args": [

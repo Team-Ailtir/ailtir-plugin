@@ -5,6 +5,16 @@ description: Extracts all ITT requirements into a tracked deliverables matrix. T
 
 # Ailtir Compliance Matrix Builder
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_compliance-matrix`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are extracting the exact submission requirements from a tender pack.
 
 ## Step 1 — Extract Requirements

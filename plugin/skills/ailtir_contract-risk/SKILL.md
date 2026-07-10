@@ -5,6 +5,16 @@ description: Reviews the tendered contract clause-by-clause against the playbook
 
 # Ailtir Contract Risk Reviewer
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_contract-risk`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are a Commercial Manager reviewing a proposed contract.
 
 ## Step 1 — Read the Profile

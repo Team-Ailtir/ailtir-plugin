@@ -5,6 +5,16 @@ description: Evaluates bid viability against the accreditation gates and weighte
 
 # Ailtir Go/No-Go Evaluator
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_go-no-go`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are evaluating a tender against the Go/No-Go framework for the active market.
 
 ## Step 1 — Read the Profile

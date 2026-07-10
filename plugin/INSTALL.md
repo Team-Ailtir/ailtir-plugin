@@ -6,6 +6,7 @@ This guide installs the Ailtir Co-Work Plugin and prepares its MCP integrations.
 
 - Claude Code with plugin support.
 - Python 3 available as `python3`, `python`, or the Windows `py` launcher. Several workflows run bundled Python helper scripts through `scripts/run_python.*`.
+- `uv` with Python 3.13 support. The bundled Ailtir MCP server is launched with `uvx`.
 - Node.js with `npx`. The bundled Notion and Microsoft 365 MCP servers are launched with `npx`.
 - `unzip` available on `PATH` for tender pack extraction and archive handling.
 - Access to the `Team-Ailtir/ailtir-plugin` GitHub repository or marketplace.
@@ -14,6 +15,7 @@ Verify local tools:
 
 ```bash
 python3 --version
+uv --version
 node --version
 npx --version
 unzip -v
@@ -45,14 +47,17 @@ Restart Claude Code or run `/reload-plugins` if available in your session.
 
 ## Configure MCP Servers
 
-The plugin includes `.mcp.json` with two MCP servers:
+The plugin includes `.mcp.json` with three MCP servers:
 
 | Server | Command | Required Credentials |
 |---|---|---|
+| `ailtir` | `uvx ailtir-mcp==2.1.0` | None for public usage and feedback tools |
 | `notion` | `npx -y @modelcontextprotocol/server-notion` | `NOTION_API_KEY` |
 | `m365` | `npx -y @modelcontextprotocol/server-m365` | `M365_TENANT_ID`, `M365_CLIENT_ID`, `M365_CLIENT_SECRET` |
 
-Configure these credentials in Claude Code using your normal secure settings or connector configuration flow. Do not commit secrets to this repository.
+The Ailtir server is pinned for deterministic public reporting and does not
+receive an MCP token. Configure optional Notion and Microsoft 365 credentials
+using your normal secure settings or connector flow. Do not commit secrets.
 
 Use Notion when you want Ailtir to create or update CRM, Bid Pipeline, Subcontractor Directory, and RFI Log databases. Use Microsoft 365 when project documents live in SharePoint or OneDrive.
 

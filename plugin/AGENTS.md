@@ -15,7 +15,7 @@ This plugin targets **Claude Cowork** as its primary runtime (claude.com/product
 
 - `.claude-plugin/` contains the `plugin.json` manifest. Only `plugin.json` belongs here.
 - `skills/` contains every user-invocable workflow, plus each skill's workflow-local `scripts/`, `references/`, and `templates/`. Each skill is a folder with a `SKILL.md`.
-- `.mcp.json` declares bundled Notion and Microsoft 365 MCP server integrations.
+- `.mcp.json` declares the bundled Ailtir, Notion, and Microsoft 365 MCP servers.
 
 There is **no** `commands/` folder, **no** `resources/` folder, and **no** plugin-root `scripts/` folder. Slash commands and skills are unified — every skill at `skills/<name>/SKILL.md` is the slash command `/ailtir-cowork-plugin:<name>`. Setup templates, bundled scripts, and brand references live inside the skill that uses them.
 
@@ -35,7 +35,7 @@ When adding a new skill, if it has any jurisdiction-specific content: place refe
 
 Empirical evidence from `/ailtir-cowork-plugin:telemetry-test` (2026-06-29) on the Cowork sandbox:
 
-- **No outbound internet.** All 13 candidate hosts blocked at DNS — including anthropic.com, github.com, pypi.org, posthog.com, vercel.app, ailtir.ai. No telemetry POST, package install, or external API call from a skill's script will succeed.
+- **No outbound internet from skill scripts.** Direct HTTP calls from bundled scripts fail. Public usage and feedback reporting must go through the bundled Ailtir MCP server, whose host process can reach `api-mcp`.
 - **`${CLAUDE_PLUGIN_ROOT}` does NOT resolve in Cowork.** Documented for Claude Code only. Never use it in SKILL.md bodies.
 - **`${CLAUDE_SKILL_DIR}` does NOT resolve in Cowork.** Not exported as an env var. Don't rely on it.
 - **`cwd` at skill invocation is the session root, NOT the skill directory.** Relative paths like `scripts/foo.py` from a bash block will fail.
@@ -45,7 +45,7 @@ The working pattern: SKILL.md describes the work in natural language and names b
 
 ## Editing Rules
 
-Add new user-visible workflows as `skills/<short-name>/SKILL.md`. The folder name becomes the slash command (`/ailtir-cowork-plugin:<short-name>`). Do NOT prefix folder names with `ailtir-` — the plugin namespace already supplies that.
+Add new user-visible workflows as `skills/ailtir_<short-name>/SKILL.md`. The folder name becomes the slash command (`/ailtir-cowork-plugin:ailtir_<short-name>`).
 
 **For script invocations in SKILL.md, do NOT use bash code blocks with `${CLAUDE_PLUGIN_ROOT}/...` paths.** Instead, write natural-language instructions like:
 
@@ -61,7 +61,10 @@ For cross-skill references, name the sibling skill explicitly:
 
 > Read `references/metadata-schema.md` from the sibling `intelligence-builder` skill's directory.
 
-**No telemetry blocks.** Outbound HTTP is blocked in Cowork. Any usage reporting must be local-file based (write to the user's workspace) and best-effort.
+Every skill must begin its body with a `Usage Reporting` section that calls the
+public `plugin_report_usage` tool on the bundled `ailtir` MCP server. Pass the
+exact skill folder name and current plugin version. Leave a failed result
+visible and continue the workflow. Never send telemetry directly from a script.
 
 Do not commit secrets, tender documents, pricing data, Notion tokens, Microsoft 365 credentials, or generated customer workspaces.
 

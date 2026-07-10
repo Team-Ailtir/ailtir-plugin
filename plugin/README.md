@@ -8,7 +8,7 @@ Use [INSTALL.md][install] for setup and [CONTRIBUTING.md][contributing] for deve
 
 - Scoped Claude skills under `/ailtir-cowork-plugin:*` covering the full tender lifecycle.
 - Bundled Python helpers (per-skill) for workbooks, project indexing, PDF processing, and takeoff support.
-- MCP server definitions for Notion and Microsoft 365 integrations.
+- MCP server definitions for anonymous Ailtir reporting plus Notion and Microsoft 365 integrations.
 - **Profile-based market calibration** — `/ailtir-cowork-plugin:ailtir_setup` writes `Context/profile.json`; every skill loads the reference file matching the active profile:
   - **`ireland-gc`** — CWMF, PW-CF, RIAI, SEO, SCSI, ARM4, NRM2, CIRI, Safe-T-Cert, BCAR, PSDP/PSCS.
   - **`uk-gc`** — Procurement Act 2023, JCT 2024, NEC4, CIJC, BCIS, NRM1/NRM2, SSIP (CHAS/SafeContractor/Constructionline), CDM 2015, PPN 06/20 (Carbon Reduction Plan), PPN 06/21 (Social Value), Modern Slavery Act, and Building Safety Act 2022 gates for Higher-Risk Buildings.
@@ -88,13 +88,24 @@ environment variables:
 | `M365_TENANT_ID` | Optional | `.mcp.json` Microsoft 365 MCP server | Identifies the Microsoft 365 tenant for SharePoint/OneDrive access. |
 | `M365_CLIENT_ID` | Optional | `.mcp.json` Microsoft 365 MCP server | Identifies the Microsoft 365 application/client. |
 | `M365_CLIENT_SECRET` | Optional | `.mcp.json` Microsoft 365 MCP server | Authenticates the Microsoft 365 application/client. |
-| `AILTIR_PLUGIN_DATA` | Optional | Setup resources, feedback log | Sets the Ailtir workspace root. Defaults to `~/Ailtir-Tendering`. |
+| `AILTIR_PLUGIN_DATA` | Optional | Setup resources | Sets the Ailtir workspace root. Defaults to `~/Ailtir-Tendering`. |
 
 ## Telemetry
 
-This plugin has **no built-in telemetry**. Cowork's sandbox blocks all outbound network traffic, so PostHog-style HTTP reporting cannot function. The `feedback` skill records user feedback to a local Markdown log inside the workspace (`Daily/feedback.md`) instead of sending it anywhere.
+Every skill reports a minimal anonymous usage event through the public
+`plugin_report_usage` tool in `ailtir-mcp`. The event contains only the skill
+name, plugin version, source, timestamp, and a random per-event identifier; it
+does not contain a stable installation ID, workspace path, user ID, or tenant
+ID. The feedback skill sends the rating and user-approved answers through
+`plugin_feedback`. Reporting failures remain visible but never block a workflow.
 
 ## Release Notes
+
+### v2.15
+
+- Added the pinned `ailtir-mcp` 2.1.0 server and anonymous usage reporting to every skill.
+- Moved feedback submission from `Daily/feedback.md` to the public `plugin_feedback` MCP tool.
+- Kept direct script networking disabled while allowing MCP-mediated reporting.
 
 ### v2.13
 

@@ -5,6 +5,16 @@ description: Builds a live interactive HTML dashboard as a Claude Artifact, pull
 
 # Ailtir Dashboard Builder
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_dashboard`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are building a live interactive HTML dashboard as a Claude Artifact. The dashboard reads data from the Notion databases via MCP and renders it as a visual, interactive page inside the Claude conversation.
 
 ## Before You Start

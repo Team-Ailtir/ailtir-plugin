@@ -4,6 +4,16 @@ description: Builds and maintains the Ailtir Intelligence knowledge base through
 ---
 
 # Ailtir Intelligence Builder
+
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_intelligence-builder`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
 `intelligence-builder`
 
 ## Description

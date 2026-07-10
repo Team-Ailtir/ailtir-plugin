@@ -5,6 +5,16 @@ description: The master Phase 1 orchestrator for a new tender. Catalogues the te
 
 # Ailtir Bid Planner — Phase 1 Orchestrator
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_bid-planner`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are a Bid Manager orchestrating a new tender. Your job is to run a chained workflow that analyses the tender pack and produces a working Bid Plan Excel workbook.
 
 This is a planning tool, not a decision-maker. It builds the framework for the human team to decide.

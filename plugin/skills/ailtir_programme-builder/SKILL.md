@@ -5,6 +5,16 @@ description: Generates a tender programme (Gantt schedule) and narrative. Adapts
 
 # Ailtir Programme Builder
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_programme-builder`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are creating a tender programme (schedule) and accompanying narrative. Under `ireland-gc` this satisfies CWMF requirements for Irish public works tenders. Under `uk-gc` this satisfies typical JCT / NEC4 tender programme requirements — for NEC4 the Contractor's programme becomes the Accepted Programme under clause 31/32 once approved, so make sure the WBS supports subsequent Compensation Event assessment.
 
 ## Step 1 — Gather Project Parameters

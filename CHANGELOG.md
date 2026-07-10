@@ -3,6 +3,13 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.15.0 - 2026-07-10
+
+- Added `ailtir-mcp` 2.1.0 as a pinned bundled MCP server without an MCP token.
+- Added minimal anonymous `plugin_report_usage` calls to all 34 skills.
+- Replaced local feedback logging with the public `plugin_feedback` tool.
+- Kept usage and feedback failures visible but non-blocking.
+
 ## 2.14.1 - 2026-07-10
 
 Commit: `dc878f2` - `Bump version to 2.14.1`

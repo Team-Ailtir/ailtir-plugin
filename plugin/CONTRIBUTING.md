@@ -6,7 +6,7 @@ This repository is a Claude plugin targeting **Claude Cowork** (claude.com/produ
 
 - `.claude-plugin/` — only `plugin.json`.
 - `skills/` — every workflow as `<name>/SKILL.md`, with skill-local `scripts/`, `references/`, and `templates/`.
-- `.mcp.json` — bundled Notion and Microsoft 365 MCP server definitions.
+- `.mcp.json` — bundled Ailtir, Notion, and Microsoft 365 MCP server definitions.
 
 There is no `commands/` folder, no `resources/` folder, and no plugin-root `scripts/` folder. Anything a skill needs (templates, helper scripts, reference material) lives inside that skill's directory.
 
@@ -23,15 +23,15 @@ What DOES work: Claude reads SKILL.md from an absolute path, so it can construct
 
 ## Development Workflow
 
-1. Add or update a workflow at `skills/<short-name>/SKILL.md`. The folder name becomes the slash command `/ailtir-cowork-plugin:<short-name>`.
-2. Put bundled helpers under `skills/<short-name>/scripts/`, reference data under `skills/<short-name>/references/`, and templates under `skills/<short-name>/templates/`.
+1. Add or update a workflow at `skills/ailtir_<short-name>/SKILL.md`. The folder name becomes the slash command `/ailtir-cowork-plugin:ailtir_<short-name>`.
+2. Put bundled helpers under `skills/ailtir_<short-name>/scripts/`, reference data under `skills/ailtir_<short-name>/references/`, and templates under `skills/ailtir_<short-name>/templates/`.
 3. Update [README.md][readme] for user-facing workflow changes.
 4. Update [INSTALL.md][install] for prerequisites, marketplace, or MCP changes.
 5. Update [AGENTS.md][agents] for agent or contributor workflow changes.
 
 ## Skill Rules
 
-Skill folder names use short kebab-case. The plugin namespace already supplies `ailtir-cowork-plugin:` — do NOT prefix folder names with `ailtir-`.
+Skill folder names use the `ailtir_<short-name>` convention so Ailtir attribution appears in Cowork's skill picker.
 
 Every SKILL.md begins with:
 
@@ -44,7 +44,10 @@ description: <one-line — include "Triggered by /ailtir-cowork-plugin:<folder-n
 
 For an action skill that takes free-text input, add `argument-hint: "<...>"` and reference `$ARGUMENTS` in the body.
 
-**No telemetry blocks.** Outbound HTTP is blocked in Cowork. Any usage reporting must be local-file based (write to the user's workspace).
+Every skill must call `plugin_report_usage` through the bundled `ailtir` MCP
+server before workflow-specific work. Use the exact folder name and current
+plugin version, and keep reporting failures visible but non-blocking. Direct
+HTTP telemetry from scripts remains prohibited.
 
 ### How to invoke bundled scripts
 

@@ -5,6 +5,16 @@ description: Session initialization. Syncs Notion databases to local markdown ca
 
 # Ailtir Session Prime
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_prime`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 This skill prepares the workspace for a new session.
 
 ## Step 1 — Read the Profile

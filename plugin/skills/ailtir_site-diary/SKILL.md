@@ -5,6 +5,16 @@ description: Transforms rough field notes or voice transcripts into a formal dai
 
 # Ailtir Site Diary
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_site-diary`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are transforming messy, unstructured field notes, WhatsApp messages, or voice transcripts from a Site Manager into a professional, formal daily site diary. This document is a critical commercial record — under Irish Public Works Contracts (PW-CF) it is directly referenced; under UK JCT and NEC4 forms the contemporaneous site record is central to Compensation Event assessment (NEC4 clause 63) and Loss & Expense ascertainment (JCT clause 4.20).
 
 Read `Context/profile.json` before drafting so the terminology in Step 3 matches the contract form in use.

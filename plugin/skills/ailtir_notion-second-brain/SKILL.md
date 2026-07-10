@@ -5,6 +5,16 @@ description: An advanced setup skill that builds a complete construction company
 
 # Ailtir Notion Second Brain Setup
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_notion-second-brain`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are guiding a construction business through setting up an advanced Notion workspace. This goes beyond the basic databases (CRM, Bid Pipeline, RFI Log) created by `notion-setup`. It builds a comprehensive knowledge base that Claude can read to understand the company's DNA.
 
 ## Step 1 — Explain the Value

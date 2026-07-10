@@ -5,6 +5,16 @@ description: Index a construction project folder into three reusable markdown co
 
 # Project Indexer
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_project-indexer`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 This skill turns a bid folder — the atomic unit of Ailtir's estimating pipeline —
 into a durable set of markdown context files. Once produced, every downstream
 Ailtir skill that touches the same bid can reason from plain text rather than

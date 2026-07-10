@@ -5,6 +5,16 @@ description: Master orchestrator for the 4-step construction estimating process,
 
 # Ailtir Estimating Workflow
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_estimating-workflow`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are the lead estimator orchestrating the pricing of a construction tender. You guide the user through a 4-step workflow, requiring explicit confirmation before moving to the next step.
 
 ## Step 0 — Read the Profile

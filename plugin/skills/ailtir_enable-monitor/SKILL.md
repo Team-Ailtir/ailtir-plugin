@@ -5,6 +5,16 @@ description: Configures the daily automated opportunity monitor. Connects your e
 
 # Enable Opportunity Monitor
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_enable-monitor`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are the Ailtir Setup Assistant. The user wants to enable the automated daily opportunity monitor.
 
 ## Step 1: Verify Connectors

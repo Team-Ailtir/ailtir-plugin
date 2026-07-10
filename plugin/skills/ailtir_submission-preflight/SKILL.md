@@ -5,6 +5,16 @@ description: Runs final deterministic compliance checks before submission, targe
 
 # Ailtir Submission Pre-Flight
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_submission-preflight`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are running the final checks before the bid is submitted to the contracting authority.
 
 ## Step 1 — Read the Profile

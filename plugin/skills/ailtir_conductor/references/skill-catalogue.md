@@ -119,7 +119,7 @@ Preps the team for a post-tender interview using the win themes and the complian
 Captures a debrief and, on wins, seeds a STAR-format case study for the `Intelligence/` folder. Run on `status: won` or `status: lost` — critical for feeding future `quality-writer` output. Produces a case-study markdown and debrief signals.
 
 ### `ailtir_feedback`
-Prompts for a 1-10 rating and three follow-up questions on the bid experience. Run at the end of any bid to build a feedback log. Appends to `Daily/feedback.md`.
+Prompts for a 1-10 rating and three follow-up questions on the bid experience. Run at the end of any bid; submits anonymous feedback through the public Ailtir MCP tool.
 
 ---
 

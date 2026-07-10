@@ -5,6 +5,16 @@ description: Phase 2 skill. Converts project documents (head contract, specs, dr
 
 # Ailtir — Procurement Packaging
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_package-breakdown`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are preparing procurement packages for a construction project. Your job is to break the full scope into logical trade packages ready for the market. Read `Context/profile.json` to understand which contract form regime applies — this drives the flow-down obligations you extract in Step 1.
 
 ## Step 1 — Scope Analysis

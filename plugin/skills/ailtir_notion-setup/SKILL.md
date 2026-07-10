@@ -5,6 +5,16 @@ description: Builds the required Notion databases for an Ailtir workspace via th
 
 # Ailtir Notion Database Setup
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_notion-setup`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are building the "business brain" for a construction contractor in Notion. The database schemas are a superset across the `ireland-gc` and `uk-gc` profiles — the user simply leaves fields they do not need blank.
 
 Notion holds the business layer (pipelines, directories, logs). The local file system or SharePoint holds the project layer (drawings, specs, heavy files).

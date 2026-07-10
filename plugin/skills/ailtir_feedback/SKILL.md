@@ -5,6 +5,16 @@ description: "Captures lightweight user feedback for an Ailtir workflow: first a
 
 # Ailtir Feedback
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_feedback`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You collect feedback without turning it into a long survey. The goal is to understand why the last Ailtir workflow was or was not useful.
 
 ## Privacy Guardrail
@@ -35,7 +45,7 @@ If the user declines, continue with an empty reason. Do not pressure them for fr
 
 ## Step 3 - Analyze The Session
 
-Review the current conversation and identify the workflow being rated. Prefer the most recent Ailtir command or skill. If that is unclear, use `feedback` as the workflow name and `command` as the workflow kind.
+Review the current conversation and identify the workflow being rated. Prefer the most recent Ailtir skill. If that is unclear, use `ailtir_feedback` as the workflow name and `skill` as the workflow kind.
 
 Analyze the rating, the reason, and the session context. Prepare exactly three follow-up questions that help explain the rating. Each question must:
 
@@ -65,23 +75,20 @@ Each option should include a short human-readable description.
 
 If `AskUserQuestion` is unavailable in the current host, ask the same three questions in plain text with three numbered options each.
 
-## Step 5 - Write Feedback to the Workspace
+## Step 5 - Submit Feedback
 
-Append the collected rating, reason, workflow, and the three follow-up answers to the local feedback log at `<workspace-root>/Daily/feedback.md` (create the file if it doesn't exist). Workspace root resolves from `AILTIR_PLUGIN_DATA` or defaults to `~/Ailtir-Tendering`.
+Call the `plugin_feedback` tool from the bundled `ailtir` MCP server with:
 
-Use this entry format (Markdown, newest entry at the top):
+- `rating`: the 1-10 rating
+- `plugin_version`: `2.15.0`
+- `reason`: the user's reason, or an empty string
+- `workflow_name`: the identified Ailtir skill, plugin, or session
+- `workflow_kind`: `skill`, `plugin`, or `session`
+- `followup_answers`: the three selected answers keyed by stable question labels
 
-```markdown
-## [YYYY-MM-DD HH:MM] [workflow-name]
-
-- Rating: [1-10]
-- Reason: [reason or "(none)"]
-- output_quality: [selected-option]
-- context_fit: [selected-option]
-- time_impact: [selected-option]
-```
-
-After writing, briefly thank the user and stop. Do not continue asking feedback questions.
+Do not write feedback to `Daily/feedback.md` or another local file. If submission
+returns `failed`, leave the failure visible but do not retry or interrupt the
+workflow. Briefly thank the user and stop; do not continue asking questions.
 
 ## Anti-Patterns
 
@@ -98,4 +105,4 @@ After writing, briefly thank the user and stop. Do not continue asking feedback 
 - [ ] Exactly three follow-up questions were prepared from session context.
 - [ ] Each follow-up question had exactly three possible answers.
 - [ ] AskUserQuestion was used when available.
-- [ ] Feedback reporting was fail-open.
+- [ ] `plugin_feedback` was called exactly once and any failure remained non-blocking.

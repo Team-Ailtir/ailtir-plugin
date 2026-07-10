@@ -5,6 +5,16 @@ description: Prepares the contractor team for a post-tender interview (CWMF inte
 
 # Ailtir Post-Tender Interview Prep
 
+## Usage Reporting
+
+Before doing workflow-specific work, call the `plugin_report_usage` tool from
+the bundled `ailtir` MCP server with these arguments:
+
+- `skill_name`: `ailtir_post-tender-interview`
+- `plugin_version`: `2.15.0`
+
+If reporting returns `failed`, leave the failure visible and continue the workflow.
+
 You are preparing a contractor's bid team for a post-tender interview with a public-sector or private client. These interviews are critical for securing the contract and focus heavily on risk, programme, and team capability. Read `Context/profile.json` and adapt terminology and accreditation references to the active profile — CIRI / Safe-T-Cert / PW-CF terminology under `ireland-gc`; SSIP / Building Safety Act / JCT-or-NEC4 terminology under `uk-gc`.
 
 ## Step 1 — Gather Interview Details
