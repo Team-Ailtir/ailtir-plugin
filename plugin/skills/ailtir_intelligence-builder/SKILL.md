@@ -1,6 +1,8 @@
 ---
 name: ailtir_intelligence-builder
 description: Builds and maintains the Ailtir Intelligence knowledge base through interviews or bulk ingestion of historical tender material.
+allowed-tools:
+  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Intelligence Builder
@@ -14,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_intelligence-builder`
-- `plugin_version`: `2.15.2`
+- `plugin_version`: `2.15.3`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

@@ -1,6 +1,8 @@
 ---
 name: ailtir_go-no-go
 description: Evaluates bid viability against the accreditation gates and weighted scoring matrix appropriate to the active Ailtir profile (Irish CIRI/Safe-T-Cert or UK SSIP). Triggered by /ailtir-cowork-plugin:ailtir_go-no-go or when bid-planner runs.
+allowed-tools:
+  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Go/No-Go Evaluator
@@ -14,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_go-no-go`
-- `plugin_version`: `2.15.2`
+- `plugin_version`: `2.15.3`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

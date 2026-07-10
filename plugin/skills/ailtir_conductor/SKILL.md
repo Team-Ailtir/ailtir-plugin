@@ -1,6 +1,8 @@
 ---
 name: ailtir_conductor
 description: Proactive lifecycle router. Scans every active bid, tells the user what phase each is in, and recommends the next skill to run. Triggered by /ailtir-cowork-plugin:ailtir_conductor, or auto-invoked at the end of ailtir_prime when at least one bid exists.
+allowed-tools:
+  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Conductor — Lifecycle Router
@@ -14,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_conductor`
-- `plugin_version`: `2.15.2`
+- `plugin_version`: `2.15.3`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

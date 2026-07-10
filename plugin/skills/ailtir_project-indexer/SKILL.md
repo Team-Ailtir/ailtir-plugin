@@ -1,6 +1,8 @@
 ---
 name: ailtir_project-indexer
 description: Index a construction project folder into three reusable markdown context files (CLAUDE.md, project.md, and drawings.md) so future sessions can reason about the project from cheap text instead of re-parsing PDFs every time. Triggered by /ailtir-cowork-plugin:ailtir_project-indexer, or during bid-planner execution.
+allowed-tools:
+  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Project Indexer
@@ -14,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_project-indexer`
-- `plugin_version`: `2.15.2`
+- `plugin_version`: `2.15.3`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

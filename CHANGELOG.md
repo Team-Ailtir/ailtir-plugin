@@ -3,6 +3,11 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.15.3 - 2026-07-10
+
+- Pre-approved `plugin_report_usage` while every Ailtir skill is active.
+- Pre-approved `plugin_feedback` only while the feedback skill is active.
+
 ## 2.15.2 - 2026-07-10
 
 - Restored the stable anonymous installation UUID used by earlier telemetry.

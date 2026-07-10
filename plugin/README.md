@@ -101,6 +101,11 @@ path, user ID, or tenant ID. The feedback skill sends the rating and user-approv
 
 ## Release Notes
 
+### v2.15.3
+
+- Pre-approved the two public reporting tools within the skills that use them,
+  avoiding first-use tool permission prompts without approving other MCP tools.
+
 ### v2.15.2
 
 - Restored a stable anonymous installation UUID for usage and feedback events.

@@ -1,6 +1,8 @@
 ---
 name: ailtir_notion-setup
 description: Builds the required Notion databases for an Ailtir workspace via the Notion MCP connector. Creates the Bid Pipeline, Subcontractor Directory, RFI Log, and CRM databases with the correct properties and relations. USE THIS when the user runs /ailtir-cowork-plugin:ailtir_notion-setup or asks to set up their Notion databases.
+allowed-tools:
+  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Notion Database Setup
@@ -14,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_notion-setup`
-- `plugin_version`: `2.15.2`
+- `plugin_version`: `2.15.3`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

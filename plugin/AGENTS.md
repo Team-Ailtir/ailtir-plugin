@@ -68,6 +68,12 @@ stored in `~/Ailtir-Tendering/install_id`. Create that UUID v4 once when the
 file is missing. Leave a failed result visible and continue the workflow. Never
 send telemetry directly from a script.
 
+Every skill must pre-approve only
+`mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage` in its
+`allowed-tools` frontmatter. The feedback skill must additionally pre-approve
+`mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_feedback`. Do not use an MCP
+wildcard because that would silently approve present and future write tools.
+
 Do not commit secrets, tender documents, pricing data, Notion tokens, Microsoft 365 credentials, or generated customer workspaces.
 
 ## Verification

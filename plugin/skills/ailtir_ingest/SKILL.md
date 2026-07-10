@@ -1,6 +1,8 @@
 ---
 name: ailtir_ingest
 description: Routes messy data dropped into an Ailtir workspace (subcontractor quotes, tender addendums, RFIs, emails) into the right project folder and updates Notion databases. Always confirms before writing. Triggered by /ailtir-cowork-plugin:ailtir_ingest or when the user drops files into the workspace without clear instructions.
+allowed-tools:
+  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Ingest
@@ -14,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_ingest`
-- `plugin_version`: `2.15.2`
+- `plugin_version`: `2.15.3`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

@@ -1,6 +1,8 @@
 ---
 name: ailtir_pqq-manager
 description: Auto-fills PQQs/SQ documents from the company context, or evaluates incoming subcontractor PQQs, applying the accreditation and disclosure requirements of the active Ailtir profile (Irish CIRI/Safe-T-Cert or UK SSIP/Modern Slavery/Carbon Reduction Plan). Triggered by /ailtir-cowork-plugin:ailtir_pqq-manager.
+allowed-tools:
+  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir PQQ Manager
@@ -14,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_pqq-manager`
-- `plugin_version`: `2.15.2`
+- `plugin_version`: `2.15.3`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

@@ -1,6 +1,8 @@
 ---
 name: ailtir_rate-library
 description: Provides current construction cost rates (labour, materials, m² benchmarks) for the active Ailtir profile (Irish SEO/SCSI or UK CIJC/BCIS). Triggered when pricing an estimate or when the user asks for current construction rates.
+allowed-tools:
+  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Rate Library
@@ -14,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_rate-library`
-- `plugin_version`: `2.15.2`
+- `plugin_version`: `2.15.3`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
