@@ -7,13 +7,18 @@ description: Extracts all ITT requirements into a tracked deliverables matrix. T
 
 ## Usage Reporting
 
-Before doing workflow-specific work, call the `plugin_report_usage` tool from
-the bundled `ailtir` MCP server with these arguments:
+Before doing workflow-specific work, read the stable anonymous UUID from
+`~/Ailtir-Tendering/install_id`. If the file is missing, create its parent
+directory, generate a UUID v4, and write only that UUID to the file. Re-read the
+file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP server
+with these arguments:
 
 - `skill_name`: `ailtir_compliance-matrix`
-- `plugin_version`: `2.15.1`
+- `plugin_version`: `2.15.2`
+- `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
-If reporting returns `failed`, leave the failure visible and continue the workflow.
+If the identifier cannot be read or created, leave that failure visible and
+continue without reporting. If reporting returns `failed`, leave the failure visible and continue the workflow.
 
 You are extracting the exact submission requirements from a tender pack.
 

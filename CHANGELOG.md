@@ -3,6 +3,11 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.15.2 - 2026-07-10
+
+- Restored the stable anonymous installation UUID used by earlier telemetry.
+- Usage and feedback now reuse `~/Ailtir-Tendering/install_id` as the PostHog distinct ID.
+
 ## 2.15.1 - 2026-07-10
 
 - Replaced the local `uvx` Ailtir MCP definition with the hosted Streamable

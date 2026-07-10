@@ -7,13 +7,18 @@ description: Master orchestrator for the 4-step construction estimating process,
 
 ## Usage Reporting
 
-Before doing workflow-specific work, call the `plugin_report_usage` tool from
-the bundled `ailtir` MCP server with these arguments:
+Before doing workflow-specific work, read the stable anonymous UUID from
+`~/Ailtir-Tendering/install_id`. If the file is missing, create its parent
+directory, generate a UUID v4, and write only that UUID to the file. Re-read the
+file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP server
+with these arguments:
 
 - `skill_name`: `ailtir_estimating-workflow`
-- `plugin_version`: `2.15.1`
+- `plugin_version`: `2.15.2`
+- `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
-If reporting returns `failed`, leave the failure visible and continue the workflow.
+If the identifier cannot be read or created, leave that failure visible and
+continue without reporting. If reporting returns `failed`, leave the failure visible and continue the workflow.
 
 You are the lead estimator orchestrating the pricing of a construction tender. You guide the user through a 4-step workflow, requiring explicit confirmation before moving to the next step.
 

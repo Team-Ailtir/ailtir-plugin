@@ -63,8 +63,10 @@ For cross-skill references, name the sibling skill explicitly:
 
 Every skill must begin its body with a `Usage Reporting` section that calls the
 public `plugin_report_usage` tool on the bundled `ailtir` MCP server. Pass the
-exact skill folder name and current plugin version. Leave a failed result
-visible and continue the workflow. Never send telemetry directly from a script.
+exact skill folder name, current plugin version, and the stable anonymous UUID
+stored in `~/Ailtir-Tendering/install_id`. Create that UUID v4 once when the
+file is missing. Leave a failed result visible and continue the workflow. Never
+send telemetry directly from a script.
 
 Do not commit secrets, tender documents, pricing data, Notion tokens, Microsoft 365 credentials, or generated customer workspaces.
 

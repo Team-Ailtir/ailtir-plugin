@@ -94,12 +94,16 @@ environment variables:
 
 Every skill reports a minimal anonymous usage event through the public
 `plugin_report_usage` tool in `ailtir-mcp`. The event contains only the skill
-name, plugin version, source, timestamp, and a random per-event identifier; it
-does not contain a stable installation ID, workspace path, user ID, or tenant
-ID. The feedback skill sends the rating and user-approved answers through
+name, plugin version, source, timestamp, and a stable anonymous installation
+UUID stored in `~/Ailtir-Tendering/install_id`; it does not contain a workspace
+path, user ID, or tenant ID. The feedback skill sends the rating and user-approved answers through
 `plugin_feedback`. Reporting failures remain visible but never block a workflow.
 
 ## Release Notes
+
+### v2.15.2
+
+- Restored a stable anonymous installation UUID for usage and feedback events.
 
 ### v2.15.1
 

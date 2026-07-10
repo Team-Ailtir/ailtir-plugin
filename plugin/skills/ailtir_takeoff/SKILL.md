@@ -7,13 +7,18 @@ description: Extracts elemental quantities from construction drawings (PDF) into
 
 ## Usage Reporting
 
-Before doing workflow-specific work, call the `plugin_report_usage` tool from
-the bundled `ailtir` MCP server with these arguments:
+Before doing workflow-specific work, read the stable anonymous UUID from
+`~/Ailtir-Tendering/install_id`. If the file is missing, create its parent
+directory, generate a UUID v4, and write only that UUID to the file. Re-read the
+file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP server
+with these arguments:
 
 - `skill_name`: `ailtir_takeoff`
-- `plugin_version`: `2.15.1`
+- `plugin_version`: `2.15.2`
+- `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
-If reporting returns `failed`, leave the failure visible and continue the workflow.
+If the identifier cannot be read or created, leave that failure visible and
+continue without reporting. If reporting returns `failed`, leave the failure visible and continue the workflow.
 
 You are measuring construction quantities from tender drawings. This skill runs the Python takeoff scripts to extract counts, lengths, and areas, and formats them into an Excel register aligned with the RICS NRM2 elemental structure — the same structure is used under both `ireland-gc` (where SCSI adopts NRM2) and `uk-gc` (where NRM2 is the primary RICS standard for detailed measurement of building works).
 

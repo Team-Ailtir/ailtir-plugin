@@ -7,13 +7,18 @@ description: Final verification of a construction estimate. Cross-checks against
 
 ## Usage Reporting
 
-Before doing workflow-specific work, call the `plugin_report_usage` tool from
-the bundled `ailtir` MCP server with these arguments:
+Before doing workflow-specific work, read the stable anonymous UUID from
+`~/Ailtir-Tendering/install_id`. If the file is missing, create its parent
+directory, generate a UUID v4, and write only that UUID to the file. Re-read the
+file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP server
+with these arguments:
 
 - `skill_name`: `ailtir_cost-reconciliation`
-- `plugin_version`: `2.15.1`
+- `plugin_version`: `2.15.2`
+- `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
-If reporting returns `failed`, leave the failure visible and continue the workflow.
+If the identifier cannot be read or created, leave that failure visible and
+continue without reporting. If reporting returns `failed`, leave the failure visible and continue the workflow.
 
 You are the Commercial Director performing the final quality gate check on a priced estimate before it is submitted. Read `Context/profile.json` to load the correct benchmark reference in Step 3 and to know which profile-specific gaps to check in Step 1.
 
