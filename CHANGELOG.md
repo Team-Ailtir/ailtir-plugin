@@ -3,6 +3,12 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.15.4 - 2026-07-11
+
+- Added an occasional feedback invitation after the first completed workflow,
+  then at most every 5 completed workflows or 10 days.
+- Added transparent reporting and Ailtir connector onboarding to setup.
+
 ## 2.15.3 - 2026-07-10
 
 - Pre-approved `plugin_report_usage` while every Ailtir skill is active.

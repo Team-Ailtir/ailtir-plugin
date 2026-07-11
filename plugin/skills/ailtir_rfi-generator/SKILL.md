@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_rfi-generator`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -68,3 +68,9 @@ When the user uploads an RFI response document or pastes answers from the client
 - [ ] RFI number follows sequential format (RFI-001, RFI-002, etc.).
 - [ ] Question is clear and references the specific drawing or spec section.
 - [ ] RFI logged to Notion RFI Log with correct status (Draft/Submitted).
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

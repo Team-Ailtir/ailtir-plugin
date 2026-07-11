@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_ingest`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -87,3 +87,9 @@ After writing the files, you MUST update the state of the workspace so the next 
 - [ ] Notion Bid Pipeline updated after routing.
 - [ ] YAML frontmatter added to any file saved to `Intelligence/`.
 - [ ] User confirmed routing plan before any files were moved.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

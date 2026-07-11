@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_enable-monitor`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -51,3 +51,9 @@ Tell the user:
 ## Anti-Patterns (What NOT to do)
 - DO NOT attempt to create the schedule if the email connector is not enabled.
 - DO NOT set the cron job to run more than once a day. Both eTenders and Find a Tender send at most one digest per day.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

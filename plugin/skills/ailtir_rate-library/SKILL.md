@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_rate-library`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -52,3 +52,9 @@ Never convert between currencies unless the user explicitly asks you to compare,
 - [ ] Labour rates sourced from the current statutory / nationally-agreed reference (SEO for Ireland, CIJC for UK).
 - [ ] Benchmarks matched to correct building type and region.
 - [ ] All rates in the profile's currency — no cross-contamination.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

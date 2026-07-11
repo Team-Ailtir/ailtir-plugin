@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_site-diary`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -64,3 +64,9 @@ Provide the formatted diary. Offer to write it to a Markdown file (`Site_Diary_Y
 - [ ] No emotional language, blame, or speculation in the formal diary.
 - [ ] Commercial triggers (delays, variations, formal instructions) explicitly flagged.
 - [ ] Missing data marked as `[Not Recorded]` — not invented.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

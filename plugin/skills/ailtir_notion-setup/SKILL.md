@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_notion-setup`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -66,3 +66,9 @@ When you run `/ailtir-cowork-plugin:ailtir_bid-planner` on a new tender, I will 
 - [ ] Bid Pipeline has a Relation property pointing to CRM.
 - [ ] RFI Log has a Relation property pointing to Bid Pipeline.
 - [ ] Subcontractor Directory includes the full accreditation superset from `references/database-schemas.md` (Irish CIRI/Safe-T-Cert plus UK SSIP/CHAS/SafeContractor/Constructionline/ISO tiers/Modern Slavery).
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

@@ -49,7 +49,7 @@ The plugin includes `.mcp.json` with three MCP servers:
 
 | Server | Command | Required Credentials |
 |---|---|---|
-| `ailtir` | `https://app.ailtir.ai/ailtir-mcp` | None for public usage and feedback tools |
+| `ailtir` | `https://app.ailtir.ai/ailtir-mcp` | None for public anonymous usage and feedback tools |
 | `notion` | `npx -y @modelcontextprotocol/server-notion` | `NOTION_API_KEY` |
 | `m365` | `npx -y @modelcontextprotocol/server-m365` | `M365_TENANT_ID`, `M365_CLIENT_ID`, `M365_CLIENT_SECRET` |
 

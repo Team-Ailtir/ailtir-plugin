@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_intelligence-builder`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -80,3 +80,9 @@ Confirm to the user that the `Intelligence/` folder has been updated and that `q
 - [ ] Metadata tags (sector, value, route, outcome) inferred from content where possible.
 - [ ] No raw PDFs or Word docs saved directly — always extracted to Markdown.
 - [ ] User confirmed the intelligence folder path before bulk ingest.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

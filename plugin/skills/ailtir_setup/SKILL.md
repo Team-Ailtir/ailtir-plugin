@@ -7,16 +7,41 @@ allowed-tools:
 
 # Ailtir Setup
 
-## Usage Reporting
+## Step 0A — Feedback and Ailtir Connector
 
-Before doing workflow-specific work, read the stable anonymous UUID from
-`~/Ailtir-Tendering/install_id`. If the file is missing, create its parent
-directory, generate a UUID v4, and write only that UUID to the file. Re-read the
-file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP server
-with these arguments:
+Before reporting usage, inspecting the workspace, or starting the interview,
+tell the user:
+
+> Ailtir provides this plugin free of charge. In return, we ask users to enable
+> anonymous usage reporting and occasionally invite them to provide anonymous
+> feedback. Usage reports contain the skill name, plugin version, timestamp,
+> and an anonymous installation identifier that links events from this
+> installation.
+> They do not contain company names, tender documents, prices, workspace paths,
+> or account details. Feedback is submitted only when you choose to answer it.
+
+Check whether the bundled Ailtir MCP server exposes the `plugin_report_usage`
+tool. Do not attempt to call a missing tool. If it is unavailable, tell the user
+to:
+
+1. Open **Customize → Connectors** in Claude.
+2. Add a custom connector named **Ailtir** with the URL
+   `https://app.ailtir.ai/ailtir-mcp`.
+3. Enable the connector.
+4. Restart Claude Desktop or start a new Cowork session.
+5. Run `/ailtir-cowork-plugin:ailtir_setup` again.
+
+Stop setup at that point without starting the company interview or writing
+workspace files.
+
+When the tool is available, run the bundled `scripts/feedback_schedule.py`
+helper from the sibling `ailtir_feedback` skill with `configure --enabled true`.
+Then read the stable anonymous UUID from `~/Ailtir-Tendering/install_id`. If the
+file is missing, create its parent directory, generate a UUID v4, and write only
+that UUID to the file. Re-read the file and call `plugin_report_usage` with:
 
 - `skill_name`: `ailtir_setup`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -24,7 +49,7 @@ continue without reporting. If reporting returns `failed`, leave the failure vis
 
 Initialize a new Ailtir workspace. Act as an onboarding consultant.
 
-## Step 0 — Pre-flight
+## Step 0B — Workspace Pre-flight
 
 Before starting the interview, check whether the workspace has already been set up. Look for a `CLAUDE.md` file in the workspace root (`AILTIR_PLUGIN_DATA` or `~/Ailtir-Tendering`) with `os: ailtir-cowork` in its YAML frontmatter.
 
@@ -131,6 +156,9 @@ Once you have a bid or two in flight, run `/ailtir-cowork-plugin:ailtir_conducto
 
 ## Quality Checks
 
+- [ ] Reporting was explained before the first usage event.
+- [ ] The Ailtir connector was available before onboarding began.
+- [ ] Occasional feedback scheduling was enabled locally.
 - [ ] Pre-flight ran — either fresh setup, update, or cancel (never silent overwrite).
 - [ ] Workspace folder structure created under `AILTIR_PLUGIN_DATA` or `~/Ailtir-Tendering` with all required subfolders.
 - [ ] `Context/profile.json` written with valid `region`, `vertical`, `currency`, `date_format`, `profile_key`, `created`, `schema_version`.

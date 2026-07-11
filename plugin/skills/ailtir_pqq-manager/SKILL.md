@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_pqq-manager`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -81,3 +81,9 @@ Provide a clear PASS / FAIL / PASS WITH CONDITIONS recommendation for the subcon
 - [ ] Under `ireland-gc`: CIRI and Safe-T-Cert details sourced from `Context/company.md`.
 - [ ] Under `uk-gc`: SSIP membership, Modern Slavery statement, Carbon Reduction Plan, and Social Value response all cited from `Context/company.md`.
 - [ ] Subcontractor evaluation mode: RED / AMBER / GREEN rating applied to every submission.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

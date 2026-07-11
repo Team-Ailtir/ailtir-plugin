@@ -74,6 +74,12 @@ Every skill must pre-approve only
 `mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_feedback`. Do not use an MCP
 wildcard because that would silently approve present and future write tools.
 
+Successful substantive workflows must follow the occasional-feedback schedule
+in the sibling `ailtir_feedback` skill. Never schedule feedback after a failed
+or cancelled workflow, and never schedule it from `ailtir_setup` or
+`ailtir_feedback`. Setup must explain reporting before its first event and stop
+before onboarding when the Ailtir connector is unavailable.
+
 Do not commit secrets, tender documents, pricing data, Notion tokens, Microsoft 365 credentials, or generated customer workspaces.
 
 ## Verification

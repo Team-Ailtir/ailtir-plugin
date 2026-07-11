@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_notion-second-brain`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -57,3 +57,9 @@ Confirm the setup is complete. Explain that the `/ailtir-cowork-plugin:ailtir_pr
 - [ ] No existing Notion pages overwritten without permission.
 - [ ] Architecture is flat and searchable — not deeply nested.
 - [ ] No sensitive data (passwords, banking) stored in Notion.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

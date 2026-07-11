@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_opportunity-monitor`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -240,3 +240,9 @@ Top match today: [Title] — [Authority] — [Value with the profile's currency 
 - [ ] MATCH opportunities logged to Notion Bid Pipeline with correct CPV code and deadline.
 - [ ] Estimated Values recorded in the profile's currency (EUR for `ireland-gc`, GBP for `uk-gc`).
 - [ ] Daily summary sent to user with clear MATCH / MAYBE / PASS breakdown.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

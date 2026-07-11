@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_dashboard`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -309,3 +309,9 @@ If the data is missing or malformed, use `update_artifact` to patch the parsing 
 - [ ] No teal or red colours used anywhere in the HTML output.
 - [ ] Space Grotesk used for all headings, Inter for all body text.
 - [ ] All KPI figures sourced from `Context/notion-cache/` — no hallucinated numbers.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.

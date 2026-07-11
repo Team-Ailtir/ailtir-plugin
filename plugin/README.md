@@ -96,10 +96,22 @@ Every skill reports a minimal anonymous usage event through the public
 `plugin_report_usage` tool in `ailtir-mcp`. The event contains only the skill
 name, plugin version, source, timestamp, and a stable anonymous installation
 UUID stored in `~/Ailtir-Tendering/install_id`; it does not contain a workspace
-path, user ID, or tenant ID. The feedback skill sends the rating and user-approved answers through
-`plugin_feedback`. Reporting failures remain visible but never block a workflow.
+path, user ID, or tenant ID. The feedback skill sends the anonymous rating and
+user-approved answers through `plugin_feedback`. Reporting failures remain
+visible but never block a workflow.
+After the first successful substantive workflow, the plugin optionally invites
+feedback; later invitations occur no more frequently than every 5 successful
+workflows or 10 days. Scheduling stays local in `.feedback_state.json`, and no
+feedback is submitted unless the user accepts and answers the invitation.
 
 ## Release Notes
+
+### v2.15.4
+
+- Added locally scheduled, optional feedback invitations with conservative
+  frequency limits.
+- Setup now explains reporting and requires the Ailtir connector before the
+  onboarding interview begins.
 
 ### v2.15.3
 

@@ -16,7 +16,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_bid-planner`
-- `plugin_version`: `2.15.3`
+- `plugin_version`: `2.15.4`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -128,3 +128,9 @@ If they agree, run the `intelligence-builder` skill in Interview Mode.
 - [ ] Compliance Matrix captures every evaluation criterion with exact weighting from the ITT.
 - [ ] Bid folder created under the workspace root (`AILTIR_PLUGIN_DATA` or `~/Ailtir-Tendering`) at `Bids/[BID]/` with all 9 sections.
 - [ ] Bid logged to Notion Bid Pipeline with correct status and return date.
+
+## Occasional Feedback
+
+After this workflow completes successfully, follow
+`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
+Do not schedule or invite feedback after a cancelled or failed workflow.
