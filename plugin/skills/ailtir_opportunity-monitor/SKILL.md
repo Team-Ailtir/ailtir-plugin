@@ -1,8 +1,6 @@
 ---
 name: ailtir_opportunity-monitor
 description: Automated daily background task that checks your email for tender alerts appropriate to your active Ailtir profile (Irish eTenders/TED or UK Find a Tender/Contracts Finder), scores each opportunity against your company profile using a 5-dimension strategic fit model, and logs qualified leads to your Notion Bid Pipeline.
-allowed-tools:
-  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Opportunity Monitor
@@ -16,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_opportunity-monitor`
-- `plugin_version`: `2.15.4`
+- `plugin_version`: `2.15.5`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

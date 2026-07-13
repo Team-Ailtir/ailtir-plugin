@@ -1,8 +1,6 @@
 ---
 name: ailtir_contract-admin
 description: Drafts contractual notices (Delay, Early Warning, Compensation Event, Loss & Expense, Additional Cost) with correct time bars for the active Ailtir profile. Triggered by /ailtir-cowork-plugin:ailtir_contract-admin.
-allowed-tools:
-  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Contract Admin
@@ -16,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_contract-admin`
-- `plugin_version`: `2.15.4`
+- `plugin_version`: `2.15.5`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

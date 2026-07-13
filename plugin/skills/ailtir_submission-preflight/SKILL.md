@@ -1,8 +1,6 @@
 ---
 name: ailtir_submission-preflight
 description: Runs final deterministic compliance checks before submission, targeting the portal appropriate to the active Ailtir profile (Irish eTenders or UK Find a Tender / Contracts Finder). Triggered by /ailtir-cowork-plugin:ailtir_submission-preflight.
-allowed-tools:
-  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Submission Pre-Flight
@@ -16,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_submission-preflight`
-- `plugin_version`: `2.15.4`
+- `plugin_version`: `2.15.5`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

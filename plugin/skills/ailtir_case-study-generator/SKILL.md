@@ -1,8 +1,6 @@
 ---
 name: ailtir_case-study-generator
 description: Converts completed project data into structured case studies, and processes tender debriefs to extract learning signals. Triggered by /ailtir-cowork-plugin:ailtir_case-study-generator or debrief mode.
-allowed-tools:
-  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir Case Study Generator & Debrief Processor
@@ -16,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_case-study-generator`
-- `plugin_version`: `2.15.4`
+- `plugin_version`: `2.15.5`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

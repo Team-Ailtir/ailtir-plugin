@@ -1,9 +1,6 @@
 ---
 name: ailtir_feedback
 description: "Captures lightweight anonymous user feedback for an Ailtir workflow: first a 1-10 rating, then the reason, then three structured AskUserQuestion follow-ups derived from the current session."
-allowed-tools:
-  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
-  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_feedback
 ---
 
 # Ailtir Feedback
@@ -17,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_feedback`
-- `plugin_version`: `2.15.4`
+- `plugin_version`: `2.15.5`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -88,7 +85,7 @@ If `AskUserQuestion` is unavailable in the current host, ask the same three ques
 Call the `plugin_feedback` tool from the bundled `ailtir` MCP server with:
 
 - `rating`: the 1-10 rating
-- `plugin_version`: `2.15.4`
+- `plugin_version`: `2.15.5`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 - `reason`: the user's reason, or an empty string
 - `workflow_name`: the identified Ailtir skill, plugin, or session

@@ -1,8 +1,6 @@
 ---
 name: ailtir_bid-leveling
 description: Phase 2 skill. Compares received subcontractor quotes for a specific trade package. Normalises pricing, scopes, and exclusions into a multi-tab Excel comparison. Triggered by /ailtir-cowork-plugin:ailtir_bid-leveling.
-allowed-tools:
-  - mcp__plugin_ailtir-cowork-plugin_ailtir__plugin_report_usage
 ---
 
 # Ailtir — Bid Leveling (Quote Analysis)
@@ -16,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_bid-leveling`
-- `plugin_version`: `2.15.4`
+- `plugin_version`: `2.15.5`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
