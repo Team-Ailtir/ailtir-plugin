@@ -3,6 +3,12 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.15.5 - 2026-07-13
+
+Commit: pending - `Bump version to 2.15.5`
+
+- Removed ineffective skill-level tool pre-approvals because Cowork manages MCP permissions independently.
+
 ## 2.15.4 - 2026-07-11
 
 - Added an occasional feedback invitation after the first completed workflow,
