@@ -5,7 +5,7 @@ version. Entries use those version bumps as release boundaries.
 
 ## 2.15.5 - 2026-07-13
 
-Commit: pending - `Bump version to 2.15.5`
+Commit: `5cd3695` - `Bump version to 2.15.5`
 
 - Removed ineffective skill-level tool pre-approvals because Cowork manages MCP permissions independently.
 
