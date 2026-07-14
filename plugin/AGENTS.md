@@ -17,7 +17,7 @@ This plugin targets **Claude Cowork** as its primary runtime (claude.com/product
 - `skills/` contains every user-invocable workflow, plus each skill's workflow-local `scripts/`, `references/`, and `templates/`. Each skill is a folder with a `SKILL.md`.
 - `.mcp.json` declares the bundled Ailtir, Notion, and Microsoft 365 MCP servers.
 
-There is **no** `commands/` folder, **no** `resources/` folder, and **no** plugin-root `scripts/` folder. Slash commands and skills are unified — every skill at `skills/<name>/SKILL.md` is the slash command `/ailtir-cowork-plugin:<name>`. Setup templates, bundled scripts, and brand references live inside the skill that uses them.
+There is **no** `commands/` folder, **no** `resources/` folder, and **no** plugin-root `scripts/` folder. Slash commands and skills are unified — every skill at `skills/<name>/SKILL.md` is the slash command `/<name>`. Setup templates, bundled scripts, and brand references live inside the skill that uses them.
 
 ## Profile Architecture
 
@@ -25,7 +25,7 @@ From v2.13 the plugin is calibrated per **profile**. The `setup` skill writes `C
 
 Skills that need to branch on jurisdiction follow this contract:
 
-- Read `Context/profile.json` early in the skill body. If it is missing, stop and direct the user to `/ailtir-cowork-plugin:ailtir_setup`.
+- Read `Context/profile.json` early in the skill body. If it is missing, stop and direct the user to `/ailtir_setup`.
 - Load market-specific data from `references/{profile_key}/<file>.md` inside the same skill (or from a named sibling skill's references, as `go-no-go` does with the `bid-planner` skill's references).
 - Never mix content across profiles in a single output — currency, terminology, standards, and gate lists must all come from the active profile.
 
@@ -33,7 +33,7 @@ When adding a new skill, if it has any jurisdiction-specific content: place refe
 
 ## Cowork Runtime Constraints (Important)
 
-Empirical evidence from `/ailtir-cowork-plugin:telemetry-test` (2026-06-29) on the Cowork sandbox:
+Empirical evidence from `/telemetry-test` (2026-06-29) on the Cowork sandbox:
 
 - **No outbound internet from skill scripts.** Direct HTTP calls from bundled scripts fail. Public usage and feedback reporting must go through the bundled Ailtir MCP server, whose host process can reach `api-mcp`.
 - **`${CLAUDE_PLUGIN_ROOT}` does NOT resolve in Cowork.** Documented for Claude Code only. Never use it in SKILL.md bodies.
@@ -45,7 +45,7 @@ The working pattern: SKILL.md describes the work in natural language and names b
 
 ## Editing Rules
 
-Add new user-visible workflows as `skills/ailtir_<short-name>/SKILL.md`. The folder name becomes the slash command (`/ailtir-cowork-plugin:ailtir_<short-name>`).
+Add new user-visible workflows as `skills/ailtir_<short-name>/SKILL.md`. The folder name becomes the slash command (`/ailtir_<short-name>`).
 
 **For script invocations in SKILL.md, do NOT use bash code blocks with `${CLAUDE_PLUGIN_ROOT}/...` paths.** Instead, write natural-language instructions like:
 

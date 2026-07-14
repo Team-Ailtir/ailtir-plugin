@@ -4,7 +4,7 @@
 
 ## Database Mapping
 
-If Notion is connected, Ailtir expects the following databases to exist. Run `/ailtir-cowork-plugin:ailtir_notion-setup` to create them automatically.
+If Notion is connected, Ailtir expects the following databases to exist. Run `/ailtir_notion-setup` to create them automatically.
 
 | Database | Purpose | Status |
 |---|---|---|

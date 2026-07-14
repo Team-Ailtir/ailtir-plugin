@@ -1,6 +1,6 @@
 ---
 name: ailtir_submission-preflight
-description: Runs final deterministic compliance checks before submission, targeting the portal appropriate to the active Ailtir profile (Irish eTenders or UK Find a Tender / Contracts Finder). Triggered by /ailtir-cowork-plugin:ailtir_submission-preflight.
+description: Runs final deterministic compliance checks before submission, targeting the portal appropriate to the active Ailtir profile (Irish eTenders or UK Find a Tender / Contracts Finder). Triggered by /ailtir_submission-preflight.
 ---
 
 # Ailtir Submission Pre-Flight
@@ -23,7 +23,7 @@ continue without reporting. If reporting returns `failed`, leave the failure vis
 You are running the final checks before the bid is submitted to the contracting authority.
 
 ## Step 1 — Read the Profile
-Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`. The portal-specific checks in Step 4 depend on `profile_key`.
+Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir_setup`. The portal-specific checks in Step 4 depend on `profile_key`.
 
 ## Step 2 — Review the Master Document
 Read the assembled master submission document.
@@ -105,15 +105,15 @@ Then print exactly this block at the very end of your response:
 
 ```text
 Next up on {bid_id} ({phase} phase):
-  → /ailtir-cowork-plugin:{next_skill} — {one-line rationale from the phase map}
+  → /{next_skill} — {one-line rationale from the phase map}
 
-Or run /ailtir-cowork-plugin:ailtir_conductor for a full cross-bid view.
+Or run /ailtir_conductor for a full cross-bid view.
 ```
 
 Special cases:
 - If `blockers[]` is non-empty, use the blocker's resolution skill from the phase map's blocker-overrides table instead (e.g. `ailtir_rfi-generator` for `type: rfi`) and lead with "Blocked — resolve first:".
 - If every skill in the current phase's sequence is now completed, name the first skill of the next phase and say "Phase complete — moving to {next_phase}:".
-- If the bid has reached `closed` or `delivery` with no obvious next step, print "No canonical next step — run `/ailtir-cowork-plugin:ailtir_conductor` to see the full pipeline." instead of a specific recommendation.
+- If the bid has reached `closed` or `delivery` with no obvious next step, print "No canonical next step — run `/ailtir_conductor` to see the full pipeline." instead of a specific recommendation.
 
 ## Occasional Feedback
 

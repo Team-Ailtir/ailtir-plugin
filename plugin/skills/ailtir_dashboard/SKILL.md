@@ -1,6 +1,6 @@
 ---
 name: ailtir_dashboard
-description: Builds a live interactive HTML dashboard as a Claude Artifact, pulling data from Notion via MCP to visualise the bid pipeline, subcontractor register, and BD KPIs. Triggered by /ailtir-cowork-plugin:ailtir_dashboard.
+description: Builds a live interactive HTML dashboard as a Claude Artifact, pulling data from Notion via MCP to visualise the bid pipeline, subcontractor register, and BD KPIs. Triggered by /ailtir_dashboard.
 ---
 
 # Ailtir Dashboard Builder
@@ -159,7 +159,7 @@ Create an HTML artifact with the following structure:
   <div class="section" style="padding-top:0;">
     <div style="background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.3); border-radius: 8px; padding: 14px 18px; font-size: 13px; color: var(--text-body);">
       <strong style="color: var(--white);">Next actions</strong> — to act on these recommendations, run
-      <code style="background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; color: var(--purple-400);">/ailtir-cowork-plugin:ailtir_conductor</code>
+      <code style="background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 4px; color: var(--purple-400);">/ailtir_conductor</code>
       in your Claude session.
     </div>
   </div>

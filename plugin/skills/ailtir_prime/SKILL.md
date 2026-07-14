@@ -1,6 +1,6 @@
 ---
 name: ailtir_prime
-description: Session initialization. Syncs Notion databases to local markdown cache and presents a briefing. Triggered by /ailtir-cowork-plugin:ailtir_prime.
+description: Session initialization. Syncs Notion databases to local markdown cache and presents a briefing. Triggered by /ailtir_prime.
 ---
 
 # Ailtir Session Prime
@@ -23,7 +23,7 @@ continue without reporting. If reporting returns `failed`, leave the failure vis
 This skill prepares the workspace for a new session.
 
 ## Step 1 — Read the Profile
-Read `Context/profile.json` from the workspace root. If it is missing, tell the user the workspace has not been set up and direct them to run `/ailtir-cowork-plugin:ailtir_setup`. Do not continue.
+Read `Context/profile.json` from the workspace root. If it is missing, tell the user the workspace has not been set up and direct them to run `/ailtir_setup`. Do not continue.
 
 Hold onto the `profile_key`, `region`, and `vertical` values — the briefing header uses them, and downstream skills read them from `Context/profile.json` when they need to branch.
 
@@ -54,9 +54,9 @@ Check whether any bid folders exist under `Bids/` in the workspace root.
 
 - **If at least one bid folder exists**, hand off to `ailtir_conductor` inline. Do not require a second slash command — proceed to run the conductor's flow now: read its SKILL.md, execute Step 1 (scan), Step 2 (backfill missing frontmatter), Step 3 (rank), Step 4 (recommend), and Step 5 (prompt) against the bids just surfaced in the briefing. The user should see one continuous experience: profile → briefing → "here's what to do next".
 - **If no bids exist yet** (first-time user post-setup), offer the three onboarding branches instead:
-  1. `/ailtir-cowork-plugin:ailtir_intelligence-builder` — capture case studies & win themes so quality-writer works from day one.
-  2. `/ailtir-cowork-plugin:ailtir_notion-setup` — build the Notion CRM/Pipeline/Sub Directory/RFI Log.
-  3. `/ailtir-cowork-plugin:ailtir_bid-planner` — start a bid on an ITT you already have.
+  1. `/ailtir_intelligence-builder` — capture case studies & win themes so quality-writer works from day one.
+  2. `/ailtir_notion-setup` — build the Notion CRM/Pipeline/Sub Directory/RFI Log.
+  3. `/ailtir_bid-planner` — start a bid on an ITT you already have.
 
 Then ask: "What are we tackling first?"
 

@@ -1,6 +1,6 @@
 ---
 name: ailtir_estimating-workflow
-description: Master orchestrator for the 4-step construction estimating process, calibrated to the active Ailtir profile (Irish ARM4/NRM2 or UK NRM1/NRM2). Triggered by /ailtir-cowork-plugin:ailtir_estimating-workflow or when the user asks to estimate or price a tender.
+description: Master orchestrator for the 4-step construction estimating process, calibrated to the active Ailtir profile (Irish ARM4/NRM2 or UK NRM1/NRM2). Triggered by /ailtir_estimating-workflow or when the user asks to estimate or price a tender.
 ---
 
 # Ailtir Estimating Workflow
@@ -28,7 +28,7 @@ Read `Context/profile.json` from the workspace root. The measurement structure, 
 - `ireland-gc` → ARM4/NRM2 elemental structure, Euro, `references/ireland-gc/benchmarks.md`, rates from `rate-library/references/ireland-gc/rates-2026.md`.
 - `uk-gc` → NRM1 (preliminaries) / NRM2 (measurement) structure, pound sterling, `references/uk-gc/benchmarks.md`, rates from `rate-library/references/uk-gc/rates-2026.md`.
 
-If `Context/profile.json` is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`.
+If `Context/profile.json` is missing, stop and tell the user to run `/ailtir_setup`.
 
 ## Workflow Overview
 
@@ -45,21 +45,21 @@ If `Context/profile.json` is missing, stop and tell the user to run `/ailtir-cow
 ## Step 1: Requirements Extraction
 Review the tender documents (drawings, specs, ITT).
 - Identify all measurable items.
-- If quantities are missing, advise the user to run `/ailtir-cowork-plugin:ailtir_takeoff` first.
+- If quantities are missing, advise the user to run `/ailtir_takeoff` first.
 - Present a list of identified scope packages (e.g., Groundworks, Concrete Frame, MEP).
 - **Handoff:** Ask "Are you happy with this scope breakdown? Say 'proceed' to build the schedule."
 
 ## Step 2: Schedule Builder
 Build the pricing schedule structure.
 - Use the profile-appropriate NRM2 elemental structure (Substructure, Superstructure, Finishes, Services).
-- Separate Preliminaries (direct the user to run `/ailtir-cowork-plugin:ailtir_prelims-builder` if needed).
+- Separate Preliminaries (direct the user to run `/ailtir_prelims-builder` if needed).
 - Output an Excel template using the bundled `scripts/create_estimate.py` helper. Pass `--profile-key` with the value read from `Context/profile.json` so the workbook uses the correct currency symbol and sample prelims rates.
 - **Handoff:** Ask "Review the pricing structure. Say 'proceed' to start line-item pricing."
 
 ## Step 3: Line Item Pricing
 Price the schedule.
 - Use `rate-library` to pull current profile-appropriate labour and material rates.
-- Incorporate subcontractor quotes from `/ailtir-cowork-plugin:ailtir_bid-leveling`.
+- Incorporate subcontractor quotes from `/ailtir_bid-leveling`.
 - Generate detailed workings (Qty × Rate = Amount).
 - Under `uk-gc`: on any Higher-Risk Building (HRB) scope, add the Building Safety Act information-management overhead per `references/uk-gc/benchmarks.md`.
 - **Handoff:** Ask "Pricing complete. Total is [currency-symbol]X. Say 'proceed' for the final reconciliation check."

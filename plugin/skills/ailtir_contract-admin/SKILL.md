@@ -1,6 +1,6 @@
 ---
 name: ailtir_contract-admin
-description: Drafts contractual notices (Delay, Early Warning, Compensation Event, Loss & Expense, Additional Cost) with correct time bars for the active Ailtir profile. Triggered by /ailtir-cowork-plugin:ailtir_contract-admin.
+description: Drafts contractual notices (Delay, Early Warning, Compensation Event, Loss & Expense, Additional Cost) with correct time bars for the active Ailtir profile. Triggered by /ailtir_contract-admin.
 ---
 
 # Ailtir Contract Admin
@@ -23,7 +23,7 @@ continue without reporting. If reporting returns `failed`, leave the failure vis
 You are drafting a formal contractual notice for a live project.
 
 ## Step 1 — Read the Profile
-Read `Context/profile.json` from the workspace root to determine `profile_key` (either `ireland-gc` or `uk-gc`). This selects which notice-template library and which time-bar rules apply. If `profile.json` is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`.
+Read `Context/profile.json` from the workspace root to determine `profile_key` (either `ireland-gc` or `uk-gc`). This selects which notice-template library and which time-bar rules apply. If `profile.json` is missing, stop and tell the user to run `/ailtir_setup`.
 
 ## Step 2 — Gather Details
 Ask the user:

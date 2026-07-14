@@ -1,6 +1,6 @@
 ---
 name: ailtir_conductor
-description: Proactive lifecycle router. Scans every active bid, tells the user what phase each is in, and recommends the next skill to run. Triggered by /ailtir-cowork-plugin:ailtir_conductor, or auto-invoked at the end of ailtir_prime when at least one bid exists.
+description: Proactive lifecycle router. Scans every active bid, tells the user what phase each is in, and recommends the next skill to run. Triggered by /ailtir_conductor, or auto-invoked at the end of ailtir_prime when at least one bid exists.
 ---
 
 # Ailtir Conductor — Lifecycle Router
@@ -24,7 +24,7 @@ You are the Ailtir plugin's proactive next-step advisor. Customers do not need t
 
 ## Step 0 — Read the Profile
 
-Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`. Do not continue without a profile.
+Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir_setup`. Do not continue without a profile.
 
 ## Step 1 — Scan the Bids
 
@@ -39,7 +39,7 @@ Each record has:
 - `inferred` — dict of best-guess phase, completed[], next_action[] derived from folder contents (populated regardless of frontmatter presence)
 - `warnings[]` — any parse issues
 
-If the array is empty, tell the user "No bids found under `Bids/`. Would you like to start one with `/ailtir-cowork-plugin:ailtir_bid-planner`?" and stop.
+If the array is empty, tell the user "No bids found under `Bids/`. Would you like to start one with `/ailtir_bid-planner`?" and stop.
 
 ## Step 2 — Backfill Missing Frontmatter
 
@@ -79,7 +79,7 @@ For the top bid, ask:
 
 Handle the response:
 
-- **Y** — Tell the user: *"Please run `/ailtir-cowork-plugin:{next_skill}` on `{bid_path}` now. When it finishes, run `/ailtir-cowork-plugin:ailtir_conductor` again to see what's next."* Do **not** try to invoke the skill directly — Cowork does not chain slash commands from inside a skill. The user does the invocation; the conductor re-enters on the next turn.
+- **Y** — Tell the user: *"Please run `/{next_skill}` on `{bid_path}` now. When it finishes, run `/ailtir_conductor` again to see what's next."* Do **not** try to invoke the skill directly — Cowork does not chain slash commands from inside a skill. The user does the invocation; the conductor re-enters on the next turn.
 - **d** — Run `scripts/update_frontmatter.py --bid-path <path> --set next_action.reason "Deferred by user on {today}"`. Move to the next bid.
 - **s** — Ask why briefly, then run `scripts/update_frontmatter.py --bid-path <path> --skip {next_skill} --reason "<user's reason>"`. The skill gets appended to `completed[]` with `result: skipped`. Move on.
 - **e** — Read the relevant paragraph from `references/skill-catalogue.md` in this skill's directory, print it, then re-ask the Y/d/s/o/q prompt.
@@ -90,7 +90,7 @@ Handle the response:
 
 Before exiting (either on `q`, or after the user says `Y` to a recommendation), print:
 
-> Want a visual overview? Run `/ailtir-cowork-plugin:ailtir_dashboard` — the same phase/next-action info is shown per bid, colour-coded.
+> Want a visual overview? Run `/ailtir_dashboard` — the same phase/next-action info is shown per bid, colour-coded.
 
 Only print this nudge once per session (track by session, not per bid).
 

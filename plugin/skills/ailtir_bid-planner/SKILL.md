@@ -1,6 +1,6 @@
 ---
 name: ailtir_bid-planner
-description: The master Phase 1 orchestrator for a new tender. Catalogues the tender pack, runs Go/No-Go analysis, extracts compliance requirements, flags contract risks against the active Ailtir profile's playbook (Irish PW-CF/RIAI or UK JCT/NEC4), and generates a 9-tab Bid Plan Workbook and folder structure. Triggered by /ailtir-cowork-plugin:ailtir_bid-planner.
+description: The master Phase 1 orchestrator for a new tender. Catalogues the tender pack, runs Go/No-Go analysis, extracts compliance requirements, flags contract risks against the active Ailtir profile's playbook (Irish PW-CF/RIAI or UK JCT/NEC4), and generates a 9-tab Bid Plan Workbook and folder structure. Triggered by /ailtir_bid-planner.
 ---
 
 # Ailtir Bid Planner — Phase 1 Orchestrator
@@ -33,7 +33,7 @@ Pause at three points:
 ---
 
 ## Step 0 — Read the Profile
-Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`. The `profile_key` value drives Steps 2B and 2D and — through the downstream skills — every other analysis in this orchestrator.
+Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir_setup`. The `profile_key` value drives Steps 2B and 2D and — through the downstream skills — every other analysis in this orchestrator.
 
 ## Step 1 — Gather Context
 
@@ -98,7 +98,7 @@ Present a concise summary to the user:
 - Top 3 Contract Risks
 - Provide the `.xlsx` file (the folders are created directly on disk).
 
-Ask: "Would you like me to move to Phase 2 and break this down into trade packages (`/ailtir-cowork-plugin:ailtir_package-breakdown`)?"
+Ask: "Would you like me to move to Phase 2 and break this down into trade packages (`/ailtir_package-breakdown`)?"
 
 ---
 

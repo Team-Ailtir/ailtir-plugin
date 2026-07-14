@@ -1,6 +1,6 @@
 ---
 name: ailtir_notion-setup
-description: Builds the required Notion databases for an Ailtir workspace via the Notion MCP connector. Creates the Bid Pipeline, Subcontractor Directory, RFI Log, and CRM databases with the correct properties and relations. USE THIS when the user runs /ailtir-cowork-plugin:ailtir_notion-setup or asks to set up their Notion databases.
+description: Builds the required Notion databases for an Ailtir workspace via the Notion MCP connector. Creates the Bid Pipeline, Subcontractor Directory, RFI Log, and CRM databases with the correct properties and relations. USE THIS when the user runs /ailtir_notion-setup or asks to set up their Notion databases.
 ---
 
 # Ailtir Notion Database Setup
@@ -50,7 +50,7 @@ Once built, update `references/database-schemas.md` with the actual database IDs
 Tell the user:
 "Notion databases created successfully. You now have a connected CRM, Bid Pipeline, Subcontractor Directory, and RFI Log.
 
-When you run `/ailtir-cowork-plugin:ailtir_bid-planner` on a new tender, I will automatically log it in the Bid Pipeline. When you run `/ailtir-cowork-plugin:ailtir_rfi-generator`, I will log the questions in the RFI Log."
+When you run `/ailtir_bid-planner` on a new tender, I will automatically log it in the Bid Pipeline. When you run `/ailtir_rfi-generator`, I will log the questions in the RFI Log."
 
 - [HUMAN INPUT REQUIRED] Confirm the Notion connector is active before attempting to create databases.
 
