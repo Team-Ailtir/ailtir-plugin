@@ -86,27 +86,35 @@ contained HTML block (inline CSS, no external assets) containing:
   - **Skip this step** — mark it skipped and move on
   - **Pick another bid** — choose a different surfaced bid
   - **Quit** — stop
-- A **Submit** button that writes the chosen action back into the chat as a
-  plain message (e.g. `conductor: run it`), exactly as the bid-planner form's
-  submit button writes its answers back. The conductor reads that message on
-  the next turn and runs the matching action below.
+- A **Submit** button that writes a message back into the chat, exactly as the
+  bid-planner form's submit button does. **The message text depends on the
+  selected card:**
+  - **Run it** → write the bare slash command for **this bid's computed
+    `{next_skill}`** — the value you determined in Step 4 from
+    `references/phase-map.md` for the surfaced bid, whatever it is
+    (`/ailtir_go-no-go`, `/ailtir_takeoff`, `/ailtir_contract-risk`, …). Never
+    hardcode one skill; always substitute the actual `{next_skill}` for the bid
+    being prompted. Write only that command, nothing else. This posts as a user
+    command, so Cowork runs the skill directly. Do **not** write
+    `conductor: run it`; that is a plain message the conductor cannot act on.
+  - Every other card → write `conductor: <action>` (e.g. `conductor: defer`,
+    `conductor: skip`, `conductor: explain`, `conductor: pick another`,
+    `conductor: quit`). The conductor reads that on the next turn and runs the
+    matching action below.
 
 Keep the cards visually consistent with the bid-planner style: bordered cards,
 icon or bold title, muted description line, dark-theme friendly.
 
-**Fallback:** if the HTML artifact does not render (older host, or the user
-asks for text), print this plain menu and read the typed reply instead:
+Handle the submitted message:
 
-> Run `{next_skill}` now? [Y = run it / d = defer this bid / s = skip this step / e = explain what it does / o = pick another bid / q = quit]
-
-Handle the response (card submission or typed letter map to the same actions):
-
-- **Y** — Tell the user: *"Please run `/{next_skill}` on `{bid_path}` now. When it finishes, run `/ailtir_conductor` again to see what's next."* Do **not** try to invoke the skill directly — Cowork does not chain slash commands from inside a skill. The user does the invocation; the conductor re-enters on the next turn.
-- **d** — Run `scripts/update_frontmatter.py --bid-path <path> --set next_action.reason "Deferred by user on {today}"`. Move to the next bid.
-- **s** — Ask why briefly, then run `scripts/update_frontmatter.py --bid-path <path> --skip {next_skill} --reason "<user's reason>"`. The skill gets appended to `completed[]` with `result: skipped`. Move on.
-- **e** — Read the relevant paragraph from `references/skill-catalogue.md` in this skill's directory, print it, then re-present the Step 5 choice (the HTML card artifact, or the text menu if that is the active mode).
-- **o** — List the other surfaced bids by number, let the user pick, then re-run Step 4 for that bid.
-- **q** — Stop.
+- **`/{next_skill}` (Run it)** — nothing for the conductor to do; the skill has
+  been invoked directly. It will run on `{bid_path}`. When it finishes the user
+  re-runs `/ailtir_conductor` to see what's next.
+- **`conductor: defer`** — Run `scripts/update_frontmatter.py --bid-path <path> --set next_action.reason "Deferred by user on {today}"`. Move to the next bid.
+- **`conductor: skip`** — Ask why briefly, then run `scripts/update_frontmatter.py --bid-path <path> --skip {next_skill} --reason "<user's reason>"`. The skill gets appended to `completed[]` with `result: skipped`. Move on.
+- **`conductor: explain`** — Read the relevant paragraph from `references/skill-catalogue.md` in this skill's directory, print it, then re-present the Step 5 card.
+- **`conductor: pick another`** — List the other surfaced bids by number, let the user pick, then re-run Step 4 for that bid.
+- **`conductor: quit`** — Stop.
 
 ## Step 6 — Dashboard Nudge
 
@@ -144,7 +152,10 @@ auto_drive: false         # opt-in per-bid escalation to auto-chain (post-MVP)
 
 ## Anti-Patterns
 
-- DO NOT chain slash commands. In Cowork the conductor recommends and the user invokes.
+- DO NOT write the fully-qualified `/ailtir-cowork-plugin:ailtir_<name>` form anywhere the user sees it. Cowork invokes skills as `/ailtir_<name>` — always use that short form in cards, messages, and prose. Never expand it back to the plugin-namespaced form.
+- DO NOT make the "Run it" card write a plain sentence or `conductor: run it`. It must write the bare slash command `/{next_skill}` so Cowork runs the skill directly.
+- DO NOT hardcode a specific skill in the "Run it" card. `{next_skill}` is recomputed per bid in Step 4 — the card must always carry the skill that is actually next for the bid being prompted, for every phase and every bid.
+- DO NOT chain slash commands from inside the skill. The "Run it" card works because the *user's* submitted message is the slash command, not because the conductor invokes it.
 - DO NOT rewrite the whole README — the frontmatter block sits above the existing `# {bid_id}` heading and prose.
 - DO NOT recommend a skill that is already in `completed[]` with `result: proceed` or better. Skipped skills can be re-recommended if the user changes their mind (they must explicitly ask).
 - DO NOT invent phases. Phases come from `references/phase-map.md` only.
