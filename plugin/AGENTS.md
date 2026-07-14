@@ -15,6 +15,7 @@ This plugin targets **Claude Cowork** as its primary runtime (claude.com/product
 
 - `.claude-plugin/` contains the `plugin.json` manifest. Only `plugin.json` belongs here.
 - `skills/` contains every user-invocable workflow, plus each skill's workflow-local `scripts/`, `references/`, and `templates/`. Each skill is a folder with a `SKILL.md`.
+- `agents/` contains plugin-scoped sub-agent definitions dispatched by orchestrator skills via the `Agent` tool (each file is one sub-agent). Cowork ignores the `hooks`, `mcpServers`, and `permissionMode` frontmatter fields on plugin sub-agents — do not use them here.
 - `.mcp.json` declares the bundled Ailtir, Notion, and Microsoft 365 MCP servers.
 
 There is **no** `commands/` folder, **no** `resources/` folder, and **no** plugin-root `scripts/` folder. Slash commands and skills are unified — every skill at `skills/<name>/SKILL.md` is the slash command `/ailtir-cowork-plugin:<name>`. Setup templates, bundled scripts, and brand references live inside the skill that uses them.
