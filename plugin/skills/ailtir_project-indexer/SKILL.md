@@ -176,44 +176,55 @@ split into. The split is deterministic, so partial runs resume cleanly:
 if the process is interrupted after five drawings, the sixth is the only
 one that needs redoing.
 
-#### Step 5b — Analyse each sheet exhaustively
+#### Step 5b — Analyse each sheet exhaustively (parallel sub-agents)
 
-For every single-sheet PDF, produce a dedicated `.md` file in
-`0. AI Context/drawings/`. Use the sheet ID from the title block for the
-filename (e.g. `A-101.md`, `E-201.md`); if the title block was
-unreadable, fall back to `<source_stem>_sheet<N>.md`.
+Dispatch the plugin-scoped `drawing-analyst` sub-agent via the `Agent`
+tool, one invocation per sheet. Sub-agents run in isolated context
+windows: vision tokens for each sheet stay inside the sub-agent, and
+only a compact JSON status returns to this skill. The Cowork runtime
+schedules up to 16 concurrent sub-agents and queues the rest, so a
+30-sheet pack that used to walk sheet-by-sheet in this main context
+now completes in two rounds without polluting the main window.
 
-The write-up must be exhaustive enough that downstream skills can answer
-almost any question about the sheet without reopening the PDF. Cover
-whatever is present:
+For each single-sheet artefact produced by Step 5a, decide the target
+filename first: use the sheet ID from `<stem>_sheet<N>.json`
+(`title_block.hints.sheet_number`), fall back to
+`<source_stem>_sheet<N>.md` when the title block was unreadable. Then
+invoke `drawing-analyst` with these fields (all absolute paths):
 
-- **Identification** — sheet ID, title, discipline role code (see
-  `research/drawing-conventions.md` for the ISO 19650 role letters),
-  scale(s) paired with sheet size, revision (P/C series for ISO 19650,
-  letter series for legacy BS 1192), suitability code (S0–S7, A, B),
-  issue date, drawn/checked/approved initials, path to the source
-  single-sheet PDF, position within the parent multi-sheet file.
-- **View content** — plan, section, elevation, detail, 3D — with a
-  zone-by-zone walk of every plan.
-- **Systems and elements shown** — every system that carries a route or
-  a symbol on the sheet.
-- **Materials, grades, sizes, manufacturers** — verbatim. Cite any spec
-  section the sheet points to. Do not backfill what the sheet does not
-  name.
-- **Schedules and tables** — type, row count, and full content for small
-  schedules (under ~20 rows); column summary and row count for larger
-  ones.
-- **Annotations, general notes, callouts, hold points** — near-verbatim.
-  Every detail bubble and what it refers to.
-- **Cross-references** — every other sheet, every spec section, every
-  RFI, every revision cloud, and what each is about.
-- **Trade-perspective lens** — surface implications for the trade chosen
-  in Step 4 on every sheet, off-trade ones included. State the
-  perspective explicitly at the top of each file.
+- `png_path` — `<bid_root>/0. AI Context/drawings_split/<stem>/<stem>_sheet<N>.png`
+- `json_path` — `<bid_root>/0. AI Context/drawings_split/<stem>/<stem>_sheet<N>.json`
+- `pdf_path` — `<bid_root>/0. AI Context/drawings_split/<stem>/<stem>_sheet<N>.pdf`
+- `output_path` — `<bid_root>/0. AI Context/drawings/<sheet_id>.md`
+- `trade_perspective` — the value confirmed in Step 4
+- `active_profile` — from `Context/profile.json`
+- `bid_ref` — the bid folder name
 
-Quantities are out of scope. Counts, lengths, and areas are
-`ailtir_takeoff`'s responsibility — that skill runs against the
-single-sheet PDF in `drawings_split/` and produces auditable results.
+Dispatch every sheet in one batch — do not throttle manually. The
+runtime handles concurrency. Every ~25 returned statuses, print a
+one-line progress note to the user ("Analysed 25 of 78 sheets") so
+long runs stay visible.
+
+Collect each sub-agent's returned JSON status. The array feeds Step 5c's
+register (sheet ID, discipline, revision, suitability, revision date,
+one-line summary) and Step 6's handover (gaps, sheets flagged for
+manual review).
+
+Failure handling (Cowork v2.1.199+ returns structured failure signals
+rather than error text as findings):
+
+- If a sub-agent's returned status is a failure signal (API error,
+  usage limit, repeated server error), retry that single sheet once.
+- If the retry also fails, keep whatever `.md` the sub-agent wrote
+  before termination and add the sheet to the Step 6 "manual review"
+  list. Do not treat error text as sheet content.
+- If a returned JSON is malformed (not parseable, missing required
+  fields), treat it as a failure and follow the same retry-once path.
+
+Quantities remain out of scope for the drawing-analyst. Counts,
+lengths, and areas are `ailtir_takeoff`'s responsibility — that skill
+runs against the same single-sheet PDF in `drawings_split/` and
+produces auditable results.
 
 #### Step 5c — Combined register
 
