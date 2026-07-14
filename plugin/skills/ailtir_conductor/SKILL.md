@@ -89,10 +89,14 @@ contained HTML block (inline CSS, no external assets) containing:
 - A **Submit** button that writes a message back into the chat, exactly as the
   bid-planner form's submit button does. **The message text depends on the
   selected card:**
-  - **Run it** → write the bare slash command itself, `/{next_skill}` (e.g.
-    `/ailtir_contract-risk`) — nothing else. This posts as a user command, so
-    Cowork runs the skill directly. Do **not** write `conductor: run it` for
-    this case; that would just be a plain message the conductor cannot act on.
+  - **Run it** → write the bare slash command for **this bid's computed
+    `{next_skill}`** — the value you determined in Step 4 from
+    `references/phase-map.md` for the surfaced bid, whatever it is
+    (`/ailtir_go-no-go`, `/ailtir_takeoff`, `/ailtir_contract-risk`, …). Never
+    hardcode one skill; always substitute the actual `{next_skill}` for the bid
+    being prompted. Write only that command, nothing else. This posts as a user
+    command, so Cowork runs the skill directly. Do **not** write
+    `conductor: run it`; that is a plain message the conductor cannot act on.
   - Every other card → write `conductor: <action>` (e.g. `conductor: defer`,
     `conductor: skip`, `conductor: explain`, `conductor: pick another`,
     `conductor: quit`). The conductor reads that on the next turn and runs the
@@ -150,6 +154,7 @@ auto_drive: false         # opt-in per-bid escalation to auto-chain (post-MVP)
 
 - DO NOT write the fully-qualified `/ailtir-cowork-plugin:ailtir_<name>` form anywhere the user sees it. Cowork invokes skills as `/ailtir_<name>` — always use that short form in cards, messages, and prose. Never expand it back to the plugin-namespaced form.
 - DO NOT make the "Run it" card write a plain sentence or `conductor: run it`. It must write the bare slash command `/{next_skill}` so Cowork runs the skill directly.
+- DO NOT hardcode a specific skill in the "Run it" card. `{next_skill}` is recomputed per bid in Step 4 — the card must always carry the skill that is actually next for the bid being prompted, for every phase and every bid.
 - DO NOT chain slash commands from inside the skill. The "Run it" card works because the *user's* submitted message is the slash command, not because the conductor invokes it.
 - DO NOT rewrite the whole README — the frontmatter block sits above the existing `# {bid_id}` heading and prose.
 - DO NOT recommend a skill that is already in `completed[]` with `result: proceed` or better. Skipped skills can be re-recommended if the user changes their mind (they must explicitly ask).
