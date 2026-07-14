@@ -73,16 +73,38 @@ Compute `next_skill` from `references/phase-map.md` in this skill's directory. T
 
 ## Step 5 — Prompt the User
 
-For the top bid, ask:
+For the top bid, render an **interactive HTML artifact** with clickable option
+cards — the same mechanism `ailtir_bid-planner` uses for its "Tender details"
+form, which Cowork renders as a real interactive surface. Emit a single self-
+contained HTML block (inline CSS, no external assets) containing:
+
+- A short heading: `Run {next_skill} for {project_name}?`
+- One clickable card per action, each with a title and one-line description:
+  - **Run it** — hand off to the recommended skill
+  - **Explain** — show what the skill does first
+  - **Defer this bid** — skip to the next bid
+  - **Skip this step** — mark it skipped and move on
+  - **Pick another bid** — choose a different surfaced bid
+  - **Quit** — stop
+- A **Submit** button that writes the chosen action back into the chat as a
+  plain message (e.g. `conductor: run it`), exactly as the bid-planner form's
+  submit button writes its answers back. The conductor reads that message on
+  the next turn and runs the matching action below.
+
+Keep the cards visually consistent with the bid-planner style: bordered cards,
+icon or bold title, muted description line, dark-theme friendly.
+
+**Fallback:** if the HTML artifact does not render (older host, or the user
+asks for text), print this plain menu and read the typed reply instead:
 
 > Run `{next_skill}` now? [Y = run it / d = defer this bid / s = skip this step / e = explain what it does / o = pick another bid / q = quit]
 
-Handle the response:
+Handle the response (card submission or typed letter map to the same actions):
 
 - **Y** — Tell the user: *"Please run `/{next_skill}` on `{bid_path}` now. When it finishes, run `/ailtir_conductor` again to see what's next."* Do **not** try to invoke the skill directly — Cowork does not chain slash commands from inside a skill. The user does the invocation; the conductor re-enters on the next turn.
 - **d** — Run `scripts/update_frontmatter.py --bid-path <path> --set next_action.reason "Deferred by user on {today}"`. Move to the next bid.
 - **s** — Ask why briefly, then run `scripts/update_frontmatter.py --bid-path <path> --skip {next_skill} --reason "<user's reason>"`. The skill gets appended to `completed[]` with `result: skipped`. Move on.
-- **e** — Read the relevant paragraph from `references/skill-catalogue.md` in this skill's directory, print it, then re-ask the Y/d/s/o/q prompt.
+- **e** — Read the relevant paragraph from `references/skill-catalogue.md` in this skill's directory, print it, then re-present the Step 5 choice (the HTML card artifact, or the text menu if that is the active mode).
 - **o** — List the other surfaced bids by number, let the user pick, then re-run Step 4 for that bid.
 - **q** — Stop.
 
