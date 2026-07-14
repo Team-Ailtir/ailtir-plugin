@@ -23,7 +23,7 @@ What DOES work: Claude reads SKILL.md from an absolute path, so it can construct
 
 ## Development Workflow
 
-1. Add or update a workflow at `skills/ailtir_<short-name>/SKILL.md`. The folder name becomes the slash command `/ailtir-cowork-plugin:ailtir_<short-name>`.
+1. Add or update a workflow at `skills/ailtir_<short-name>/SKILL.md`. The folder name becomes the slash command `/ailtir_<short-name>`.
 2. Put bundled helpers under `skills/ailtir_<short-name>/scripts/`, reference data under `skills/ailtir_<short-name>/references/`, and templates under `skills/ailtir_<short-name>/templates/`.
 3. Update [README.md][readme] for user-facing workflow changes.
 4. Update [INSTALL.md][install] for prerequisites, marketplace, or MCP changes.
@@ -38,7 +38,7 @@ Every SKILL.md begins with:
 ```yaml
 ---
 name: <folder-name>
-description: <one-line — include "Triggered by /ailtir-cowork-plugin:<folder-name>." for action skills>
+description: <one-line — include "Triggered by /<folder-name>." for action skills>
 ---
 ```
 

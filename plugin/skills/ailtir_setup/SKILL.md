@@ -1,6 +1,6 @@
 ---
 name: ailtir_setup
-description: First-time Ailtir workspace setup. Runs the onboarding interview and builds your local Context folder. Triggered by /ailtir-cowork-plugin:ailtir_setup.
+description: First-time Ailtir workspace setup. Runs the onboarding interview and builds your local Context folder. Triggered by /ailtir_setup.
 ---
 
 # Ailtir Setup
@@ -27,7 +27,7 @@ to:
    `https://app.ailtir.ai/ailtir-mcp`.
 3. Enable the connector.
 4. Restart Claude Desktop or start a new Cowork session.
-5. Run `/ailtir-cowork-plugin:ailtir_setup` again.
+5. Run `/ailtir_setup` again.
 
 Stop setup at that point without starting the company interview or writing
 workspace files.
@@ -145,11 +145,11 @@ Setup complete. Your workspace is configured for [Company Name] on the [profile_
 
 To get the most out of the quality-writer from day one, we should add 2-3 case studies and your top win themes to the `Intelligence/` folder. I can interview you for 10 minutes to write them up, or you can point me to a folder of old CVs and tenders and I'll extract them automatically.
 
-If you want to do that now, run `/ailtir-cowork-plugin:ailtir_intelligence-builder`.
-If you are using Notion, run `/ailtir-cowork-plugin:ailtir_notion-setup` to build your databases.
-Otherwise, drop a tender pack into the workspace and run `/ailtir-cowork-plugin:ailtir_bid-planner` to begin.
+If you want to do that now, run `/ailtir_intelligence-builder`.
+If you are using Notion, run `/ailtir_notion-setup` to build your databases.
+Otherwise, drop a tender pack into the workspace and run `/ailtir_bid-planner` to begin.
 
-Once you have a bid or two in flight, run `/ailtir-cowork-plugin:ailtir_conductor` for a proactive "what should I do next?" view across every bid — or `/ailtir-cowork-plugin:ailtir_dashboard` for the visual version. You never need to memorise the 30+ skill catalogue; the conductor will always tell you what to run next.
+Once you have a bid or two in flight, run `/ailtir_conductor` for a proactive "what should I do next?" view across every bid — or `/ailtir_dashboard` for the visual version. You never need to memorise the 30+ skill catalogue; the conductor will always tell you what to run next.
 ```
 
 ## Quality Checks

@@ -28,7 +28,7 @@ Read `Context/profile.json` from the workspace root to determine `profile_key`.
 - If `profile_key` is `ireland-gc`, read `references/ireland-gc/rates-2026.md` from this skill's directory. Rates are in Euro (€).
 - If `profile_key` is `uk-gc`, read `references/uk-gc/rates-2026.md` from this skill's directory. Rates are in pound sterling (£).
 
-If `Context/profile.json` is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`.
+If `Context/profile.json` is missing, stop and tell the user to run `/ailtir_setup`.
 
 ## Step 2 — Answer the User's Question
 Answer the user's rate query directly using the values in the loaded rates file. Do not blend rates across profiles. When the user asks for a rate, quote the specific figure from the loaded file, cite the source (SEO, CIJC, SCSI, BCIS, etc.), and — for labour — remind the user to apply the labour-burden uplift the file specifies.

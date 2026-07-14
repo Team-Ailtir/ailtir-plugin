@@ -1,6 +1,6 @@
 ---
 name: ailtir_pqq-manager
-description: Auto-fills PQQs/SQ documents from the company context, or evaluates incoming subcontractor PQQs, applying the accreditation and disclosure requirements of the active Ailtir profile (Irish CIRI/Safe-T-Cert or UK SSIP/Modern Slavery/Carbon Reduction Plan). Triggered by /ailtir-cowork-plugin:ailtir_pqq-manager.
+description: Auto-fills PQQs/SQ documents from the company context, or evaluates incoming subcontractor PQQs, applying the accreditation and disclosure requirements of the active Ailtir profile (Irish CIRI/Safe-T-Cert or UK SSIP/Modern Slavery/Carbon Reduction Plan). Triggered by /ailtir_pqq-manager.
 ---
 
 # Ailtir PQQ Manager
@@ -25,7 +25,7 @@ You are managing Pre-Qualification Questionnaires (PQQs) or, under the Procureme
 2. **Evaluate Mode:** Scoring incoming PQQs submitted by subcontractors.
 
 ## Step 1 — Read the Profile
-Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`. The accreditations to check, statutory disclosures required, and typical PQQ instrument depend on `profile_key`:
+Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir_setup`. The accreditations to check, statutory disclosures required, and typical PQQ instrument depend on `profile_key`:
 
 - `ireland-gc` — Irish PQQs on eTenders. Check: CIRI registration, Safe-T-Cert, ISO 9001/14001/45001, insurance limits, turnover, CIS/Revenue tax clearance.
 - `uk-gc` — UK PQQs / Supplier Information under Procurement Act 2023 Central Digital Platform (or legacy SQ under the Public Contracts Regulations 2015 on pre-February-2025 procurements). Check: SSIP (CHAS / SafeContractor / Constructionline Gold / Achilles Building Confidence), ISO 9001/14001/45001, insurance limits, turnover, Modern Slavery Act s.54 statement (mandatory disclosure if turnover ≥£36m), Carbon Reduction Plan reference under PPN 06/20 for central government contracts >£5m/year, Social Value response under PPN 06/21 (minimum 10% weighting on central government works), and Building Safety Act competency evidence where the project involves Higher-Risk Buildings.

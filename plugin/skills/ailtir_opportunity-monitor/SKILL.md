@@ -30,7 +30,7 @@ Before running, read the following files from the user's workspace:
 - `Context/company.md` — Company profile, target sectors, preferred regions, contract value sweet spot, active certifications.
 - `Context/connectors.md` — Connector status for email and Notion.
 
-If `Context/profile.json` is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`.
+If `Context/profile.json` is missing, stop and tell the user to run `/ailtir_setup`.
 
 ---
 

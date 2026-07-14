@@ -1,6 +1,6 @@
 ---
 name: ailtir_enable-monitor
-description: Configures the daily automated opportunity monitor. Connects your email and Notion, and schedules the background task to run every morning. Triggered by /ailtir-cowork-plugin:ailtir_enable-monitor.
+description: Configures the daily automated opportunity monitor. Connects your email and Notion, and schedules the background task to run every morning. Triggered by /ailtir_enable-monitor.
 ---
 
 # Enable Opportunity Monitor
@@ -36,7 +36,7 @@ Run the following command:
 ```bash
 manus-config schedule create \
   --title "Ailtir Opportunity Monitor" \
-  --detail "Run the /ailtir-cowork-plugin:ailtir_opportunity-monitor workflow to check my email for the tender-alert digests appropriate to my active Ailtir profile (Irish eTenders/TED under ireland-gc, UK Find a Tender / Contracts Finder under uk-gc), filter them against my company profile, and log matches to my Notion Bid Pipeline." \
+  --detail "Run the /ailtir_opportunity-monitor workflow to check my email for the tender-alert digests appropriate to my active Ailtir profile (Irish eTenders/TED under ireland-gc, UK Find a Tender / Contracts Finder under uk-gc), filter them against my company profile, and log matches to my Notion Bid Pipeline." \
   --cron "0 0 8 * * 1-5" \
   --repeated
 ```

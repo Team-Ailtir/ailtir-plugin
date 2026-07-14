@@ -1,6 +1,6 @@
 ---
 name: ailtir_package-breakdown
-description: Phase 2 skill. Converts project documents (head contract, specs, drawings) into a subcontractor trade package register and scope matrix. Triggered by /ailtir-cowork-plugin:ailtir_package-breakdown.
+description: Phase 2 skill. Converts project documents (head contract, specs, drawings) into a subcontractor trade package register and scope matrix. Triggered by /ailtir_package-breakdown.
 ---
 
 # Ailtir — Procurement Packaging
@@ -53,7 +53,7 @@ Populate the workbook with:
 
 ## Step 3 — Present
 
-Provide the Excel workbook. Ask: "Would you like me to draft the Subcontractor Enquiry packs for any of these trades (`/ailtir-cowork-plugin:ailtir_subcontractor-enquiry`)?"
+Provide the Excel workbook. Ask: "Would you like me to draft the Subcontractor Enquiry packs for any of these trades (`/ailtir_subcontractor-enquiry`)?"
 
 ## Quality Checks
 - [ ] Every trade required for the project scope is represented as a package.
@@ -87,15 +87,15 @@ Then print exactly this block at the very end of your response:
 
 ```text
 Next up on {bid_id} ({phase} phase):
-  → /ailtir-cowork-plugin:{next_skill} — {one-line rationale from the phase map}
+  → /{next_skill} — {one-line rationale from the phase map}
 
-Or run /ailtir-cowork-plugin:ailtir_conductor for a full cross-bid view.
+Or run /ailtir_conductor for a full cross-bid view.
 ```
 
 Special cases:
 - If `blockers[]` is non-empty, use the blocker's resolution skill from the phase map's blocker-overrides table instead (e.g. `ailtir_rfi-generator` for `type: rfi`) and lead with "Blocked — resolve first:".
 - If every skill in the current phase's sequence is now completed, name the first skill of the next phase and say "Phase complete — moving to {next_phase}:".
-- If the bid has reached `closed` or `delivery` with no obvious next step, print "No canonical next step — run `/ailtir-cowork-plugin:ailtir_conductor` to see the full pipeline." instead of a specific recommendation.
+- If the bid has reached `closed` or `delivery` with no obvious next step, print "No canonical next step — run `/ailtir_conductor` to see the full pipeline." instead of a specific recommendation.
 
 ## Occasional Feedback
 

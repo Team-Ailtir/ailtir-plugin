@@ -1,6 +1,6 @@
 ---
 name: ailtir_notion-second-brain
-description: An advanced setup skill that builds a complete construction company "second brain" in Notion, including SOPs, cost history, and lessons learned. Triggered by /ailtir-cowork-plugin:ailtir_notion-second-brain.
+description: An advanced setup skill that builds a complete construction company "second brain" in Notion, including SOPs, cost history, and lessons learned. Triggered by /ailtir_notion-second-brain.
 ---
 
 # Ailtir Notion Second Brain Setup
@@ -42,7 +42,7 @@ If the connector is not active, provide a detailed Markdown template that the us
 Ask the user for 2-3 key lessons learned from recent projects, or 1-2 standard cost metrics, and add them to the newly created databases to demonstrate how it works.
 
 ## Step 5 — Output
-Confirm the setup is complete. Explain that the `/ailtir-cowork-plugin:ailtir_prime` command will now sync this expanded knowledge base into the local `Context/notion-cache/` folder for Ailtir to use in future sessions.
+Confirm the setup is complete. Explain that the `/ailtir_prime` command will now sync this expanded knowledge base into the local `Context/notion-cache/` folder for Ailtir to use in future sessions.
 
 ## Anti-Patterns (What NOT to do)
 - DO NOT overwrite existing Notion pages without asking for permission first.

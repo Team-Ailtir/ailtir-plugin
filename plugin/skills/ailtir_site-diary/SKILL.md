@@ -1,6 +1,6 @@
 ---
 name: ailtir_site-diary
-description: Transforms rough field notes or voice transcripts into a formal daily site diary. Under `ireland-gc` the diary is compliant with PW-CF requirements; under `uk-gc` it captures the equivalent daily record required to support NEC4 Compensation Event assessment and JCT Extension of Time / Loss & Expense claims. Triggered by /ailtir-cowork-plugin:ailtir_site-diary or when the user drops field notes.
+description: Transforms rough field notes or voice transcripts into a formal daily site diary. Under `ireland-gc` the diary is compliant with PW-CF requirements; under `uk-gc` it captures the equivalent daily record required to support NEC4 Compensation Event assessment and JCT Extension of Time / Loss & Expense claims. Triggered by /ailtir_site-diary or when the user drops field notes.
 ---
 
 # Ailtir Site Diary

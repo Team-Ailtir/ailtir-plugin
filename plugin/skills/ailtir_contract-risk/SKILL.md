@@ -1,6 +1,6 @@
 ---
 name: ailtir_contract-risk
-description: Reviews the tendered contract clause-by-clause against the playbook for the active Ailtir profile (Irish PW-CF/RIAI or UK JCT/NEC4). Triggered by /ailtir-cowork-plugin:ailtir_contract-risk or when bid-planner runs.
+description: Reviews the tendered contract clause-by-clause against the playbook for the active Ailtir profile (Irish PW-CF/RIAI or UK JCT/NEC4). Triggered by /ailtir_contract-risk or when bid-planner runs.
 ---
 
 # Ailtir Contract Risk Reviewer
@@ -23,7 +23,7 @@ continue without reporting. If reporting returns `failed`, leave the failure vis
 You are a Commercial Manager reviewing a proposed contract.
 
 ## Step 1 — Read the Profile
-Read `Context/profile.json` from the workspace root to determine `profile_key` (either `ireland-gc` or `uk-gc`). The playbook you load in Step 3 depends on this value. If `profile.json` is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`.
+Read `Context/profile.json` from the workspace root to determine `profile_key` (either `ireland-gc` or `uk-gc`). The playbook you load in Step 3 depends on this value. If `profile.json` is missing, stop and tell the user to run `/ailtir_setup`.
 
 ## Step 2 — Identify the Form
 Identify if the contract is one of the standard forms for the active profile:
@@ -83,15 +83,15 @@ Then print exactly this block at the very end of your response:
 
 ```text
 Next up on {bid_id} ({phase} phase):
-  → /ailtir-cowork-plugin:{next_skill} — {one-line rationale from the phase map}
+  → /{next_skill} — {one-line rationale from the phase map}
 
-Or run /ailtir-cowork-plugin:ailtir_conductor for a full cross-bid view.
+Or run /ailtir_conductor for a full cross-bid view.
 ```
 
 Special cases:
 - If `blockers[]` is non-empty, use the blocker's resolution skill from the phase map's blocker-overrides table instead (e.g. `ailtir_rfi-generator` for `type: rfi`) and lead with "Blocked — resolve first:".
 - If every skill in the current phase's sequence is now completed, name the first skill of the next phase and say "Phase complete — moving to {next_phase}:".
-- If the bid has reached `closed` or `delivery` with no obvious next step, print "No canonical next step — run `/ailtir-cowork-plugin:ailtir_conductor` to see the full pipeline." instead of a specific recommendation.
+- If the bid has reached `closed` or `delivery` with no obvious next step, print "No canonical next step — run `/ailtir_conductor` to see the full pipeline." instead of a specific recommendation.
 
 ## Occasional Feedback
 

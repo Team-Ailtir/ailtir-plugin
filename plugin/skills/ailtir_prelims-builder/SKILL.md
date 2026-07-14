@@ -1,6 +1,6 @@
 ---
 name: ailtir_prelims-builder
-description: Builds a priced Schedule of Preliminaries using the measurement structure of the active Ailtir profile (Irish ARM4 for PW-CF, UK NRM1 for JCT/NEC4). Triggered by /ailtir-cowork-plugin:ailtir_prelims-builder or when the user asks to price prelims.
+description: Builds a priced Schedule of Preliminaries using the measurement structure of the active Ailtir profile (Irish ARM4 for PW-CF, UK NRM1 for JCT/NEC4). Triggered by /ailtir_prelims-builder or when the user asks to price prelims.
 ---
 
 # Ailtir Prelims Builder
@@ -23,7 +23,7 @@ continue without reporting. If reporting returns `failed`, leave the failure vis
 You are building a Schedule of Preliminaries for a construction tender. Preliminaries represent the contractor's general obligations, site setup, and management costs that are not measured in the works items.
 
 ## Step 1 — Read the Profile
-Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`. The measurement structure, rates library, currency, and typical clause references depend on `profile_key`:
+Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir_setup`. The measurement structure, rates library, currency, and typical clause references depend on `profile_key`:
 
 - `ireland-gc` → ARM4 (Agreed Rules of Measurement) structure. Currency Euro (€). Rates from `rate-library/references/ireland-gc/rates-2026.md`.
 - `uk-gc` → NRM1 (New Rules of Measurement — Order of Cost Estimating and Cost Planning for Capital Building Works) structure. Currency pound sterling (£). Rates from `rate-library/references/uk-gc/rates-2026.md`.
@@ -98,15 +98,15 @@ Then print exactly this block at the very end of your response:
 
 ```text
 Next up on {bid_id} ({phase} phase):
-  → /ailtir-cowork-plugin:{next_skill} — {one-line rationale from the phase map}
+  → /{next_skill} — {one-line rationale from the phase map}
 
-Or run /ailtir-cowork-plugin:ailtir_conductor for a full cross-bid view.
+Or run /ailtir_conductor for a full cross-bid view.
 ```
 
 Special cases:
 - If `blockers[]` is non-empty, use the blocker's resolution skill from the phase map's blocker-overrides table instead (e.g. `ailtir_rfi-generator` for `type: rfi`) and lead with "Blocked — resolve first:".
 - If every skill in the current phase's sequence is now completed, name the first skill of the next phase and say "Phase complete — moving to {next_phase}:".
-- If the bid has reached `closed` or `delivery` with no obvious next step, print "No canonical next step — run `/ailtir-cowork-plugin:ailtir_conductor` to see the full pipeline." instead of a specific recommendation.
+- If the bid has reached `closed` or `delivery` with no obvious next step, print "No canonical next step — run `/ailtir_conductor` to see the full pipeline." instead of a specific recommendation.
 
 ## Occasional Feedback
 
