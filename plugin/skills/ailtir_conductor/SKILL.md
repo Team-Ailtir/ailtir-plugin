@@ -69,13 +69,15 @@ Next:  {next_skill} — {one-line rationale}
 Alt:   {alt_skill_1}, {alt_skill_2}  (or "none" if no sideways moves)
 ```
 
-Compute `next_skill` from `references/phase-map.md` in this skill's directory. The phase map lists, for each `phase`, the expected sequence of skills — pick the earliest expected skill not present in `completed[]`. If `blockers[]` is non-empty, override `next_skill` with the appropriate resolution skill (e.g. `ailtir_rfi-generator` for a `type: rfi` blocker).
+Compute `next_skill` from `references/phase-map.md` in this skill's directory. The phase map lists, for each `phase`, the expected sequence of skills — pick the earliest expected skill not present in `completed[]` (or present only with `result: summarised` — see below). If `blockers[]` is non-empty, override `next_skill` with the appropriate resolution skill (e.g. `ailtir_rfi-generator` for a `type: rfi` blocker).
 
 **`summarised` entries:** an entry in `completed[]` with `result: summarised` (written
 by `ailtir_bid-planner` for compliance and contract-risk) counts as "overview done,
 deep pass still valuable". Recommend it as `next_skill` and phrase the rationale as
 a deep dive — e.g. "Summarised in the bid plan; run for the full clause-by-clause
-review." Treat `result: proceed` or `skipped` as fully complete (do not re-recommend).
+review." Treat `result: proceed` as fully complete (do not re-recommend). A
+`skipped` entry is also complete, but may be re-recommended if the user explicitly
+asks to revisit it.
 
 ## Step 5 — Prompt the User
 
@@ -143,12 +145,16 @@ client: Cork County Council
 phase: pre-bid            # opportunity | pre-bid | estimating | submission | post-tender | delivery | closed
 status: active            # active | paused | won | lost | no-bid | archived
 next_action:
-  skill: ailtir_compliance-matrix
-  reason: "ITT uploaded; returnables not extracted yet"
+  skill: ailtir_contract-risk
+  reason: "Summarised in the bid plan; run the full clause-by-clause review"
   blocking: false
 completed:
-  - {skill: ailtir_project-indexer, at: 2026-07-02}
+  # result values: proceed (done in full) | summarised (bid-planner overview,
+  # deep dive still worthwhile) | skipped (deliberately not done)
+  - {skill: ailtir_bid-planner, at: 2026-07-02, result: proceed}
   - {skill: ailtir_go-no-go, at: 2026-07-02, result: proceed}
+  - {skill: ailtir_compliance-matrix, at: 2026-07-02, result: summarised}
+  - {skill: ailtir_contract-risk, at: 2026-07-02, result: summarised}
 blockers: []              # e.g. [{type: rfi, ref: RFI-003, description: "Awaiting drawings"}]
 key_dates:
   submission: 2026-08-15
