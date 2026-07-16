@@ -33,7 +33,7 @@ Pause at three points:
 ---
 
 ## Step 0 — Read the Profile
-Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir_setup`. The `profile_key` value drives Steps 2B and 2D and — through the downstream skills — every other analysis in this orchestrator.
+Read `Context/profile.json` from the workspace root. If it is missing, stop and tell the user to run `/ailtir_setup`. The `profile_key` value selects the reference files this skill reads in Step 2 — the Go/No-Go criteria (Step 2B) and the contract playbook (Step 2D), both under `references/{profile_key}/`.
 
 ## Step 1 — Gather Context
 
@@ -140,7 +140,23 @@ Build a JSON config from the same analysis and run the bundled
 
 This is an internal working deck (Title → Overview → Pack Status → Submission
 Requirements → Programme → Packages → Top Risks → Immediate Actions). Set
-`"priceOnly": true` in the config to skip quality sections.
+`"priceOnly": true` in the config to skip quality sections. The config shape (all
+keys optional; a missing array just renders an empty slide):
+
+```json
+{
+  "project": "[Name]", "client": "[Client]", "value": "€2.0M", "sector": "Civils",
+  "returnDate": "YYYY-MM-DD", "priceOnly": false,
+  "overview": ["Road widening", "New bridge"],
+  "packStatus": {"received": 12, "missing": 2, "gaps": 3},
+  "missingDocs": [{"doc": "Geotech report", "impact": "Pricing blind"}],
+  "requirements": [{"ref": "WP-1", "text": "PSCS statement", "weight": "", "owner": "Director"}],
+  "programme": [{"date": "2026-02-07", "label": "Query deadline"}],
+  "packages": [{"name": "Groundworks"}, {"name": "Concrete"}],
+  "risks": [{"title": "20-day time bar", "owner": "Commercial"}],
+  "actions": [{"when": "TODAY", "what": "Issue subbie enquiries", "who": "Estimator"}]
+}
+```
 
 ### Part B — Folder Structure
 Generate a Bid Reference Number (format: `YYYY-NNN-ProjectName`, e.g. `2026-004-BallymunSchool`). Check the Notion Bid Pipeline for the next sequential number, or ask the user.
@@ -173,6 +189,8 @@ Then present the handoff explicitly — the workbook is a summarised first pass:
 > - `/ailtir_compliance-matrix` — full returnables tracker with templates, owners & deadlines
 >
 > See `PROCESS.md` for how the whole bid lifecycle fits together.
+
+---
 
 ## On Completion — Update Bid State
 
@@ -211,11 +229,11 @@ If they agree, run the `intelligence-builder` skill in Interview Mode.
 - [HUMAN INPUT REQUIRED] Do not log the bid to Notion without confirming the contract value and return date with the user.
 
 ## Quality Checks
-- [ ] `Context/profile.json` read; downstream skills invoked with the correct `profile_key`.
+- [ ] `Context/profile.json` read; `profile_key` used to select the Step 2 reference files (analysis done inline — no sibling skills invoked).
 - [ ] Bid reference follows format YYYY-NNN-ProjectName.
 - [ ] Go/No-Go score is based on actual scoring criteria from `references/{profile_key}/go-no-go-criteria.md`, not a guess.
 - [ ] All mandatory gates for the active profile explicitly checked (CIRI/Safe-T-Cert/turnover for `ireland-gc`; SSIP/turnover/BSA/Modern Slavery for `uk-gc`).
-- [ ] Compliance Matrix captures every evaluation criterion with exact weighting from the ITT.
+- [ ] Compliance & Submission tab carries one row per returnable/criterion (summary depth — the full tracker is deferred to `/ailtir_compliance-matrix`).
 - [ ] Bid folder created under the workspace root (`AILTIR_PLUGIN_DATA` or `~/Ailtir-Tendering`) at `Bids/[BID]/` with all 9 sections.
 - [ ] Bid logged to Notion Bid Pipeline with correct status and return date.
 
