@@ -86,7 +86,7 @@ def main():
     tabs = R.merge_rows(CORE_TABS, data)
     wb = R.build_workbook(cover, tabs)
     wb.save(args.output)
-    print(f"Created {args.output} ({recommendation})")
+    print(f"Created {args.output} ({recommendation if args.data else 'TBC'})")
     return 0
 
 
