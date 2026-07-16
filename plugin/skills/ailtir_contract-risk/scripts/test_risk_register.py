@@ -11,11 +11,21 @@ def test_core_tabs():
     ]
 
 
-def test_build_renders_cover_first():
+def test_titles_fit_excel_limit():
+    # Excel caps sheet names at 31 chars; the engine truncates silently, so a
+    # too-long title would lose characters. Guard every core-tab title here.
+    import _xlsx_render as R
+    for t in K.CORE_TABS:
+        assert R.safe_sheet_title(t["title"]) == t["title"], t["title"]
+
+
+def test_build_renders_all_sheets():
     import _xlsx_render as R
     wb = R.build_workbook(K.cover({"contract": "PW-CF5"}), R.merge_rows(K.CORE_TABS, {}))
-    assert wb.sheetnames[0] == "1. Cover"
-    assert "2. Risk Register" in wb.sheetnames
+    assert wb.sheetnames == [
+        "1. Cover", "2. Risk Register", "3. Schedule Part 1 - Data",
+        "4. Action Tracker",
+    ], wb.sheetnames
 
 
 if __name__ == "__main__":
