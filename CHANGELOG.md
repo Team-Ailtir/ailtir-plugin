@@ -3,6 +3,21 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.16.0 - 2026-07-16
+
+- Rewrote the bid-planner workbook as a deterministic 9-tab skeleton (structure
+  script-owned, content model-supplied via `--data` JSON) — ending the
+  improvised, inconsistent tab output.
+- Inlined full Go/No-Go scoring into the bid-planner; added an Ailtir-branded
+  kick-off deck (`create_bid_deck.js`).
+- Gave `compliance-matrix` and `contract-risk` their own deterministic deep-dive
+  workbook scripts; each writes its own file.
+- Added the `summarised` completion state: the planner summarises compliance and
+  risk, and the conductor recommends the deep dives as depth passes, not repeats.
+- Promoted `bid-planner` to the canonical pre-bid entry point; moved
+  `package-breakdown` guidance to the estimating phase.
+- Added `PROCESS.md` documenting the full bid lifecycle as onboarding material.
+
 ## 2.15.5 - 2026-07-13
 
 Commit: `5cd3695` - `Bump version to 2.15.5`
