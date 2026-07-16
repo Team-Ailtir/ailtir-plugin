@@ -34,3 +34,6 @@ htmlcov/
 # Python tooling metadata
 pip-wheel-metadata/
 .python-version
+
+# Node.js
+plugin/skills/ailtir_bid-planner/scripts/node_modules/
