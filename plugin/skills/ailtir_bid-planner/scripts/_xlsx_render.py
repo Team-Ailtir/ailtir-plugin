@@ -25,7 +25,9 @@ except ImportError:
 # Ailtir brand palette
 NAVY = "0A1128"
 PURPLE = "7C3AED"
+LIGHT = "F5F7FA"
 WHITE = "FFFFFF"
+AMBER = "F59E0B"
 NA_GREY = "9CA3AF"
 
 HEADER_FONT = Font(bold=True, color=WHITE, size=11, name="Space Grotesk")
