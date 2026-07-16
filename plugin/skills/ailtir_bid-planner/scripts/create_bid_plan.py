@@ -1,109 +1,100 @@
+"""Tier-1 bid-planner workbook: 9 deterministic core tabs (+ optional tabs).
+
+Structure, headers, and styling are owned here; the model supplies row content
+via --data JSON. See ailtir_bid-planner/SKILL.md for the data contract.
+"""
+from __future__ import annotations
+
 import argparse
+import re
 import sys
-from datetime import datetime
+from pathlib import Path
 
-try:
-    from openpyxl import Workbook
-    from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-except ImportError:
-    print("openpyxl not installed. Please install it.")
-    sys.exit(1)
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _xlsx_render as R  # noqa: E402
 
-# Ailtir Brand Palette
-AILTIR_NAVY = "0A1128" # Navy 900
-AILTIR_PURPLE = "7C3AED" # Purple 500
-AILTIR_LIGHT = "F5F7FA"
-AILTIR_WHITE = "FFFFFF"
-FLAG_AMBER = "F59E0B" # Amber 400
 
-HEADER_FONT = Font(bold=True, color=AILTIR_WHITE, size=11, name="Space Grotesk")
-HEADER_FILL = PatternFill("solid", fgColor=AILTIR_NAVY)
-BODY_FONT = Font(size=10, name="Inter")
-THIN_BORDER = Border(
-    left=Side(style="thin", color="D9D9D9"),
-    right=Side(style="thin", color="D9D9D9"),
-    top=Side(style="thin", color="D9D9D9"),
-    bottom=Side(style="thin", color="D9D9D9"),
-)
-CENTER = Alignment(horizontal="center", vertical="center", wrap_text=True)
-LEFT_WRAP = Alignment(horizontal="left", vertical="top", wrap_text=True)
+def go_no_go_recommendation(score, gate_fail):
+    if gate_fail:
+        return "NO-GO (mandatory gate failed)"
+    if score >= 80:
+        return "Strong GO"
+    if score >= 60:
+        return "Marginal GO"
+    return "NO-GO"
 
-def style_header(ws, row, max_col):
-    for col in range(1, max_col + 1):
-        cell = ws.cell(row=row, column=col)
-        cell.font = HEADER_FONT
-        cell.fill = HEADER_FILL
-        cell.alignment = CENTER
-        cell.border = THIN_BORDER
 
-def build_summary(wb, project, client, return_date, route):
-    ws = wb.active
-    ws.title = "1. Bid Summary"
-    ws.merge_cells("A1:H1")
-    ws["A1"] = f"AILTIR BID PLAN — {project.upper()}"
-    ws["A1"].font = Font(bold=True, color=AILTIR_WHITE, size=14, name="Space Grotesk")
-    ws["A1"].fill = PatternFill("solid", fgColor=AILTIR_NAVY)
-    ws["A1"].alignment = CENTER
-    
-    details = [
-        ("Project Name:", project),
-        ("Client:", client),
-        ("Tender Return:", return_date),
-        ("Procurement Route:", route)
-    ]
-    
-    row = 3
-    for label, val in details:
-        ws.cell(row=row, column=1, value=label).font = Font(bold=True, name="Inter")
-        ws.cell(row=row, column=2, value=val).font = BODY_FONT
-        row += 1
+BANNER_COMPLIANCE = ("Summarised view. Run /ailtir_compliance-matrix for the full "
+                     "returnables tracker with templates, owners & deadlines.")
+BANNER_RISK = ("Summarised view. Run /ailtir_contract-risk for the full "
+               "clause-by-clause register, contract data & action tracker.")
+BANNER_PACKAGE = ("Summarised view. Run /ailtir_package-breakdown in the "
+                  "enquire-and-procure phase for the full package register.")
 
-def build_register(wb):
-    ws = wb.create_sheet("2. Document Register")
-    headers = ["Filename", "Title", "Type", "Rev", "Date", "Notes"]
-    for i, h in enumerate(headers, 1):
-        ws.cell(row=1, column=i, value=h)
-    style_header(ws, 1, len(headers))
+CORE_TABS = [
+    {"key": "document_register", "title": "2. Document Register",
+     "headers": ["Filename", "Title", "Type", "Rev", "Date", "Notes"]},
+    {"key": "go_no_go", "title": "3. Go / No-Go",
+     "headers": ["Criteria", "Max Score", "Actual Score", "Notes"]},
+    {"key": "compliance_submission", "title": "4. Compliance & Submission",
+     "banner": BANNER_COMPLIANCE, "sections": [
+         {"key": "returnables", "heading": "A. Returnables & Award Criteria",
+          "headers": ["Ref", "Requirement / Criterion", "Weighting", "Template", "Owner"]},
+         {"key": "submission_rules", "heading": "B. Submission Rules",
+          "headers": ["Item", "Requirement"]},
+     ]},
+    {"key": "risk_summary", "title": "5. Risk Summary", "banner": BANNER_RISK,
+     "headers": ["Ref", "Risk", "Rating", "Impact", "Mitigation"]},
+    {"key": "package_outline", "title": "6. Package Outline", "banner": BANNER_PACKAGE,
+     "headers": ["Package", "Scope", "Est. Value", "Target Date"]},
+    {"key": "bid_programme", "title": "7. Bid Programme",
+     "headers": ["Milestone", "Date", "Owner", "Notes"]},
+    {"key": "team_raci", "title": "8. BID TEAM RACI",
+     "headers": ["Activity", "Responsible", "Accountable", "Consulted", "Informed"]},
+    {"key": "clarifications", "title": "9. Clarifications Log",
+     "headers": ["Ref", "Query", "Raised", "Status", "Response"]},
+]
 
-def build_gonogo(wb):
-    ws = wb.create_sheet("3. Go-No-Go")
-    headers = ["Criteria", "Max Score", "Actual Score", "Notes"]
-    for i, h in enumerate(headers, 1):
-        ws.cell(row=1, column=i, value=h)
-    style_header(ws, 1, len(headers))
-
-def build_compliance(wb):
-    ws = wb.create_sheet("4. Compliance Matrix")
-    headers = ["Ref", "Requirement", "Format", "Template Provided", "Owner", "Status"]
-    for i, h in enumerate(headers, 1):
-        ws.cell(row=1, column=i, value=h)
-    style_header(ws, 1, len(headers))
-
-def build_risk(wb):
-    ws = wb.create_sheet("5. Risk Register")
-    headers = ["Risk ID", "Category", "Description", "Contract Clause", "Mitigation", "Status"]
-    for i, h in enumerate(headers, 1):
-        ws.cell(row=1, column=i, value=h)
-    style_header(ws, 1, len(headers))
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--output", required=True)
-    parser.add_argument("--project", required=True)
-    parser.add_argument("--client", default="TBC")
-    parser.add_argument("--return-date", default="TBC")
-    parser.add_argument("--route", default="TBC")
-    args = parser.parse_args()
+    p = argparse.ArgumentParser(description="Generate the Ailtir Tier-1 bid plan workbook")
+    p.add_argument("--output", required=True)
+    p.add_argument("--project", required=True)
+    p.add_argument("--client", default="TBC")
+    p.add_argument("--return-date", default="TBC")
+    p.add_argument("--route", default="TBC")
+    p.add_argument("--data", default=None, help="Path to model-supplied JSON row content")
+    args = p.parse_args()
 
-    wb = Workbook()
-    build_summary(wb, args.project, args.client, args.return_date, args.route)
-    build_register(wb)
-    build_gonogo(wb)
-    build_compliance(wb)
-    build_risk(wb)
-    
+    data = R.load_data(args.data)
+    gng = data.get("tabs", {}).get("go_no_go", {})
+    score = int(gng.get("score", 0))
+    gate_fail = bool(gng.get("gate_fail", False))
+    recommendation = go_no_go_recommendation(score, gate_fail)
+
+    cover = {
+        "title": f"AILTIR BID PLAN — {args.project.upper()}",
+        "fields": [
+            ("Project Name:", args.project),
+            ("Client:", args.client),
+            ("Tender Return:", args.return_date),
+            ("Procurement Route:", args.route),
+            ("Go/No-Go Score:", f"{score}/100" if args.data else "TBC"),
+            ("Recommendation:", recommendation if args.data else "TBC"),
+        ],
+    }
+
+    tabs = R.merge_rows(CORE_TABS, data)
+    # openpyxl (and Excel) reject sheet names containing \ * ? : / [ ]
+    # Sanitize before handing to build_workbook; CORE_TABS keeps the display form.
+    _INVALID = re.compile(r'[\\*?:/\[\]]')
+    for t in tabs:
+        t["title"] = _INVALID.sub("-", t["title"])
+    wb = R.build_workbook(cover, tabs)
     wb.save(args.output)
-    print(f"Created {args.output}")
+    print(f"Created {args.output} ({recommendation})")
+    return 0
+
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
