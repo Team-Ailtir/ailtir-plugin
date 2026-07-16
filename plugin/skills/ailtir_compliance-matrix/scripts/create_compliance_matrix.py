@@ -22,7 +22,7 @@ CORE_TABS = [
                  "Template Provided", "Status", "Owner", "Notes"]},
     {"key": "submission_rules", "title": "4. Submission Rules",
      "headers": ["Item", "Requirement"]},
-    {"key": "gap_check", "title": "5. Template & Document Gap Check",
+    {"key": "gap_check", "title": "5. Template & Doc Gap Check",
      "headers": ["Ref", "Document", "Required?", "Template in Pack?", "Action Required"]},
 ]
 

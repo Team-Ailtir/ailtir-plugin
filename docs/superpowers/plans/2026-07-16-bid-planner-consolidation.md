@@ -518,7 +518,7 @@ git commit -m "feat: rewrite bid-planner workbook as deterministic 9-tab skeleto
 
 **Interfaces:**
 - Consumes: bundled `_xlsx_render`.
-- Produces: CLI `--output --data`; module-level `CORE_TABS` (4 tabs: Award Criterion, Mandatory Returnables, Submission Rules, Template & Document Gap Check).
+- Produces: CLI `--output --data`; module-level `CORE_TABS` (4 tabs: Award Criterion, Mandatory Returnables, Submission Rules, Template & Doc Gap Check).
 
 - [ ] **Step 1: Bundle the render engine**
 
@@ -542,7 +542,7 @@ import create_compliance_matrix as C
 def test_core_tabs():
     assert [t["title"] for t in C.CORE_TABS] == [
         "2. Award Criterion", "3. Mandatory Returnables",
-        "4. Submission Rules", "5. Template & Document Gap Check",
+        "4. Submission Rules", "5. Template & Doc Gap Check",
     ]
 
 
@@ -599,7 +599,7 @@ CORE_TABS = [
                  "Template Provided", "Status", "Owner", "Notes"]},
     {"key": "submission_rules", "title": "4. Submission Rules",
      "headers": ["Item", "Requirement"]},
-    {"key": "gap_check", "title": "5. Template & Document Gap Check",
+    {"key": "gap_check", "title": "5. Template & Doc Gap Check",
      "headers": ["Ref", "Document", "Required?", "Template in Pack?", "Action Required"]},
 ]
 

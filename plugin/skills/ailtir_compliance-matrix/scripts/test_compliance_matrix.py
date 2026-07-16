@@ -8,15 +8,25 @@ import create_compliance_matrix as C
 def test_core_tabs():
     assert [t["title"] for t in C.CORE_TABS] == [
         "2. Award Criterion", "3. Mandatory Returnables",
-        "4. Submission Rules", "5. Template & Document Gap Check",
+        "4. Submission Rules", "5. Template & Doc Gap Check",
     ]
 
 
-def test_build_renders_cover_first():
+def test_titles_fit_excel_limit():
+    # Excel caps sheet names at 31 chars; the engine truncates silently, so a
+    # too-long title would lose characters. Guard every core-tab title here.
+    import _xlsx_render as R
+    for t in C.CORE_TABS:
+        assert R.safe_sheet_title(t["title"]) == t["title"], t["title"]
+
+
+def test_build_renders_all_sheets():
     import _xlsx_render as R
     wb = R.build_workbook(C.cover({"project": "X"}), R.merge_rows(C.CORE_TABS, {}))
-    assert wb.sheetnames[0] == "1. Cover"
-    assert "3. Mandatory Returnables" in wb.sheetnames
+    assert wb.sheetnames == [
+        "1. Cover", "2. Award Criterion", "3. Mandatory Returnables",
+        "4. Submission Rules", "5. Template & Doc Gap Check",
+    ], wb.sheetnames
 
 
 if __name__ == "__main__":
