@@ -14,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_conductor`
-- `plugin_version`: `2.15.5`
+- `plugin_version`: `2.16.0`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -70,6 +70,12 @@ Alt:   {alt_skill_1}, {alt_skill_2}  (or "none" if no sideways moves)
 ```
 
 Compute `next_skill` from `references/phase-map.md` in this skill's directory. The phase map lists, for each `phase`, the expected sequence of skills — pick the earliest expected skill not present in `completed[]`. If `blockers[]` is non-empty, override `next_skill` with the appropriate resolution skill (e.g. `ailtir_rfi-generator` for a `type: rfi` blocker).
+
+**`summarised` entries:** an entry in `completed[]` with `result: summarised` (written
+by `ailtir_bid-planner` for compliance and contract-risk) counts as "overview done,
+deep pass still valuable". Recommend it as `next_skill` and phrase the rationale as
+a deep dive — e.g. "Summarised in the bid plan; run for the full clause-by-clause
+review." Treat `result: proceed` or `skipped` as fully complete (do not re-recommend).
 
 ## Step 5 — Prompt the User
 
@@ -157,7 +163,7 @@ auto_drive: false         # opt-in per-bid escalation to auto-chain (post-MVP)
 - DO NOT hardcode a specific skill in the "Run it" card. `{next_skill}` is recomputed per bid in Step 4 — the card must always carry the skill that is actually next for the bid being prompted, for every phase and every bid.
 - DO NOT chain slash commands from inside the skill. The "Run it" card works because the *user's* submitted message is the slash command, not because the conductor invokes it.
 - DO NOT rewrite the whole README — the frontmatter block sits above the existing `# {bid_id}` heading and prose.
-- DO NOT recommend a skill that is already in `completed[]` with `result: proceed` or better. Skipped skills can be re-recommended if the user changes their mind (they must explicitly ask).
+- DO NOT recommend a skill that is already in `completed[]` with `result: proceed`. An entry with `result: summarised` is NOT complete — recommend it as a deep dive (see Step 4). Skipped skills can be re-recommended if the user explicitly asks.
 - DO NOT invent phases. Phases come from `references/phase-map.md` only.
 - DO NOT run the conductor if `Context/profile.json` is missing. Direct the user to `ailtir_setup`.
 
