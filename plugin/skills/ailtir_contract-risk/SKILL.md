@@ -41,8 +41,9 @@ Read `references/{profile_key}/contract-playbook.md` from this skill's directory
 
 ## Step 4 — Generate the Workbook
 This is the deep-dive pass. Assemble your clause-by-clause analysis into a JSON
-payload and run the bundled `scripts/create_risk_register.py` with `python3` —
-the script owns all tab structure and styling; you supply the rows:
+payload, **write it to `/tmp/risk_data.json`**, then run the bundled
+`scripts/create_risk_register.py` with `python3` — the script owns all tab
+structure and styling; you supply the rows:
 
 `python3 scripts/create_risk_register.py --output "Contract_Risk_Register_[Bid].xlsx" --data /tmp/risk_data.json`
 
@@ -59,7 +60,8 @@ Payload shape:
 }
 ```
 
-This writes its OWN workbook — never the bid-planner file.
+This writes its OWN workbook — never the bid-planner file. If a section does not
+apply, pass `"rows": []` with a `"na_note"`.
 
 - [HUMAN INPUT REQUIRED] If the contract form cannot be determined from the documents, ask the user before proceeding.
 

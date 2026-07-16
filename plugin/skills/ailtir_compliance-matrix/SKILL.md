@@ -33,9 +33,10 @@ Extract:
 Check if the required templates were actually provided in the tender pack. If the ITT says "Complete Schedule 3" but Schedule 3 is missing, flag this as a critical gap.
 
 ## Step 3 — Generate the Workbook
-This is the deep-dive pass. Assemble your extracted analysis into a JSON payload
-and run the bundled `scripts/create_compliance_matrix.py` with `python3` — the
-script owns all tab structure and styling; you supply the rows:
+This is the deep-dive pass. Assemble your extracted analysis into a JSON payload,
+**write it to `/tmp/compliance_data.json`**, then run the bundled
+`scripts/create_compliance_matrix.py` with `python3` — the script owns all tab
+structure and styling; you supply the rows:
 
 `python3 scripts/create_compliance_matrix.py --output "Compliance_Matrix_[Bid].xlsx" --data /tmp/compliance_data.json`
 
