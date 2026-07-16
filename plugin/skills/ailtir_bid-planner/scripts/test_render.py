@@ -20,6 +20,26 @@ def test_custom_cover_sheet_title():
     assert wb.sheetnames == ["1. Cover"], wb.sheetnames
 
 
+def test_load_data_missing_file_exits():
+    # A bad --data path should exit(1) with a message, not a raw traceback.
+    import tempfile, os
+    missing = os.path.join(tempfile.gettempdir(), "definitely_no_such_ailtir.json")
+    try:
+        R.load_data(missing)
+        assert False, "expected SystemExit"
+    except SystemExit as e:
+        assert e.code == 1
+
+
+def test_save_workbook_creates_parent_dir(tmp_note="creates nested dir"):
+    import tempfile, os
+    d = tempfile.mkdtemp()
+    nested = os.path.join(d, "a", "b", "out.xlsx")
+    wb = R.build_workbook({"fields": []}, [{"title": "2. X", "headers": ["h"], "rows": [["v"]]}])
+    R.save_workbook(wb, nested)
+    assert os.path.exists(nested), nested
+
+
 def test_sheet_title_sanitised():
     # Excel forbids / \ * ? : [ ] in sheet names; the tab spec keeps the display
     # title but the worksheet name is sanitised, so build_workbook must not raise.

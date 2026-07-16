@@ -200,6 +200,8 @@ conductor and dashboard reflect it. Run the sibling `ailtir_conductor` skill's
 
 ```
 python3 <ailtir_conductor>/scripts/update_frontmatter.py --bid-path Bids/<BID> \
+    --complete ailtir_bid-planner --result proceed
+python3 <ailtir_conductor>/scripts/update_frontmatter.py --bid-path Bids/<BID> \
     --complete ailtir_go-no-go --result proceed
 python3 <ailtir_conductor>/scripts/update_frontmatter.py --bid-path Bids/<BID> \
     --complete ailtir_compliance-matrix --result summarised
@@ -207,7 +209,9 @@ python3 <ailtir_conductor>/scripts/update_frontmatter.py --bid-path Bids/<BID> \
     --complete ailtir_contract-risk --result summarised
 ```
 
-Go/No-Go is `proceed` (done in full). Compliance and contract-risk are
+Record `ailtir_bid-planner` itself as `proceed` — without this entry the
+conductor would recommend the planner again as the first unfinished pre-bid
+step. Go/No-Go is `proceed` (done in full). Compliance and contract-risk are
 `summarised` — the conductor will recommend them as deep dives, not repeats.
 
 ---

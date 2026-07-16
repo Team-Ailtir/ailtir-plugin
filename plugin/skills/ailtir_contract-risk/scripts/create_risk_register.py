@@ -37,7 +37,7 @@ def main():
     args = p.parse_args()
     data = R.load_data(args.data)
     wb = R.build_workbook(cover(data.get("cover", {})), R.merge_rows(CORE_TABS, data))
-    wb.save(args.output)
+    R.save_workbook(wb, args.output)
     print(f"Created {args.output}")
     return 0
 

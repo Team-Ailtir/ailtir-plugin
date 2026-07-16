@@ -49,7 +49,22 @@ LEFT = Alignment(horizontal="left", vertical="top", wrap_text=True)
 def load_data(path):
     if not path:
         return {}
-    return json.loads(Path(path).read_text(encoding="utf-8"))
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        print(f"--data file not found: {path}", file=sys.stderr)
+        raise SystemExit(1)
+    except json.JSONDecodeError as e:
+        print(f"--data is not valid JSON ({path}): {e}", file=sys.stderr)
+        raise SystemExit(1)
+
+
+def save_workbook(wb, output):
+    """Save, creating the parent directory if the caller passed a nested path."""
+    out = Path(output)
+    if out.parent and not out.parent.exists():
+        out.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(output)
 
 
 # Excel/openpyxl reject \ * ? : / [ ] in sheet names and cap them at 31 chars.
