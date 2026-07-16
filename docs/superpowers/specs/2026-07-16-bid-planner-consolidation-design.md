@@ -70,8 +70,8 @@ where this bid stands." Summary tabs explicitly hand off to the deep-dives.
 
 ### Tier 2 — deep-dive skills (full depth, own workbooks)
 
-`ailtir_compliance-matrix`, `ailtir_contract-risk`, `ailtir_package-breakdown`
-each get their own deterministic script producing a richer multi-tab workbook —
+`ailtir_compliance-matrix` and `ailtir_contract-risk` each get their own
+deterministic script producing a richer multi-tab workbook —
 the "we're bidding, go deep" pass. Each writes its **own** file, never the
 planner's, so nothing gets clobbered. Depth difference (summary vs full) is
 defined in code, not improvised prose.
@@ -178,8 +178,10 @@ rows filled by the model via `--data`.
 - Tab 3 — Schedule Part 1 / Contract Data (Part, Ref, Data Item, Value in Contract, Playbook Standard/Note)
 - Tab 4 — Action Tracker (#, Risk Ref, Action, Who, Due By, Status, Notes)
 
-### `ailtir_package-breakdown` → extend `create_package_register.py`
-From 1 tab to: Package List, Scope Matrix, Flow-Down Register.
+**Note:** `ailtir_package-breakdown` is *not* a pre-bid deep dive. It belongs to
+the later enquire-and-procure phase (trade packages for the market), so it is out
+of scope here — see Out of scope. The pre-bid deep dives are compliance-matrix
+and contract-risk only.
 
 ## Tier 1 deck
 
@@ -195,17 +197,17 @@ tenders (skip quality sections).
 
 - Introduce a new completion result value **`summarised`**. When bid-planner
   finishes it writes `completed[]` entries for `ailtir_go-no-go`,
-  `ailtir_compliance-matrix`, `ailtir_contract-risk`, and
-  `ailtir_package-breakdown` with `result: summarised`.
+  `ailtir_compliance-matrix`, and `ailtir_contract-risk` with
+  `result: summarised`.
 - `go-no-go` specifically is upgraded to `result: proceed` by the planner (the
-  planner does it *in full*), while compliance / risk / packages stay
-  `summarised`.
+  planner does it *in full*), while compliance and risk stay `summarised`.
 - The conductor treats `summarised` as "overview done, deep pass still valuable".
   Its `pre-bid` recommendation for those skills is framed explicitly as a deep
   dive: *"Summarised in the bid plan — run for the full clause-by-clause review."*
   Never blind re-running.
 - Pre-bid sequence after the planner: `bid-planner` → `ailtir_contract-risk` →
-  `ailtir_compliance-matrix` → `ailtir_package-breakdown`.
+  `ailtir_compliance-matrix`. `ailtir_package-breakdown` is **not** in the pre-bid
+  sequence — it stays in the later enquire-and-procure phase, unchanged.
 - Deep-dive skills, on completion, upgrade their own entry from `summarised` to
   `proceed`.
 - `bid-planner` is promoted in the phase-map from "alternative" to the canonical
@@ -230,8 +232,9 @@ pointing at `PROCESS.md`.
 
 ## Out of scope
 
-- No change to estimating / submission / delivery phase skills beyond the
-  package-breakdown extension.
+- No change to estimating / enquire-and-procure / submission / delivery phase
+  skills. `ailtir_package-breakdown` is explicitly untouched — it stays in the
+  enquire-and-procure phase and gets no new script here.
 - Telemetry plumbing untouched (separate known issue).
 - No change to the interactive HTML card mechanism in the conductor.
 
@@ -244,6 +247,6 @@ pointing at `PROCESS.md`.
 2. Deep-dive skills produce their fixed multi-tab structure every run, with
    model-generated content of the quality seen in the Athenry workbooks.
 3. Running the planner then the conductor never asks the user to redo go/no-go,
-   and frames compliance/risk/packages as deep dives, not repeats.
+   and frames compliance and contract-risk as deep dives, not repeats.
 4. One planner workbook + at most one file per deep-dive per bid — no scatter.
 5. `PROCESS.md` exists and reads as a coherent onboarding walkthrough.
