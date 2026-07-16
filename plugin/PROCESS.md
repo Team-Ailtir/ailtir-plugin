@@ -10,11 +10,13 @@ Every analysis has two depths:
 
 - **Tier 1 — the first pass (`ailtir_bid-planner`).** One workbook + one deck
   that summarise *everything* at a glance, so you can decide whether to commit.
-  Go/No-Go is done in full here; compliance, risk, and packages are summarised
-  (one row per item) with a banner pointing at the deep dive.
+  Go/No-Go is done in full here; compliance and risk are summarised (one row per
+  item) with a banner pointing at their Tier-2 deep dives; packages are outlined
+  for awareness and developed fully later, in the estimating phase.
 - **Tier 2 — the deep dives.** When you commit to bidding, dedicated skills
   produce their own richer workbooks: `ailtir_contract-risk` (clause-by-clause)
-  and `ailtir_compliance-matrix` (full returnables tracker).
+  and `ailtir_compliance-matrix` (full returnables tracker). (Packages have no
+  Tier-2 skill here — `ailtir_package-breakdown` runs in the estimating phase.)
 
 **Why:** you get a complete overview in one command without drowning in detail,
 then go deep only where it matters — with no duplicated files, because the Tier-1
