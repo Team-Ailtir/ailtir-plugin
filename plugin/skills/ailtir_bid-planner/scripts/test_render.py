@@ -20,6 +20,16 @@ def test_custom_cover_sheet_title():
     assert wb.sheetnames == ["1. Cover"], wb.sheetnames
 
 
+def test_sheet_title_sanitised():
+    # Excel forbids / \ * ? : [ ] in sheet names; the tab spec keeps the display
+    # title but the worksheet name is sanitised, so build_workbook must not raise.
+    tabs = [{"title": "3. Go / No-Go", "headers": ["A"], "rows": [["x"]]}]
+    wb = R.build_workbook({"fields": []}, tabs)
+    assert "3. Go - No-Go" in wb.sheetnames, wb.sheetnames
+    assert R.safe_sheet_title("a/b:c") == "a-b-c"
+    assert len(R.safe_sheet_title("x" * 40)) == 31
+
+
 def test_na_note_when_empty():
     tabs = [{"title": "6. Pkg", "headers": ["P"], "rows": [], "na_note": "N/A here"}]
     wb = R.build_workbook({"fields": []}, tabs)

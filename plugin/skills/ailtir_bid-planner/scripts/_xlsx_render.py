@@ -11,6 +11,7 @@ root, and are invoked by absolute path).
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -51,6 +52,16 @@ def load_data(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
 
 
+# Excel/openpyxl reject \ * ? : / [ ] in sheet names and cap them at 31 chars.
+# Tab specs keep their human display title (e.g. "3. Go / No-Go"); the sheet
+# name is derived here so callers never have to sanitise.
+_INVALID_TITLE = re.compile(r"[\\*?:/\[\]]")
+
+
+def safe_sheet_title(title):
+    return _INVALID_TITLE.sub("-", title)[:31]
+
+
 def _style_header(ws, row, ncols, fill=HEADER_FILL, font=HEADER_FONT):
     for c in range(1, ncols + 1):
         cell = ws.cell(row=row, column=c)
@@ -67,7 +78,7 @@ def _autosize(ws, ncols, widths=None):
 
 
 def _render_cover(ws, cover):
-    ws.title = cover.get("sheet_title", "1. Bid Summary")
+    ws.title = safe_sheet_title(cover.get("sheet_title", "1. Bid Summary"))
     ws.merge_cells("A1:F1")
     ws["A1"] = cover.get("title", "AILTIR BID PLAN")
     ws["A1"].font = TITLE_FONT
@@ -104,7 +115,7 @@ def _render_grid(ws, start_row, headers, rows, na_note):
 
 
 def _render_tab(wb, spec):
-    ws = wb.create_sheet(spec["title"])
+    ws = wb.create_sheet(safe_sheet_title(spec["title"]))
     r = 1
     sections = spec.get("sections")
     if sections:

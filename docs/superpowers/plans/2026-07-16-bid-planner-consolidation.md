@@ -494,7 +494,8 @@ wb = openpyxl.load_workbook("/tmp/BidPlan.xlsx")
 print(wb.sheetnames)
 assert wb.sheetnames[0] == "1. Bid Summary"
 assert "Design Risk" in wb.sheetnames  # optional tab appended
-assert wb.sheetnames.count("3. Go / No-Go") == 1  # no duplicates
+# "/" is illegal in Excel sheet names; the engine sanitises "3. Go / No-Go" -> "3. Go - No-Go"
+assert wb.sheetnames.count("3. Go - No-Go") == 1  # no duplicates
 PY
 ```
 Expected: prints 10 sheet names (9 core + 1 optional), no `AssertionError`, `Created /tmp/BidPlan.xlsx (Marginal GO)`.

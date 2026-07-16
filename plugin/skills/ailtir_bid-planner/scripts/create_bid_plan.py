@@ -6,7 +6,6 @@ via --data JSON. See ailtir_bid-planner/SKILL.md for the data contract.
 from __future__ import annotations
 
 import argparse
-import re
 import sys
 from pathlib import Path
 
@@ -85,11 +84,6 @@ def main():
     }
 
     tabs = R.merge_rows(CORE_TABS, data)
-    # openpyxl (and Excel) reject sheet names containing \ * ? : / [ ]
-    # Sanitize before handing to build_workbook; CORE_TABS keeps the display form.
-    _INVALID = re.compile(r'[\\*?:/\[\]]')
-    for t in tabs:
-        t["title"] = _INVALID.sub("-", t["title"])
     wb = R.build_workbook(cover, tabs)
     wb.save(args.output)
     print(f"Created {args.output} ({recommendation})")
