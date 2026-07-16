@@ -22,7 +22,13 @@ function main() {
     console.error("Usage: node create_bid_deck.js --config <json> --output <pptx>");
     process.exit(2);
   }
-  const c = JSON.parse(fs.readFileSync(configPath, "utf8"));
+  let c;
+  try {
+    c = JSON.parse(fs.readFileSync(configPath, "utf8"));
+  } catch (err) {
+    console.error(`Cannot read config ${configPath}: ${err.message}`);
+    process.exit(1);
+  }
   const p = new pptxgen();
   p.defineLayout({ name: "A4", width: 11.7, height: 8.27 });
   p.layout = "A4";
@@ -33,6 +39,7 @@ function main() {
   // Slide 1 — Title
   let s = p.addSlide();
   s.background = { color: NAVY };
+  s.addShape(p.ShapeType.rect, { x: 0.5, y: 2.45, w: 2.2, h: 0.08, fill: { color: PURPLE } });
   s.addText(c.project || "Bid Kick-Off", { x: 0.5, y: 2.6, w: 10.7, h: 1, fontFace: "Space Grotesk", fontSize: 40, bold: true, color: WHITE });
   s.addText(
     [B(`${c.client || ""}   `, { color: WHITE }), B(`${c.value || ""}  ${c.sector || ""}`, { color: "CFD3DC" })],
@@ -94,7 +101,12 @@ function main() {
     s.addTable([["When", "What", "Who"], ...c.actions.map((a) => [a.when || "", a.what || a, a.who || ""])], { x: 0.5, y: 1.2, w: 10.7, fontFace: "Inter", fontSize: 12, border: { pt: 0.5, color: "D9D9D9" } });
   }
 
-  p.writeFile({ fileName: output }).then(() => console.log(`Created ${output}`));
+  p.writeFile({ fileName: output })
+    .then(() => console.log(`Created ${output}`))
+    .catch((err) => {
+      console.error(`Failed to write ${output}: ${err.message}`);
+      process.exit(1);
+    });
 }
 
 main();

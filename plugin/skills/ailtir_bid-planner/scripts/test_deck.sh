@@ -13,4 +13,9 @@ cat > /tmp/deck.json <<'JSON'
 JSON
 node create_bid_deck.js --config /tmp/deck.json --output /tmp/deck.pptx
 test -s /tmp/deck.pptx
+# A .pptx is a ZIP archive; verify structural integrity when unzip is available
+# (catches a truncated/corrupt write that a non-empty check would miss).
+if command -v unzip >/dev/null 2>&1; then
+  unzip -t /tmp/deck.pptx >/dev/null
+fi
 echo "DECK OK"
