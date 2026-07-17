@@ -14,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_contract-risk`
-- `plugin_version`: `2.15.5`
+- `plugin_version`: `2.16.0`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -39,9 +39,29 @@ Read `references/{profile_key}/contract-playbook.md` from this skill's directory
 - Time Bars — critical for NEC4 (strict 8-week Compensation Event bar) and PW-CF (strict 20 working days)
 - Fitness for purpose language layered onto D&B (voids most PI cover)
 
-## Step 4 — Present
-Provide a summary of the top 5 commercial risks.
-If called by the `bid-planner`, return the data to the orchestrator to populate the Risk Register tab. If called directly, present it to the user.
+## Step 4 — Generate the Workbook
+This is the deep-dive pass. Assemble your clause-by-clause analysis into a JSON
+payload, **write it to `/tmp/risk_data.json`**, then run the bundled
+`scripts/create_risk_register.py` with `python3` — the script owns all tab
+structure and styling; you supply the rows:
+
+`python3 scripts/create_risk_register.py --output "Contract_Risk_Register_[Bid].xlsx" --data /tmp/risk_data.json`
+
+Payload shape:
+
+```json
+{
+  "cover": {"Project": "X", "Contract Form": "PW-CF5 v2.7", "Playbook Base": "ireland-gc"},
+  "tabs": {
+    "risk_register": {"rows": [["CR-01","20-Working-Day Time Bar","Sub-clause 10.3","RED","Loss of EOT","Notice register","Commercial Manager"]]},
+    "contract_data": {"rows": [["Part 1A","ER","Employer's Representative","Named","Standard"]]},
+    "action_tracker": {"rows": [["A-01","CR-01","Establish CE notice register","Commercial","START DATE","OPEN",""]]}
+  }
+}
+```
+
+This writes its OWN workbook — never the bid-planner file. If a section does not
+apply, pass `"rows": []` with a `"na_note"`.
 
 - [HUMAN INPUT REQUIRED] If the contract form cannot be determined from the documents, ask the user before proceeding.
 
@@ -59,6 +79,9 @@ If called by the `bid-planner`, return the data to the orchestrator to populate 
 ## On Completion — Update Bid State
 
 When this skill finishes for a specific bid, update the bid's state file so `ailtir_conductor` and `ailtir_dashboard` reflect the progress. Run the sibling `ailtir_conductor` skill's `scripts/update_frontmatter.py` helper with `python3`:
+
+This deep dive **upgrades** the bid-planner's `summarised` entry to a full
+`proceed`. Use `--result proceed`.
 
 ```
 python3 <ailtir_conductor>/scripts/update_frontmatter.py \

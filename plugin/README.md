@@ -2,6 +2,8 @@
 
 The Ailtir Co-Work Plugin is a Claude plugin for construction tender management, built primarily for **Claude Cowork** (claude.com/product/cowork) and compatible with Claude Code. It covers the full tender lifecycle — opportunity monitoring, bid planning, estimating, submission, post-award records, and reusable bid intelligence — across the Irish and UK construction markets, using a profile architecture designed to expand to further markets and verticals.
 
+> **New here?** Read [PROCESS.md](PROCESS.md) for the end-to-end bid lifecycle and how the skills fit together.
+
 Use [INSTALL.md][install] for setup and [CONTRIBUTING.md][contributing] for development workflow.
 
 ## What It Provides

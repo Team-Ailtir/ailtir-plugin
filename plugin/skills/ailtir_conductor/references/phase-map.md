@@ -18,20 +18,35 @@ The lead has been logged but a formal bid folder may not yet exist. The conducto
 
 ## Phase: `pre-bid`
 
-Tender pack in hand, decision to bid taken. The conductor's core sequence:
+Tender pack in hand, decision to bid taken. The canonical entry point is the
+Tier-1 planner, which produces a summarised first pass; the deep dives follow.
 
-1. `ailtir_project-indexer` — catalogue every document, extract dates, flag missing files.
-2. `ailtir_compliance-matrix` — extract every returnable and evaluation criterion from the ITT.
-3. `ailtir_contract-risk` — clause-by-clause review against the profile-appropriate playbook.
+1. `ailtir_bid-planner` — the Tier-1 first pass. Produces one 9-tab workbook +
+   kick-off deck. Does Go/No-Go **in full** (recorded `result: proceed`) and
+   **summarises** compliance and contract-risk (recorded `result: summarised`).
+2. `ailtir_contract-risk` — deep dive: full clause-by-clause register, contract
+   data, action tracker. Upgrades the `summarised` entry to `proceed`.
+3. `ailtir_compliance-matrix` — deep dive: full returnables tracker with
+   templates, owners, deadlines. Upgrades the `summarised` entry to `proceed`.
 4. `ailtir_pqq-manager` — if a PQQ / SQ / Supplier Info form is part of the pack.
-5. `ailtir_package-breakdown` — trade package register + scope matrix.
 
-**Advance criterion:** all five completed (or `pqq-manager` skipped because no PQQ is required). Bid advances to `estimating`.
+**`summarised` handling:** a skill whose latest `completed[]` entry has
+`result: summarised` is NOT done — surface it as the next step, but frame it as a
+deep dive, e.g. *"Summarised in the bid plan — run for the full clause-by-clause
+review."* Never present it as a blind repeat. Once its entry is `proceed` (or
+`skipped`), treat it as complete.
+
+**Advance criterion:** `bid-planner` done, `contract-risk` and
+`compliance-matrix` both at `result: proceed` (or `skipped`), and `pqq-manager`
+done or skipped (no PQQ). Bid advances to `estimating`.
+
+**Note:** `ailtir_package-breakdown` is NOT part of pre-bid. It belongs to the
+enquire-and-procure work in the `estimating` phase; the planner's Package Outline
+tab is only a glance.
 
 **Alternatives / sideways moves at this phase:**
 
-- `ailtir_rfi-generator` — draft an RFI whenever a gap is found (indexer flags a missing drawing, compliance matrix flags an unclear requirement).
-- `ailtir_bid-planner` — the Phase-1 orchestrator that bundles indexer + go/no-go + compliance-matrix + contract-risk into one flow. Recommend as the alternative for users who prefer a single-command run.
+- `ailtir_rfi-generator` — draft an RFI whenever a gap is found.
 
 ---
 

@@ -14,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_compliance-matrix`
-- `plugin_version`: `2.15.5`
+- `plugin_version`: `2.16.0`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
@@ -32,9 +32,30 @@ Extract:
 ## Step 2 — Check Templates
 Check if the required templates were actually provided in the tender pack. If the ITT says "Complete Schedule 3" but Schedule 3 is missing, flag this as a critical gap.
 
-## Step 3 — Present
-Provide a clear, structured list of requirements.
-If called by the `bid-planner`, return the data to the orchestrator to populate the Excel tab. If called directly, present it to the user.
+## Step 3 — Generate the Workbook
+This is the deep-dive pass. Assemble your extracted analysis into a JSON payload,
+**write it to `/tmp/compliance_data.json`**, then run the bundled
+`scripts/create_compliance_matrix.py` with `python3` — the script owns all tab
+structure and styling; you supply the rows:
+
+`python3 scripts/create_compliance_matrix.py --output "Compliance_Matrix_[Bid].xlsx" --data /tmp/compliance_data.json`
+
+Payload shape (each `rows` is a list of row-arrays matching the tab's columns):
+
+```json
+{
+  "cover": {"Project": "X", "ITT Ref": "ITT-W2", "Submission": "28/02 16:00"},
+  "tabs": {
+    "award_criterion": {"rows": [["AC-1","Lowest cost","100%","Price only","Price only"]]},
+    "returnables": {"rows": [["1","Vol B","Form of Tender","Contract Doc","YES","To Do","Director","Complete all blanks"]]},
+    "submission_rules": {"rows": [["SUBMISSION METHOD","eTenders only"]]},
+    "gap_check": {"rows": [["Doc 7","QW Part 1","RETURN","YES","Complete fully"]]}
+  }
+}
+```
+
+This writes its OWN workbook — never the bid-planner file. If a section does not
+apply, pass `"rows": []` with a `"na_note"`.
 
 - [HUMAN INPUT REQUIRED] If the submission method or deadline is not stated in the ITT, ask the user before finalising the matrix.
 
@@ -51,6 +72,9 @@ If called by the `bid-planner`, return the data to the orchestrator to populate 
 ## On Completion — Update Bid State
 
 When this skill finishes for a specific bid, update the bid's state file so `ailtir_conductor` and `ailtir_dashboard` reflect the progress. Run the sibling `ailtir_conductor` skill's `scripts/update_frontmatter.py` helper with `python3`:
+
+This deep dive **upgrades** the bid-planner's `summarised` entry to a full
+`proceed`. Use `--result proceed`.
 
 ```
 python3 <ailtir_conductor>/scripts/update_frontmatter.py \
