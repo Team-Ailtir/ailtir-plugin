@@ -182,6 +182,41 @@ def test_callout_width_spans_widest_section():
         [str(r) for r in ws.merged_cells.ranges]
 
 
+def test_extra_sections_appended_after_declared():
+    core = [{"key": "gng", "title": "3. GNG", "sections": [
+        {"key": "gates", "heading": "A. Gates", "headers": ["Gate"]}]}]
+    data = {"tabs": {"gng": {
+        "sections": {"gates": {"rows": [["CIRI"]]}},
+        "extra_sections": [
+            {"heading": "C. Director Sign-Off", "headers": ["Note"],
+             "rows": [["Marginal - MD to confirm"]]}]}}}
+    tabs = R.merge_rows(core, data)
+    headings = [s["heading"] for s in tabs[0]["sections"]]
+    assert headings == ["A. Gates", "C. Director Sign-Off"], headings
+    assert tabs[0]["sections"][1]["rows"] == [["Marginal - MD to confirm"]]
+
+
+def test_extra_sections_preserve_order():
+    core = [{"key": "gng", "title": "3. GNG", "sections": [
+        {"key": "gates", "heading": "A", "headers": ["G"]}]}]
+    data = {"tabs": {"gng": {"extra_sections": [
+        {"heading": "B", "headers": ["x"], "rows": [["1"]]},
+        {"heading": "C", "headers": ["y"], "rows": [["2"]]}]}}}
+    tabs = R.merge_rows(core, data)
+    assert [s["heading"] for s in tabs[0]["sections"]] == ["A", "B", "C"]
+
+
+def test_extra_sections_render():
+    core = [{"key": "gng", "title": "3. GNG", "sections": [
+        {"key": "gates", "heading": "A", "headers": ["G"]}]}]
+    data = {"tabs": {"gng": {"sections": {"gates": {"rows": [["g1"]]}},
+                             "extra_sections": [
+                                 {"heading": "B", "headers": ["x"], "rows": [["v1"]]}]}}}
+    wb = R.build_workbook({"fields": []}, R.merge_rows(core, data))
+    vals = [c.value for row in wb["3. GNG"].iter_rows() for c in row if c.value]
+    assert "B" in vals and "v1" in vals, vals
+
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in sorted(globals().items()):
