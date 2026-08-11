@@ -199,6 +199,14 @@ def merge_rows(core_tabs, data):
                 if "widths" in sd:
                     ms["widths"] = sd["widths"]
                 secs.append(ms)
+            for extra in d.get("extra_sections", []):
+                secs.append({
+                    "heading": extra.get("heading", ""),
+                    "headers": extra.get("headers", []),
+                    "rows": extra.get("rows", []),
+                    "na_note": extra.get("na_note"),
+                    "widths": extra.get("widths"),
+                })
             out["sections"] = secs
         else:
             out["rows"] = d.get("rows", [])
