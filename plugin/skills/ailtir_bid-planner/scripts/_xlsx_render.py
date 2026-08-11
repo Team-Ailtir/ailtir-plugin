@@ -219,3 +219,33 @@ def merge_rows(core_tabs, data):
     for opt in data.get("optional_tabs", []):
         filled.append(opt)
     return filled
+
+
+def validate_requirements(tabs):
+    """Check each tab against its declared contract.
+
+    Returns a list of problem strings — empty when every requirement is met.
+    A `requires` entry is either "callout" or the key of a declared section,
+    which must carry at least one row. `min_columns` guards shapes (such as a
+    RACI matrix) that are meaningless below a certain width.
+    """
+    problems = []
+    for spec in tabs:
+        title = spec.get("title", "<untitled>")
+        by_key = {s.get("key"): s for s in spec.get("sections", [])}
+        for req in spec.get("requires", []):
+            if req == "callout":
+                if not spec.get("callout"):
+                    problems.append(f"{title}: required decision callout is missing")
+                continue
+            sec = by_key.get(req)
+            if sec is None:
+                problems.append(f"{title}: required section '{req}' is not declared")
+            elif not sec.get("rows"):
+                problems.append(f"{title}: required section '{req}' has no rows")
+        min_cols = spec.get("min_columns")
+        if min_cols and len(spec.get("headers", [])) < min_cols:
+            problems.append(
+                f"{title}: needs at least {min_cols} columns, "
+                f"got {len(spec.get('headers', []))}")
+    return problems
