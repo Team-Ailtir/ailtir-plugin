@@ -40,6 +40,8 @@ BODY_FONT = Font(size=10, name="Inter")
 LABEL_FONT = Font(bold=True, size=10, name="Inter")
 NA_FONT = Font(italic=True, color=NA_GREY, size=10, name="Inter")
 BANNER_FONT = Font(italic=True, color=PURPLE, size=10, name="Inter")
+CALLOUT_FONT = Font(bold=True, color=NAVY, size=12, name="Space Grotesk")
+CALLOUT_FILL = PatternFill("solid", fgColor=AMBER)
 _THIN = Side(style="thin", color="D9D9D9")
 BORDER = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
 CENTER = Alignment(horizontal="center", vertical="center", wrap_text=True)
@@ -129,9 +131,27 @@ def _render_grid(ws, start_row, headers, rows, na_note, widths=None):
     return r
 
 
+def _tab_width(spec):
+    """Widest column count on the tab — sections may differ in width."""
+    sections = spec.get("sections")
+    if sections:
+        return max((len(s.get("headers", [])) for s in sections), default=1) or 1
+    return max(len(spec.get("headers", [])), 1)
+
+
 def _render_tab(wb, spec):
     ws = wb.create_sheet(safe_sheet_title(spec["title"]))
     r = 1
+    if spec.get("callout"):
+        ncols = _tab_width(spec)
+        ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=ncols)
+        ws.cell(row=r, column=1, value=spec["callout"])
+        for c in range(1, ncols + 1):
+            cell = ws.cell(row=r, column=c)
+            cell.font = CALLOUT_FONT
+            cell.fill = CALLOUT_FILL
+            cell.alignment = CENTER
+        r += 2
     sections = spec.get("sections")
     if sections:
         for sec in sections:

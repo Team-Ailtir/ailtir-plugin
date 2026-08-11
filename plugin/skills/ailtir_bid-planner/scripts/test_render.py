@@ -139,6 +139,49 @@ def test_widths_applied():
     assert ws.column_dimensions["B"].width == 8
 
 
+def test_callout_renders_at_top():
+    tabs = [{"title": "3. GNG", "callout": "STRONG GO - 82/100",
+             "headers": ["Criteria"], "rows": [["Client"]]}]
+    wb = R.build_workbook({"fields": []}, tabs)
+    ws = wb["3. GNG"]
+    assert ws.cell(row=1, column=1).value == "STRONG GO - 82/100"
+    # callout occupies row 1, row 2 is a blank spacer, content starts at row 3
+    assert ws.cell(row=2, column=1).value is None
+    assert ws.cell(row=3, column=1).value == "Criteria"
+
+
+def test_callout_is_amber_and_merged():
+    tabs = [{"title": "3. GNG", "callout": "NO-GO",
+             "headers": ["A", "B", "C"], "rows": [["1", "2", "3"]]}]
+    wb = R.build_workbook({"fields": []}, tabs)
+    ws = wb["3. GNG"]
+    assert ws.cell(row=1, column=1).fill.fgColor.rgb.endswith(R.AMBER)
+    assert ws.cell(row=1, column=1).font.bold
+    assert any(str(rng) == "A1:C1" for rng in ws.merged_cells.ranges), \
+        [str(r) for r in ws.merged_cells.ranges]
+
+
+def test_callout_coexists_with_banner():
+    tabs = [{"title": "3. GNG", "callout": "MARGINAL GO", "banner": "Run deep dive",
+             "headers": ["A"], "rows": [["1"]]}]
+    wb = R.build_workbook({"fields": []}, tabs)
+    ws = wb["3. GNG"]
+    vals = [c.value for row in ws.iter_rows() for c in row if c.value]
+    assert vals[0] == "MARGINAL GO", vals
+    assert vals[-1] == "Run deep dive", vals
+
+
+def test_callout_width_spans_widest_section():
+    tabs = [{"title": "3. GNG", "callout": "GO", "sections": [
+        {"heading": "A", "headers": ["x", "y"], "rows": [["1", "2"]]},
+        {"heading": "B", "headers": ["p", "q", "r", "s"], "rows": [["1", "2", "3", "4"]]},
+    ]}]
+    wb = R.build_workbook({"fields": []}, tabs)
+    ws = wb["3. GNG"]
+    assert any(str(rng) == "A1:D1" for rng in ws.merged_cells.ranges), \
+        [str(r) for r in ws.merged_cells.ranges]
+
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in sorted(globals().items()):
