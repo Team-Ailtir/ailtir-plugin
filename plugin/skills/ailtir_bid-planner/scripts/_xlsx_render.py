@@ -107,7 +107,7 @@ def _render_cover(ws, cover):
     _autosize(ws, 2, [26, 60])
 
 
-def _render_grid(ws, start_row, headers, rows, na_note):
+def _render_grid(ws, start_row, headers, rows, na_note, widths=None):
     r = start_row
     if headers:
         for i, h in enumerate(headers, 1):
@@ -125,7 +125,7 @@ def _render_grid(ws, start_row, headers, rows, na_note):
     elif na_note:
         ws.cell(row=r, column=1, value=na_note).font = NA_FONT
         r += 1
-    _autosize(ws, max(len(headers) if headers else 1, 1))
+    _autosize(ws, max(len(headers) if headers else 1, 1), widths)
     return r
 
 
@@ -140,10 +140,12 @@ def _render_tab(wb, spec):
             ws.cell(row=r, column=1, value=sec["heading"])
             _style_header(ws, r, ncols, fill=SECTION_FILL, font=SECTION_FONT)
             r += 1
-            r = _render_grid(ws, r, sec.get("headers", []), sec.get("rows", []), sec.get("na_note"))
+            r = _render_grid(ws, r, sec.get("headers", []), sec.get("rows", []),
+                             sec.get("na_note"), sec.get("widths"))
             r += 1
     else:
-        r = _render_grid(ws, r, spec.get("headers", []), spec.get("rows", []), spec.get("na_note"))
+        r = _render_grid(ws, r, spec.get("headers", []), spec.get("rows", []),
+                         spec.get("na_note"), spec.get("widths"))
     if spec.get("banner"):
         r += 1
         ws.cell(row=r, column=1, value=spec["banner"]).font = BANNER_FONT
@@ -173,12 +175,18 @@ def merge_rows(core_tabs, data):
                 ms["rows"] = sd.get("rows", [])
                 if "na_note" in sd:
                     ms["na_note"] = sd["na_note"]
+                ms["headers"] = sd.get("headers", base.get("headers", []))
+                if "widths" in sd:
+                    ms["widths"] = sd["widths"]
                 secs.append(ms)
             out["sections"] = secs
         else:
             out["rows"] = d.get("rows", [])
             if "na_note" in d:
                 out["na_note"] = d["na_note"]
+            out["headers"] = d.get("headers", spec.get("headers", []))
+            if "widths" in d:
+                out["widths"] = d["widths"]
         filled.append(out)
     for opt in data.get("optional_tabs", []):
         filled.append(opt)
