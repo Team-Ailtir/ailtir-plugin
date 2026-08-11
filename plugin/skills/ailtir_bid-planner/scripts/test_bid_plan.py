@@ -32,6 +32,29 @@ def test_summary_tabs_have_banners():
         assert by_key[key].get("banner"), key
 
 
+def test_go_no_go_declares_three_elements():
+    gng = {t["key"]: t for t in B.CORE_TABS}["go_no_go"]
+    assert set(gng["requires"]) == {"gates", "scoring", "callout"}, gng.get("requires")
+    keys = [s["key"] for s in gng["sections"]]
+    assert keys == ["gates", "scoring"], keys
+
+
+def test_go_no_go_sections_have_default_headers():
+    gng = {t["key"]: t for t in B.CORE_TABS}["go_no_go"]
+    for sec in gng["sections"]:
+        assert len(sec["headers"]) >= 3, sec
+
+
+def test_callout_text_includes_score_and_verdict():
+    text = B.decision_callout(82, False)
+    assert "82/100" in text and "Strong GO" in text, text
+
+
+def test_callout_names_failed_gate():
+    text = B.decision_callout(90, True)
+    assert "NO-GO" in text and "gate" in text.lower(), text
+
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in sorted(globals().items()):

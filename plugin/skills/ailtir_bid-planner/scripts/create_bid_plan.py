@@ -23,6 +23,14 @@ def go_no_go_recommendation(score, gate_fail):
     return "NO-GO"
 
 
+def decision_callout(score, gate_fail):
+    """One-line verdict for the amber callout at the top of the Go/No-Go tab."""
+    verdict = go_no_go_recommendation(score, gate_fail)
+    if gate_fail:
+        return f"DECISION: {verdict} — {score}/100 scored, but a mandatory gate failed"
+    return f"DECISION: {verdict} — {score}/100"
+
+
 BANNER_COMPLIANCE = ("Summarised view. Run /ailtir_compliance-matrix for the full "
                      "returnables tracker with templates, owners & deadlines.")
 BANNER_RISK = ("Summarised view. Run /ailtir_contract-risk for the full "
@@ -34,7 +42,14 @@ CORE_TABS = [
     {"key": "document_register", "title": "2. Document Register",
      "headers": ["Filename", "Title", "Type", "Rev", "Date", "Notes"]},
     {"key": "go_no_go", "title": "3. Go / No-Go",
-     "headers": ["Criteria", "Max Score", "Actual Score", "Notes"]},
+     "requires": ["gates", "scoring", "callout"], "sections": [
+         {"key": "gates", "heading": "A. Mandatory Gates (Pass / Fail)",
+          "headers": ["#", "Gate", "Requirement", "Status", "Evidence / Notes"],
+          "widths": [6, 26, 40, 12, 44]},
+         {"key": "scoring", "heading": "B. Weighted Scoring Matrix",
+          "headers": ["Dimension", "Max", "Actual", "Band Hit", "Rationale"],
+          "widths": [30, 8, 8, 34, 50]},
+     ]},
     {"key": "compliance_submission", "title": "4. Compliance & Submission",
      "banner": BANNER_COMPLIANCE, "sections": [
          {"key": "returnables", "heading": "A. Returnables & Award Criteria",
@@ -70,6 +85,7 @@ def main():
     score = int(gng.get("score", 0))
     gate_fail = bool(gng.get("gate_fail", False))
     recommendation = go_no_go_recommendation(score, gate_fail)
+    callout = decision_callout(score, gate_fail)
 
     cover = {
         "title": f"AILTIR BID PLAN — {args.project.upper()}",
@@ -84,6 +100,16 @@ def main():
     }
 
     tabs = R.merge_rows(CORE_TABS, data)
+    for spec in tabs:
+        if spec.get("key") == "go_no_go":
+            spec["callout"] = callout
+    if args.data:
+        problems = R.validate_requirements(tabs)
+        if problems:
+            print("Payload is missing required content:", file=sys.stderr)
+            for prob in problems:
+                print(f"  - {prob}", file=sys.stderr)
+            return 1
     wb = R.build_workbook(cover, tabs)
     R.save_workbook(wb, args.output)
     print(f"Created {args.output} ({recommendation if args.data else 'TBC'})")
