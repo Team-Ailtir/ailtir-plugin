@@ -96,6 +96,49 @@ def test_merge_rows_section_keys():
     assert tabs[0]["sections"][1]["rows"] == [["2"]]
 
 
+def test_model_headers_override_declared():
+    core = [{"key": "raci", "title": "8. RACI", "headers": ["Activity"]}]
+    data = {"tabs": {"raci": {"headers": ["Activity", "A. Ryan", "B. Nolan"],
+                              "rows": [["Pricing", "R", "C"]]}}}
+    tabs = R.merge_rows(core, data)
+    assert tabs[0]["headers"] == ["Activity", "A. Ryan", "B. Nolan"], tabs[0]["headers"]
+
+
+def test_declared_headers_used_when_model_silent():
+    core = [{"key": "docs", "title": "2. Docs", "headers": ["Filename", "Title"]}]
+    tabs = R.merge_rows(core, {"tabs": {"docs": {"rows": [["a.pdf", "A"]]}}})
+    assert tabs[0]["headers"] == ["Filename", "Title"], tabs[0]["headers"]
+
+
+def test_wide_matrix_renders_all_columns():
+    tabs = [{"title": "8. RACI",
+             "headers": ["Activity", "P1", "P2", "P3", "P4", "P5"],
+             "rows": [["Pricing", "R", "A", "C", "I", "I"]]}]
+    wb = R.build_workbook({"fields": []}, tabs)
+    ws = wb["8. RACI"]
+    assert [ws.cell(row=1, column=c).value for c in range(1, 7)] == \
+        ["Activity", "P1", "P2", "P3", "P4", "P5"]
+    assert ws.cell(row=2, column=6).value == "I"
+
+
+def test_section_headers_override_declared():
+    core = [{"key": "gng", "title": "3. GNG", "sections": [
+        {"key": "gates", "heading": "A. Gates", "headers": ["Gate"]}]}]
+    data = {"tabs": {"gng": {"sections": {"gates": {
+        "headers": ["#", "Gate", "Status"], "rows": [["1", "CIRI", "PASS"]]}}}}}
+    tabs = R.merge_rows(core, data)
+    assert tabs[0]["sections"][0]["headers"] == ["#", "Gate", "Status"]
+
+
+def test_widths_applied():
+    tabs = [{"title": "8. RACI", "headers": ["Activity", "P1"],
+             "rows": [["Pricing", "R"]], "widths": [40, 8]}]
+    wb = R.build_workbook({"fields": []}, tabs)
+    ws = wb["8. RACI"]
+    assert ws.column_dimensions["A"].width == 40
+    assert ws.column_dimensions["B"].width == 8
+
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in sorted(globals().items()):
