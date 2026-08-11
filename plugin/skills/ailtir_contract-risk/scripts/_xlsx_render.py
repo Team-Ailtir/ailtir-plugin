@@ -40,6 +40,8 @@ BODY_FONT = Font(size=10, name="Inter")
 LABEL_FONT = Font(bold=True, size=10, name="Inter")
 NA_FONT = Font(italic=True, color=NA_GREY, size=10, name="Inter")
 BANNER_FONT = Font(italic=True, color=PURPLE, size=10, name="Inter")
+CALLOUT_FONT = Font(bold=True, color=NAVY, size=12, name="Space Grotesk")
+CALLOUT_FILL = PatternFill("solid", fgColor=AMBER)
 _THIN = Side(style="thin", color="D9D9D9")
 BORDER = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
 CENTER = Alignment(horizontal="center", vertical="center", wrap_text=True)
@@ -107,7 +109,7 @@ def _render_cover(ws, cover):
     _autosize(ws, 2, [26, 60])
 
 
-def _render_grid(ws, start_row, headers, rows, na_note):
+def _render_grid(ws, start_row, headers, rows, na_note, widths=None):
     r = start_row
     if headers:
         for i, h in enumerate(headers, 1):
@@ -125,13 +127,31 @@ def _render_grid(ws, start_row, headers, rows, na_note):
     elif na_note:
         ws.cell(row=r, column=1, value=na_note).font = NA_FONT
         r += 1
-    _autosize(ws, max(len(headers) if headers else 1, 1))
+    _autosize(ws, max(len(headers) if headers else 1, 1), widths)
     return r
+
+
+def _tab_width(spec):
+    """Widest column count on the tab — sections may differ in width."""
+    sections = spec.get("sections")
+    if sections:
+        return max((len(s.get("headers", [])) for s in sections), default=1) or 1
+    return max(len(spec.get("headers", [])), 1)
 
 
 def _render_tab(wb, spec):
     ws = wb.create_sheet(safe_sheet_title(spec["title"]))
     r = 1
+    if spec.get("callout"):
+        ncols = _tab_width(spec)
+        ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=ncols)
+        ws.cell(row=r, column=1, value=spec["callout"])
+        for c in range(1, ncols + 1):
+            cell = ws.cell(row=r, column=c)
+            cell.font = CALLOUT_FONT
+            cell.fill = CALLOUT_FILL
+            cell.alignment = CENTER
+        r += 2
     sections = spec.get("sections")
     if sections:
         for sec in sections:
@@ -140,10 +160,12 @@ def _render_tab(wb, spec):
             ws.cell(row=r, column=1, value=sec["heading"])
             _style_header(ws, r, ncols, fill=SECTION_FILL, font=SECTION_FONT)
             r += 1
-            r = _render_grid(ws, r, sec.get("headers", []), sec.get("rows", []), sec.get("na_note"))
+            r = _render_grid(ws, r, sec.get("headers", []), sec.get("rows", []),
+                             sec.get("na_note"), sec.get("widths"))
             r += 1
     else:
-        r = _render_grid(ws, r, spec.get("headers", []), spec.get("rows", []), spec.get("na_note"))
+        r = _render_grid(ws, r, spec.get("headers", []), spec.get("rows", []),
+                         spec.get("na_note"), spec.get("widths"))
     if spec.get("banner"):
         r += 1
         ws.cell(row=r, column=1, value=spec["banner"]).font = BANNER_FONT
@@ -173,13 +195,57 @@ def merge_rows(core_tabs, data):
                 ms["rows"] = sd.get("rows", [])
                 if "na_note" in sd:
                     ms["na_note"] = sd["na_note"]
+                ms["headers"] = sd.get("headers", base.get("headers", []))
+                if "widths" in sd:
+                    ms["widths"] = sd["widths"]
                 secs.append(ms)
+            for extra in d.get("extra_sections", []):
+                secs.append({
+                    "heading": extra.get("heading", ""),
+                    "headers": extra.get("headers", []),
+                    "rows": extra.get("rows", []),
+                    "na_note": extra.get("na_note"),
+                    "widths": extra.get("widths"),
+                })
             out["sections"] = secs
         else:
             out["rows"] = d.get("rows", [])
             if "na_note" in d:
                 out["na_note"] = d["na_note"]
+            out["headers"] = d.get("headers", spec.get("headers", []))
+            if "widths" in d:
+                out["widths"] = d["widths"]
         filled.append(out)
     for opt in data.get("optional_tabs", []):
         filled.append(opt)
     return filled
+
+
+def validate_requirements(tabs):
+    """Check each tab against its declared contract.
+
+    Returns a list of problem strings — empty when every requirement is met.
+    A `requires` entry is either "callout" or the key of a declared section,
+    which must carry at least one row. `min_columns` guards shapes (such as a
+    RACI matrix) that are meaningless below a certain width.
+    """
+    problems = []
+    for spec in tabs:
+        title = spec.get("title", "<untitled>")
+        by_key = {s.get("key"): s for s in spec.get("sections", [])}
+        for req in spec.get("requires", []):
+            if req == "callout":
+                if not spec.get("callout"):
+                    problems.append(f"{title}: required decision callout is missing")
+                continue
+            sec = by_key.get(req)
+            if sec is None:
+                problems.append(f"{title}: required section '{req}' is not declared")
+            elif not sec.get("rows"):
+                problems.append(f"{title}: required section '{req}' has no rows")
+        min_cols = spec.get("min_columns")
+        if min_cols and len(spec.get("headers", [])) < min_cols:
+            problems.append(
+                f"{title}: needs at least {min_cols} columns, "
+                f"got {len(spec.get('headers', []))}")
+    return problems
