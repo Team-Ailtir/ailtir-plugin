@@ -217,6 +217,40 @@ def test_extra_sections_render():
     assert "B" in vals and "v1" in vals, vals
 
 
+def test_validate_passes_when_satisfied():
+    tabs = [{"title": "3. GNG", "callout": "GO", "requires": ["gates", "callout"],
+             "sections": [{"key": "gates", "heading": "A", "headers": ["G"],
+                           "rows": [["CIRI"]]}]}]
+    assert R.validate_requirements(tabs) == []
+
+
+def test_validate_flags_empty_required_section():
+    tabs = [{"title": "3. GNG", "requires": ["gates"],
+             "sections": [{"key": "gates", "heading": "A", "headers": ["G"], "rows": []}]}]
+    problems = R.validate_requirements(tabs)
+    assert len(problems) == 1
+    assert "gates" in problems[0] and "3. GNG" in problems[0], problems
+
+
+def test_validate_flags_missing_callout():
+    tabs = [{"title": "3. GNG", "requires": ["callout"], "headers": ["A"], "rows": [["1"]]}]
+    problems = R.validate_requirements(tabs)
+    assert len(problems) == 1 and "callout" in problems[0], problems
+
+
+def test_validate_flags_narrow_matrix():
+    tabs = [{"title": "8. RACI", "min_columns": 3,
+             "headers": ["Activity", "Owner"], "rows": [["Pricing", "QS"]]}]
+    problems = R.validate_requirements(tabs)
+    assert len(problems) == 1
+    assert "8. RACI" in problems[0] and "3" in problems[0], problems
+
+
+def test_validate_ignores_tabs_without_requirements():
+    tabs = [{"title": "2. Docs", "headers": ["A"], "rows": []}]
+    assert R.validate_requirements(tabs) == []
+
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in sorted(globals().items()):
