@@ -5,6 +5,7 @@ version. Entries use those version bumps as release boundaries.
 
 ## 2.16.0 - 2026-07-16
 
+- Moved the bundled Ailtir MCP connector to its dedicated Hetzner endpoint.
 - Rewrote the bid-planner workbook as a deterministic 9-tab skeleton (structure
   script-owned, content model-supplied via `--data` JSON) — ending the
   improvised, inconsistent tab output.

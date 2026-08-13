@@ -2,7 +2,7 @@
   "mcpServers": {
     "ailtir": {
       "type": "http",
-      "url": "https://app.ailtir.ai/ailtir-mcp"
+      "url": "https://mcp.62.238.51.124.sslip.io/ailtir-mcp"
     },
     "notion": {
       "command": "npx",

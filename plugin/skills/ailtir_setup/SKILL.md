@@ -24,7 +24,7 @@ to:
 
 1. Open **Customize → Connectors** in Claude.
 2. Add a custom connector named **Ailtir** with the URL
-   `https://app.ailtir.ai/ailtir-mcp`.
+   `https://mcp.62.238.51.124.sslip.io/ailtir-mcp`.
 3. Enable the connector.
 4. Restart Claude Desktop or start a new Cowork session.
 5. Run `/ailtir_setup` again.
