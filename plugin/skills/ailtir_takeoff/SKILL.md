@@ -39,7 +39,16 @@ For each item, list:
 - **Drawing Ref:**
 
 ## Step 4 — Run the Excel Output Script
-Run the bundled `scripts/excel_output.py` helper in this skill's directory to generate the final Ailtir-branded workbook. Invoke it with `python3`, pass `takeoff.json` as the positional argument, and pass `-o takeoff_register.xlsx` for output. The workbook itself uses NRM2 headings for both profiles; downstream `estimating-workflow` handles the currency and rates.
+Run the bundled `scripts/excel_output.py` helper in this skill's directory to generate the final Ailtir-branded workbook. Invoke it with `python3` and the following required flags:
+
+```
+python3 <path to this skill's scripts>/excel_output.py \
+    --json takeoff.json \
+    --out takeoff_register.xlsx \
+    --profile <profile_key>
+```
+
+Read `profile_key` from `Context/profile.json` in the workspace root (e.g. `ireland-gc` or `uk-gc`). The workbook uses NRM2 headings for both profiles; downstream `estimating-workflow` handles currency and rates.
 
 Present the Excel file to the user.
 

@@ -55,6 +55,42 @@ def test_callout_names_failed_gate():
     assert "NO-GO" in text and "gate" in text.lower(), text
 
 
+def test_raci_declares_matrix_shape():
+    raci = {t["key"]: t for t in B.CORE_TABS}["team_raci"]
+    assert raci["headers"] == ["Activity"], raci["headers"]
+    assert raci["min_columns"] == 3, raci.get("min_columns")
+
+
+def test_cover_has_five_guaranteed_fields():
+    cover = B.build_cover_fields("Proj", "Client", "2026-09-01", "Open", 72, "Marginal GO", {})
+    labels = [label for label, _ in cover]
+    assert labels == ["Project Name:", "Client:", "Tender Return:",
+                      "Procurement Route:", "Go/No-Go Score:", "Recommendation:"], labels
+
+
+def test_cover_appends_model_extras_after_guaranteed():
+    data = {"cover": {"extra_fields": [["Contract Value:", "EUR 2.4M"],
+                                       ["Contract Form:", "PW-CF1"]]}}
+    cover = B.build_cover_fields("P", "C", "D", "R", 80, "Strong GO", data)
+    assert cover[-2] == ("Contract Value:", "EUR 2.4M"), cover[-2]
+    assert cover[-1] == ("Contract Form:", "PW-CF1"), cover[-1]
+    assert cover[0][0] == "Project Name:"
+
+
+def test_cover_extras_absent_is_fine():
+    cover = B.build_cover_fields("P", "C", "D", "R", 0, "NO-GO", {})
+    assert len(cover) == 6
+
+
+def test_no_payload_cover_score_is_tbc():
+    # Regression guard: build_cover_fields formats score as "{score}/100";
+    # main() patches the Go/No-Go Score field back to "TBC" when --data is absent.
+    raw = B.build_cover_fields("P", "C", "D", "R", 0, "TBC", {})
+    patched = [(lbl, "TBC" if lbl == "Go/No-Go Score:" else val) for lbl, val in raw]
+    score_val = next(val for lbl, val in patched if lbl == "Go/No-Go Score:")
+    assert score_val == "TBC", score_val
+
+
 if __name__ == "__main__":
     failed = 0
     for name, fn in sorted(globals().items()):

@@ -17,54 +17,55 @@ Use [INSTALL.md][install] for setup and [CONTRIBUTING.md][contributing] for deve
 
 ## Core Workflow
 
+> Canonical phase and skill order is maintained in [`skills/ailtir_conductor/references/phase-map.md`](skills/ailtir_conductor/references/phase-map.md). The block below is derived from it.
+
 ```text
-SETUP
+WORKSPACE SETUP (run once)
   /ailtir_setup
-  /ailtir_notion-setup
-  /ailtir_notion-second-brain
+  /ailtir_notion-setup          (if using Notion)
+  /ailtir_intelligence-builder  (recommended: seed before your first bid)
 
 EVERY SESSION
   /ailtir_prime
 
-FEEDBACK
-  /ailtir_feedback
-
-PHASE 0 - OPPORTUNITY IDENTIFICATION
-  /ailtir_opportunity-monitor
-
-PHASE 1 - QUALIFY & PLAN
-  /ailtir_bid-planner
-  /ailtir_project-indexer
+PHASE: opportunity
   /ailtir_go-no-go
-  /ailtir_compliance-matrix
-  /ailtir_contract-risk
 
-PHASE 2 - ESTIMATE & PRICE
+PHASE: pre-bid
+  /ailtir_bid-planner           (Tier-1 first pass — workbook + deck)
+  /ailtir_contract-risk         (deep dive)
+  /ailtir_compliance-matrix     (deep dive)
+  /ailtir_pqq-manager           (if a PQQ/SQ is required)
+
+PHASE: estimating
+  /ailtir_package-breakdown
   /ailtir_takeoff
+  /ailtir_subcontractor-enquiry
   /ailtir_prelims-builder
-  /ailtir_estimating-workflow
+  /ailtir_bid-leveling
   /ailtir_cost-reconciliation
 
-PHASE 3 - ENQUIRE & PROCURE
-  /ailtir_package-breakdown
-  /ailtir_subcontractor-enquiry
-  /ailtir_bid-leveling
-
-PHASE 4 - WRITE & SUBMIT
-  /ailtir_pqq-manager
-  /ailtir_rfi-generator
+PHASE: submission
   /ailtir_quality-writer
   /ailtir_programme-builder
   /ailtir_bid-assembly
   /ailtir_submission-preflight
-  /ailtir_post-tender-interview
 
-POST-AWARD & INTELLIGENCE
-  /ailtir_contract-admin
-  /ailtir_site-diary
+PHASE: post-tender
+  /ailtir_post-tender-interview (if invited)
   /ailtir_case-study-generator
+  /ailtir_feedback
+
+PHASE: delivery
+  /ailtir_site-diary
+  /ailtir_contract-admin
+
+SUPPORT (available at any time, not sequenced)
+  /ailtir_rfi-generator
+  /ailtir_rate-library
   /ailtir_intelligence-builder
   /ailtir_dashboard
+  /ailtir_opportunity-monitor
 ```
 
 ## Connectors

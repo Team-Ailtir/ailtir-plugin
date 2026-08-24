@@ -143,13 +143,12 @@ Tell the user:
 ```text
 Setup complete. Your workspace is configured for [Company Name] on the [profile_key] profile.
 
-To get the most out of the quality-writer from day one, we should add 2-3 case studies and your top win themes to the `Intelligence/` folder. I can interview you for 10 minutes to write them up, or you can point me to a folder of old CVs and tenders and I'll extract them automatically.
+**Recommended first action:** Run `/ailtir_intelligence-builder` now to seed your Intelligence folder with 2-3 case studies and your top win themes. The quality-writer draws on this when drafting your written responses — a blank Intelligence folder means generic drafts; even one or two entries make a real difference. I can interview you for 10 minutes, or you can point me at a folder of old CVs and tenders.
 
-If you want to do that now, run `/ailtir_intelligence-builder`.
-If you are using Notion, run `/ailtir_notion-setup` to build your databases.
-Otherwise, drop a tender pack into the workspace and run `/ailtir_bid-planner` to begin.
+When you're ready to start bidding, drop a tender pack into the workspace and run `/ailtir_bid-planner`.
+If you are using Notion, run `/ailtir_notion-setup` to build your databases first.
 
-Once you have a bid or two in flight, run `/ailtir_conductor` for a proactive "what should I do next?" view across every bid — or `/ailtir_dashboard` for the visual version. You never need to memorise the 30+ skill catalogue; the conductor will always tell you what to run next.
+Once you have bids in flight, run `/ailtir_conductor` for a proactive "what to run next?" view across every bid.
 ```
 
 ## Quality Checks

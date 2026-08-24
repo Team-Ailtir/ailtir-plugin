@@ -4,6 +4,8 @@ This is the canonical, step-by-step process the Ailtir plugin runs a tender
 through. It doubles as onboarding: read it top to bottom to understand how the
 skills fit together and which file each one produces.
 
+> **Canonical sequence:** the skill order and phase boundaries in this document are derived from [`skills/ailtir_conductor/references/phase-map.md`](skills/ailtir_conductor/references/phase-map.md), which is the machine-readable source of truth. If you spot a discrepancy, phase-map is authoritative.
+
 ## The two-tier principle
 
 Every analysis has two depths:
