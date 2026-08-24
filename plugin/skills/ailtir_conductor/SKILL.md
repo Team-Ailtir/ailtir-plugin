@@ -79,6 +79,14 @@ review." Treat `result: proceed` as fully complete (do not re-recommend). A
 `skipped` entry is also complete, but may be re-recommended if the user explicitly
 asks to revisit it.
 
+**Intelligence/ thin-check (submission phase only):** when the bid's current `phase` is `submission`, check whether `Intelligence/` in the workspace root contains fewer than 2 `.md` or `.yaml` files (count with a glob, do not read their contents). If it does, append this line to the four-line block:
+
+```text
+Note: Intelligence/ looks thin — `/ailtir_intelligence-builder` now will improve quality-writer drafts for this submission.
+```
+
+Do not add this note outside the submission phase. Do not add it if Intelligence/ has 2 or more files.
+
 ## Step 5 — Prompt the User
 
 For the top bid, render an **interactive HTML artifact** with clickable option
@@ -94,6 +102,7 @@ contained HTML block (inline CSS, no external assets) containing:
   - **Skip this step** — mark it skipped and move on
   - **Pick another bid** — choose a different surfaced bid
   - **Quit** — stop
+  - **Show full process** — display every phase and skill in order as a human-readable walkthrough
 - A **Submit** button that writes a message back into the chat, exactly as the
   bid-planner form's submit button does. **The message text depends on the
   selected card:**
@@ -107,8 +116,9 @@ contained HTML block (inline CSS, no external assets) containing:
     `conductor: run it`; that is a plain message the conductor cannot act on.
   - Every other card → write `conductor: <action>` (e.g. `conductor: defer`,
     `conductor: skip`, `conductor: explain`, `conductor: pick another`,
-    `conductor: quit`). The conductor reads that on the next turn and runs the
+    `conductor: quit`, `conductor: show process`). The conductor reads that on the next turn and runs the
     matching action below.
+  - **Show full process** → write `conductor: show process`
 
 Keep the cards visually consistent with the bid-planner style: bordered cards,
 icon or bold title, muted description line, dark-theme friendly.
@@ -123,6 +133,48 @@ Handle the submitted message:
 - **`conductor: explain`** — Read the relevant paragraph from `references/skill-catalogue.md` in this skill's directory, print it, then re-present the Step 5 card.
 - **`conductor: pick another`** — List the other surfaced bids by number, let the user pick, then re-run Step 4 for that bid.
 - **`conductor: quit`** — Stop.
+- **`conductor: show process`** — Read `references/phase-map.md` from this skill's directory. Render the full phase sequence as a clean human-readable walkthrough using this format:
+
+  ```text
+  The Ailtir Bid Lifecycle — Full Process
+
+  PHASE: opportunity
+    1. /ailtir_go-no-go — score the opportunity; proceed or no-bid
+
+  PHASE: pre-bid
+    1. /ailtir_bid-planner — Tier-1 first pass: workbook + deck, full Go/No-Go, summarised risk & compliance, package outline
+    2. /ailtir_contract-risk — full clause-by-clause risk register (deep dive)
+    3. /ailtir_compliance-matrix — full returnables tracker (deep dive)
+    4. /ailtir_pqq-manager — PQQ / SQ / Supplier Info form (if required)
+
+  PHASE: estimating
+    1. /ailtir_package-breakdown — define trade packages
+    2. /ailtir_takeoff — quantities from drawings → NRM2 register
+    3. /ailtir_subcontractor-enquiry — issue ITT letters per package
+    4. /ailtir_prelims-builder — priced prelims schedule
+    5. /ailtir_bid-leveling — normalise sub quotes
+    6. /ailtir_cost-reconciliation — final gap/benchmark check
+
+  PHASE: submission
+    1. /ailtir_quality-writer — draft written responses
+    2. /ailtir_programme-builder — tender programme + narrative
+    3. /ailtir_bid-assembly — compile the master submission
+    4. /ailtir_submission-preflight — compliance check before send
+
+  PHASE: post-tender
+    1. /ailtir_post-tender-interview — (if invited to interview)
+    2. /ailtir_case-study-generator — debrief capture + case study seed
+    3. /ailtir_feedback — 1–10 bid experience rating
+
+  PHASE: delivery
+    1. /ailtir_site-diary — daily records
+    2. /ailtir_contract-admin — delay, CE, L&E event records
+
+  Support skills (available at any time, not sequenced):
+    /ailtir_rate-library, /ailtir_rfi-generator, /ailtir_intelligence-builder
+  ```
+
+  After printing the walkthrough, re-present the Step 5 card for the current bid so the user can act immediately.
 
 ## Step 6 — Dashboard Nudge
 

@@ -31,6 +31,22 @@ def decision_callout(score, gate_fail):
     return f"DECISION: {verdict} — {score}/100"
 
 
+def build_cover_fields(project, client, return_date, route, score, recommendation, data):
+    """Five guaranteed fields, then any tender-specific extras from the payload."""
+    fields = [
+        ("Project Name:", project),
+        ("Client:", client),
+        ("Tender Return:", return_date),
+        ("Procurement Route:", route),
+        ("Go/No-Go Score:", f"{score}/100"),
+        ("Recommendation:", recommendation),
+    ]
+    for pair in data.get("cover", {}).get("extra_fields", []):
+        if len(pair) >= 2:
+            fields.append((pair[0], pair[1]))
+    return fields
+
+
 BANNER_COMPLIANCE = ("Summarised view. Run /ailtir_compliance-matrix for the full "
                      "returnables tracker with templates, owners & deadlines.")
 BANNER_RISK = ("Summarised view. Run /ailtir_contract-risk for the full "
@@ -63,8 +79,10 @@ CORE_TABS = [
      "headers": ["Package", "Scope", "Est. Value", "Target Date"]},
     {"key": "bid_programme", "title": "7. Bid Programme",
      "headers": ["Milestone", "Date", "Owner", "Notes"]},
+    # Width follows the actual bid team — the model supplies one column per
+    # person (or role, where no named team exists) and R/A/C/I in the cells.
     {"key": "team_raci", "title": "8. BID TEAM RACI",
-     "headers": ["Activity", "Responsible", "Accountable", "Consulted", "Informed"]},
+     "headers": ["Activity"], "min_columns": 3},
     {"key": "clarifications", "title": "9. Clarifications Log",
      "headers": ["Ref", "Query", "Raised", "Status", "Response"]},
 ]
@@ -87,16 +105,15 @@ def main():
     recommendation = go_no_go_recommendation(score, gate_fail)
     callout = decision_callout(score, gate_fail)
 
+    cover_fields = build_cover_fields(
+        args.project, args.client, args.return_date, args.route,
+        score, recommendation if args.data else "TBC", data)
+    if not args.data:
+        cover_fields = [(lbl, "TBC" if lbl == "Go/No-Go Score:" else val)
+                        for lbl, val in cover_fields]
     cover = {
         "title": f"AILTIR BID PLAN — {args.project.upper()}",
-        "fields": [
-            ("Project Name:", args.project),
-            ("Client:", args.client),
-            ("Tender Return:", args.return_date),
-            ("Procurement Route:", args.route),
-            ("Go/No-Go Score:", f"{score}/100" if args.data else "TBC"),
-            ("Recommendation:", recommendation if args.data else "TBC"),
-        ],
+        "fields": cover_fields,
     }
 
     tabs = R.merge_rows(CORE_TABS, data)
