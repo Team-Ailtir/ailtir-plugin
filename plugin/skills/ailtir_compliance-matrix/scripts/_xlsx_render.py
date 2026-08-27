@@ -1,12 +1,15 @@
-"""Deterministic Ailtir workbook renderer.
+"""Ailtir workbook renderer — permissive edition.
 
-The script owns structure (tab titles, order, headers) and styling; the model
-supplies row content via a --data JSON blob. Scripts define a CORE_TABS
-skeleton and pass model data through merge_rows() into build_workbook().
+The engine owns: tab existence and ordering, Ailtir brand styling, Excel-safe
+sheet titles, and output file I/O. The model owns: every header, every data
+row, section structure, callout text, and optional extra tabs.
 
-Bundled verbatim into each skill's scripts/ directory because Cowork does not
-support reliable cross-skill Python imports (scripts run with cwd = session
-root, and are invoked by absolute path).
+Scripts define a CORE_TABS list of {key, title} pairs that guarantee certain
+tabs are always present. The model supplies all content for each tab via a
+--data JSON blob. See DATA CONTRACT in each skill's SKILL.md.
+
+Bundled verbatim into each skill's scripts/ because Cowork does not support
+reliable cross-skill Python imports.
 """
 from __future__ import annotations
 
@@ -24,28 +27,27 @@ except ImportError:
     raise
 
 # Ailtir brand palette
-NAVY = "0A1128"
-PURPLE = "7C3AED"
-LIGHT = "F5F7FA"
-WHITE = "FFFFFF"
-AMBER = "F59E0B"
+NAVY    = "0A1128"
+PURPLE  = "7C3AED"
+WHITE   = "FFFFFF"
+AMBER   = "F59E0B"
 NA_GREY = "9CA3AF"
 
-HEADER_FONT = Font(bold=True, color=WHITE, size=11, name="Space Grotesk")
-HEADER_FILL = PatternFill("solid", fgColor=NAVY)
-SECTION_FONT = Font(bold=True, color=WHITE, size=11, name="Space Grotesk")
+HEADER_FONT  = Font(bold=True, color=WHITE,   size=11, name="Space Grotesk")
+HEADER_FILL  = PatternFill("solid", fgColor=NAVY)
+SECTION_FONT = Font(bold=True, color=WHITE,   size=11, name="Space Grotesk")
 SECTION_FILL = PatternFill("solid", fgColor=PURPLE)
-TITLE_FONT = Font(bold=True, color=WHITE, size=14, name="Space Grotesk")
-BODY_FONT = Font(size=10, name="Inter")
-LABEL_FONT = Font(bold=True, size=10, name="Inter")
-NA_FONT = Font(italic=True, color=NA_GREY, size=10, name="Inter")
-BANNER_FONT = Font(italic=True, color=PURPLE, size=10, name="Inter")
+TITLE_FONT   = Font(bold=True, color=WHITE,   size=14, name="Space Grotesk")
+BODY_FONT    = Font(size=10, name="Inter")
+LABEL_FONT   = Font(bold=True, size=10, name="Inter")
+NA_FONT      = Font(italic=True, color=NA_GREY, size=10, name="Inter")
+BANNER_FONT  = Font(italic=True, color=PURPLE,  size=10, name="Inter")
 CALLOUT_FONT = Font(bold=True, color=NAVY, size=12, name="Space Grotesk")
 CALLOUT_FILL = PatternFill("solid", fgColor=AMBER)
-_THIN = Side(style="thin", color="D9D9D9")
+_THIN  = Side(style="thin", color="D9D9D9")
 BORDER = Border(left=_THIN, right=_THIN, top=_THIN, bottom=_THIN)
 CENTER = Alignment(horizontal="center", vertical="center", wrap_text=True)
-LEFT = Alignment(horizontal="left", vertical="top", wrap_text=True)
+LEFT   = Alignment(horizontal="left",   vertical="top",    wrap_text=True)
 
 
 def load_data(path):
@@ -62,18 +64,13 @@ def load_data(path):
 
 
 def save_workbook(wb, output):
-    """Save, creating the parent directory if the caller passed a nested path."""
     out = Path(output)
     if out.parent and not out.parent.exists():
         out.parent.mkdir(parents=True, exist_ok=True)
     wb.save(output)
 
 
-# Excel/openpyxl reject \ * ? : / [ ] in sheet names and cap them at 31 chars.
-# Tab specs keep their human display title (e.g. "3. Go / No-Go"); the sheet
-# name is derived here so callers never have to sanitise.
 _INVALID_TITLE = re.compile(r"[\\*?:/\[\]]")
-
 
 def safe_sheet_title(title):
     return _INVALID_TITLE.sub("-", title)[:31]
@@ -109,12 +106,13 @@ def _render_cover(ws, cover):
     _autosize(ws, 2, [26, 60])
 
 
-def _render_grid(ws, start_row, headers, rows, na_note, widths=None):
+def _render_grid(ws, start_row, headers, rows, na_note=None, widths=None):
     r = start_row
+    ncols = max(len(headers), 1)
     if headers:
         for i, h in enumerate(headers, 1):
             ws.cell(row=r, column=i, value=h)
-        _style_header(ws, r, len(headers))
+        _style_header(ws, r, ncols)
         r += 1
     if rows:
         for row_vals in rows:
@@ -127,38 +125,34 @@ def _render_grid(ws, start_row, headers, rows, na_note, widths=None):
     elif na_note:
         ws.cell(row=r, column=1, value=na_note).font = NA_FONT
         r += 1
-    _autosize(ws, max(len(headers) if headers else 1, 1), widths)
+    _autosize(ws, ncols, widths)
     return r
-
-
-def _tab_width(spec):
-    """Widest column count on the tab — sections may differ in width."""
-    sections = spec.get("sections")
-    if sections:
-        return max((len(s.get("headers", [])) for s in sections), default=1) or 1
-    return max(len(spec.get("headers", [])), 1)
 
 
 def _render_tab(wb, spec):
     ws = wb.create_sheet(safe_sheet_title(spec["title"]))
     r = 1
+    sections = spec.get("sections")
+    ncols = max(
+        max((len(s.get("headers", [])) for s in sections), default=1)
+        if sections else len(spec.get("headers", [])),
+        1,
+    )
     if spec.get("callout"):
-        ncols = _tab_width(spec)
         ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=ncols)
-        ws.cell(row=r, column=1, value=spec["callout"])
         for c in range(1, ncols + 1):
             cell = ws.cell(row=r, column=c)
             cell.font = CALLOUT_FONT
             cell.fill = CALLOUT_FILL
             cell.alignment = CENTER
+        ws.cell(row=r, column=1, value=spec["callout"])
         r += 2
-    sections = spec.get("sections")
     if sections:
         for sec in sections:
-            ncols = max(len(sec.get("headers", [])), 1)
-            ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=ncols)
-            ws.cell(row=r, column=1, value=sec["heading"])
-            _style_header(ws, r, ncols, fill=SECTION_FILL, font=SECTION_FONT)
+            sec_ncols = max(len(sec.get("headers", [])), 1)
+            ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=sec_ncols)
+            ws.cell(row=r, column=1, value=sec.get("heading", ""))
+            _style_header(ws, r, sec_ncols, fill=SECTION_FILL, font=SECTION_FONT)
             r += 1
             r = _render_grid(ws, r, sec.get("headers", []), sec.get("rows", []),
                              sec.get("na_note"), sec.get("widths"))
@@ -181,71 +175,41 @@ def build_workbook(cover, tabs):
 
 
 def merge_rows(core_tabs, data):
+    """Merge CORE_TABS skeleton with model-supplied data.
+
+    CORE_TABS entries need only {key, title}. The model supplies headers, rows,
+    sections, callout, and banner via data["tabs"][key]. Tabs with no matching
+    data entry are rendered empty (header row only if the spec provides headers).
+    """
     filled = []
     supplied = data.get("tabs", {})
     for spec in core_tabs:
-        out = dict(spec)
         d = supplied.get(spec.get("key"), {})
-        if "sections" in spec:
-            secs = []
-            sd_all = d.get("sections", {})
-            for base in spec["sections"]:
-                ms = dict(base)
-                sd = sd_all.get(base.get("key"), {})
-                ms["rows"] = sd.get("rows", [])
-                if "na_note" in sd:
-                    ms["na_note"] = sd["na_note"]
-                ms["headers"] = sd.get("headers", base.get("headers", []))
-                if "widths" in sd:
-                    ms["widths"] = sd["widths"]
-                secs.append(ms)
-            for extra in d.get("extra_sections", []):
-                secs.append({
-                    "heading": extra.get("heading", ""),
-                    "headers": extra.get("headers", []),
-                    "rows": extra.get("rows", []),
-                    "na_note": extra.get("na_note"),
-                    "widths": extra.get("widths"),
-                })
-            out["sections"] = secs
+        out = {"title": spec["title"]}
+        for k in ("callout", "banner", "na_note"):
+            v = d.get(k) or spec.get(k)
+            if v:
+                out[k] = v
+        if "sections" in d:
+            clean_secs = []
+            for s in d["sections"]:
+                sec = {
+                    "heading": s.get("heading", ""),
+                    "headers": s.get("headers", []),
+                    "rows":    s.get("rows", []),
+                }
+                for k in ("na_note", "widths"):
+                    if k in s:
+                        sec[k] = s[k]
+                clean_secs.append(sec)
+            out["sections"] = clean_secs
         else:
-            out["rows"] = d.get("rows", [])
-            if "na_note" in d:
-                out["na_note"] = d["na_note"]
             out["headers"] = d.get("headers", spec.get("headers", []))
-            if "widths" in d:
-                out["widths"] = d["widths"]
+            out["rows"]    = d.get("rows", [])
+            for k in ("na_note", "widths"):
+                if k in d:
+                    out[k] = d[k]
         filled.append(out)
     for opt in data.get("optional_tabs", []):
         filled.append(opt)
     return filled
-
-
-def validate_requirements(tabs):
-    """Check each tab against its declared contract.
-
-    Returns a list of problem strings — empty when every requirement is met.
-    A `requires` entry is either "callout" or the key of a declared section,
-    which must carry at least one row. `min_columns` guards shapes (such as a
-    RACI matrix) that are meaningless below a certain width.
-    """
-    problems = []
-    for spec in tabs:
-        title = spec.get("title", "<untitled>")
-        by_key = {s.get("key"): s for s in spec.get("sections", [])}
-        for req in spec.get("requires", []):
-            if req == "callout":
-                if not spec.get("callout"):
-                    problems.append(f"{title}: required decision callout is missing")
-                continue
-            sec = by_key.get(req)
-            if sec is None:
-                problems.append(f"{title}: required section '{req}' is not declared")
-            elif not sec.get("rows"):
-                problems.append(f"{title}: required section '{req}' has no rows")
-        min_cols = spec.get("min_columns")
-        if min_cols and len(spec.get("headers", [])) < min_cols:
-            problems.append(
-                f"{title}: needs at least {min_cols} columns, "
-                f"got {len(spec.get('headers', []))}")
-    return problems

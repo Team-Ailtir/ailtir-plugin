@@ -1,8 +1,8 @@
-"""Tier-2 deep-dive compliance matrix: 4 deterministic tabs + cover.
+"""Ailtir Compliance Matrix workbook.
 
-Structure/headers/styling owned here; model supplies rows via --data JSON.
-Writes its OWN workbook — never the bid-planner file. See SKILL.md for the
-data contract.
+The engine guarantees 3 tabs exist with Ailtir styling. The model supplies
+all headers, rows, and section structure via --data JSON.
+See the DATA CONTRACT section in ailtir_compliance-matrix/SKILL.md.
 """
 from __future__ import annotations
 
@@ -13,36 +13,38 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import _xlsx_render as R  # noqa: E402
 
-
 CORE_TABS = [
-    {"key": "award_criterion", "title": "2. Award Criterion",
-     "headers": ["Ref", "Criterion", "Weight", "Notes", "Status"]},
-    {"key": "returnables", "title": "3. Mandatory Returnables",
-     "headers": ["No.", "Ref", "Document / Item", "Category",
-                 "Template Provided", "Status", "Owner", "Notes"]},
-    {"key": "submission_rules", "title": "4. Submission Rules",
-     "headers": ["Item", "Requirement"]},
-    {"key": "gap_check", "title": "5. Template & Doc Gap Check",
-     "headers": ["Ref", "Document", "Required?", "Template in Pack?", "Action Required"]},
+    {"key": "returnables",       "title": "1. Returnables & Criteria"},
+    {"key": "submission_rules",  "title": "2. Submission Rules"},
+    {"key": "gaps",              "title": "3. Gaps & Queries"},
 ]
 
 
-def cover(meta):
-    fields = [(f"{k}:", v) for k, v in meta.items()]
-    return {"sheet_title": "1. Cover", "title": "COMPLIANCE MATRIX", "fields": fields}
-
-
 def main():
-    p = argparse.ArgumentParser(description="Generate the Ailtir compliance matrix workbook")
-    p.add_argument("--output", required=True)
-    p.add_argument("--data", default=None, help="Path to model-supplied JSON")
+    p = argparse.ArgumentParser(description="Generate the Ailtir Compliance Matrix workbook")
+    p.add_argument("--output",  required=True)
+    p.add_argument("--project", required=True)
+    p.add_argument("--client",  default="TBC")
+    p.add_argument("--data",    default=None,
+                   help="Path to model-supplied JSON (headers, rows, sections per tab)")
     args = p.parse_args()
+
     data = R.load_data(args.data)
-    wb = R.build_workbook(cover(data.get("cover", {})), R.merge_rows(CORE_TABS, data))
+
+    cover = {
+        "sheet_title": "0. Overview",
+        "title": f"COMPLIANCE MATRIX — {args.project.upper()}",
+        "fields": [
+            ("Project Name:", args.project),
+            ("Client:",       args.client),
+        ],
+    }
+
+    tabs = R.merge_rows(CORE_TABS, data)
+    wb = R.build_workbook(cover, tabs)
     R.save_workbook(wb, args.output)
-    print(f"Created {args.output}")
-    return 0
+    print(f"Compliance matrix written to {args.output}")
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    main()

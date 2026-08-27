@@ -18,24 +18,12 @@ The lead has been logged but a formal bid folder may not yet exist. The conducto
 
 ## Phase: `pre-bid`
 
-Tender pack in hand, decision to bid taken. The canonical entry point is the
-Tier-1 planner, which produces a summarised first pass; the deep dives follow.
+Tender pack in hand, decision to bid taken.
 
-1. `ailtir_bid-planner` — the Tier-1 first pass. Produces one 9-tab workbook +
-   kick-off deck. Does Go/No-Go **in full** (recorded `result: proceed`),
-   **summarises** compliance and contract-risk (recorded `result: summarised`),
-   and outlines packages for awareness (fully defined in the `estimating` phase).
-2. `ailtir_contract-risk` — deep dive: full clause-by-clause register, contract
-   data, action tracker. Upgrades the `summarised` entry to `proceed`.
-3. `ailtir_compliance-matrix` — deep dive: full returnables tracker with
-   templates, owners, deadlines. Upgrades the `summarised` entry to `proceed`.
+1. `ailtir_bid-planner` — full first-pass analysis: Go/No-Go, contract risk overview, compliance requirements, package outline, bid workbook and kick-off deck.
+2. `ailtir_contract-risk` — full clause-by-clause risk register and action tracker.
+3. `ailtir_compliance-matrix` — full returnables tracker with templates, owners, and deadlines.
 4. `ailtir_pqq-manager` — if a PQQ / SQ / Supplier Info form is part of the pack.
-
-**`summarised` handling:** a skill whose latest `completed[]` entry has
-`result: summarised` is NOT done — surface it as the next step, but frame it as a
-deep dive, e.g. *"Summarised in the bid plan — run for the full clause-by-clause
-review."* Never present it as a blind repeat. Once its entry is `proceed` (or
-`skipped`), treat it as complete.
 
 **Advance criterion:** `bid-planner` done, `contract-risk` and
 `compliance-matrix` both at `result: proceed` (or `skipped`), and `pqq-manager`
