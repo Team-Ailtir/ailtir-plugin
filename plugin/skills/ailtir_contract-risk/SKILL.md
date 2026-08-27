@@ -1,29 +1,14 @@
 ---
 name: ailtir_contract-risk
-description: Reviews the tendered contract clause-by-clause against the playbook for the active Ailtir profile (Irish PW-CF/RIAI or UK JCT/NEC4). Triggered by /ailtir_contract-risk or when bid-planner runs.
+description: Reviews the tendered contract clause-by-clause against the playbook for the active Ailtir profile (Irish PW-CF/RIAI or UK JCT/NEC4). Triggered by /ailtir-cowork-plugin:ailtir_contract-risk or when bid-planner runs.
 ---
 
 # Ailtir Contract Risk Reviewer
 
-## Usage Reporting
-
-Before doing workflow-specific work, read the stable anonymous UUID from
-`~/Ailtir-Tendering/install_id`. If the file is missing, create its parent
-directory, generate a UUID v4, and write only that UUID to the file. Re-read the
-file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP server
-with these arguments:
-
-- `skill_name`: `ailtir_contract-risk`
-- `plugin_version`: `2.16.0`
-- `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
-
-If the identifier cannot be read or created, leave that failure visible and
-continue without reporting. If reporting returns `failed`, leave the failure visible and continue the workflow.
-
 You are a Commercial Manager reviewing a proposed contract.
 
 ## Step 1 — Read the Profile
-Read `Context/profile.json` from the workspace root to determine `profile_key` (either `ireland-gc` or `uk-gc`). The playbook you load in Step 3 depends on this value. If `profile.json` is missing, stop and tell the user to run `/ailtir_setup`.
+Read `Context/profile.json` from the workspace root to determine `profile_key` (either `ireland-gc` or `uk-gc`). The playbook you load in Step 3 depends on this value. If `profile.json` is missing, stop and tell the user to run `/ailtir-cowork-plugin:ailtir_setup`.
 
 ## Step 2 — Identify the Form
 Identify if the contract is one of the standard forms for the active profile:
@@ -39,31 +24,55 @@ Read `references/{profile_key}/contract-playbook.md` from this skill's directory
 - Time Bars — critical for NEC4 (strict 8-week Compensation Event bar) and PW-CF (strict 20 working days)
 - Fitness for purpose language layered onto D&B (voids most PI cover)
 
-## Step 4 — Generate the Workbook
-This is the deep-dive pass. Assemble your clause-by-clause analysis into a JSON
-payload, **write it to `/tmp/risk_data.json`**, then run the bundled
-`scripts/create_risk_register.py` with `python3` — the script owns all tab
-structure and styling; you supply the rows:
+## Step 4 — Generate Workbook
 
-`python3 scripts/create_risk_register.py --output "Contract_Risk_Register_[Bid].xlsx" --data /tmp/risk_data.json`
+Assemble a JSON payload from Steps 1–3 and write it to a temp file (e.g. `/tmp/risk_data.json`). Then call the bundled script:
 
-Payload shape:
+```
+python3 <skill_dir>/scripts/create_risk_register.py \
+  --output "Bids/[BidRef]/4-Compliance/Risk_Register_[Project].xlsx" \
+  --project "[Name]" \
+  --client "[Client]" \
+  --data /tmp/risk_data.json
+```
+
+**DATA CONTRACT:**
 
 ```json
 {
-  "cover": {"Project": "X", "Contract Form": "PW-CF5 v2.7", "Playbook Base": "ireland-gc"},
   "tabs": {
-    "risk_register": {"rows": [["CR-01","20-Working-Day Time Bar","Sub-clause 10.3","RED","Loss of EOT","Notice register","Commercial Manager"]]},
-    "contract_data": {"rows": [["Part 1A","ER","Employer's Representative","Named","Standard"]]},
-    "action_tracker": {"rows": [["A-01","CR-01","Establish CE notice register","Commercial","START DATE","OPEN",""]]}
-  }
+    "risk_register": {
+      "headers": ["Ref", "Risk", "Clause / Source", "Rating", "Commercial Impact", "Mitigation"],
+      "rows": [["R1", "Fitness for purpose overlay on D&B", "Employer's Requirements cl.4.1", "High", "Voids PI cover", "Negotiate removal or cap"]]
+    },
+    "contract_data": {
+      "headers": ["Item", "Value", "Standard Position", "Delta"],
+      "rows": [
+        ["Contract Form", "NEC4 ECC Option A", "Standard", "None"],
+        ["Liquidated Damages", "£5,000/week", "£2,000–£3,000 typical", "High — negotiate"]
+      ]
+    },
+    "action_tracker": {
+      "headers": ["Ref", "Action", "Owner", "Due Date", "Status"],
+      "rows": [["A1", "Negotiate LD rate down to £2,500/week", "Donagh Buachalla", "2026-08-01", "Open"]]
+    }
+  },
+  "optional_tabs": []
 }
 ```
 
-This writes its OWN workbook — never the bid-planner file. If a section does not
-apply, pass `"rows": []` with a `"na_note"`.
+You choose the headers for each tab — use whatever columns best represent the contract. Present a summary of the top risks to the user after generating the workbook.
 
 - [HUMAN INPUT REQUIRED] If the contract form cannot be determined from the documents, ask the user before proceeding.
+
+---
+
+## On Completion — Update Bid State
+
+```
+python3 <ailtir_conductor_dir>/scripts/update_frontmatter.py \
+    --bid-path Bids/<BID> --complete ailtir_contract-risk --result proceed
+```
 
 ## Anti-Patterns (What NOT to do)
 - DO NOT hallucinate the risk positions. Use the contract playbook.
@@ -75,49 +84,3 @@ apply, pass `"rows": []` with a `"na_note"`.
 - [ ] Correct contract form identified.
 - [ ] Deviations from standard playbook positions flagged.
 - [ ] Risks prioritised by commercial impact.
-
-## On Completion — Update Bid State
-
-When this skill finishes for a specific bid, update the bid's state file so `ailtir_conductor` and `ailtir_dashboard` reflect the progress. Run the sibling `ailtir_conductor` skill's `scripts/update_frontmatter.py` helper with `python3`:
-
-This deep dive **upgrades** the bid-planner's `summarised` entry to a full
-`proceed`. Use `--result proceed`.
-
-```
-python3 <ailtir_conductor>/scripts/update_frontmatter.py \
-    --bid-path Bids/<BID> \
-    --complete <this skill's folder name> \
-    --result proceed
-```
-
-Substitute `<BID>` for the bid folder name (e.g. `2026-014-CorkLibrary`) and `<this skill's folder name>` for the folder this SKILL.md lives in (e.g. `ailtir_project-indexer`). Use `--result skipped` and `--reason "..."` if the user asked to skip rather than complete.
-
-If the target bid README has no YAML frontmatter yet, `update_frontmatter.py` will exit with code 3. In that case, run `scripts/init_bid_frontmatter.py` from the same sibling skill first, then retry the update.
-
-This is the plugin's "Soul-Update Pattern": every bid-scoped skill leaves a trace in the bid README so the conductor never has to guess what has and hasn't been done.
-
-## On Completion — Recommend the Next Step
-
-After the frontmatter has been updated, help the user by naming what comes next — do not make them re-invoke `ailtir_conductor` just to see it.
-
-Read `references/phase-map.md` from the sibling `ailtir_conductor` skill's directory. Find the section for the bid's current `phase` (from the frontmatter you just updated). The phase map lists the canonical skill sequence for that phase — identify the earliest skill in that list not yet present in `completed[]`.
-
-Then print exactly this block at the very end of your response:
-
-```text
-Next up on {bid_id} ({phase} phase):
-  → /{next_skill} — {one-line rationale from the phase map}
-
-Or run /ailtir_conductor for a full cross-bid view.
-```
-
-Special cases:
-- If `blockers[]` is non-empty, use the blocker's resolution skill from the phase map's blocker-overrides table instead (e.g. `ailtir_rfi-generator` for `type: rfi`) and lead with "Blocked — resolve first:".
-- If every skill in the current phase's sequence is now completed, name the first skill of the next phase and say "Phase complete — moving to {next_phase}:".
-- If the bid has reached `closed` or `delivery` with no obvious next step, print "No canonical next step — run `/ailtir_conductor` to see the full pipeline." instead of a specific recommendation.
-
-## Occasional Feedback
-
-After this workflow completes successfully, follow
-`references/occasional-feedback.md` from the sibling `ailtir_feedback` skill.
-Do not schedule or invite feedback after a cancelled or failed workflow.

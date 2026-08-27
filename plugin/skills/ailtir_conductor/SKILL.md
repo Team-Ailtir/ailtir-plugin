@@ -71,13 +71,7 @@ Alt:   {alt_skill_1}, {alt_skill_2}  (or "none" if no sideways moves)
 
 Compute `next_skill` from `references/phase-map.md` in this skill's directory. The phase map lists, for each `phase`, the expected sequence of skills — pick the earliest expected skill not present in `completed[]` (or present only with `result: summarised` — see below). If `blockers[]` is non-empty, override `next_skill` with the appropriate resolution skill (e.g. `ailtir_rfi-generator` for a `type: rfi` blocker).
 
-**`summarised` entries:** an entry in `completed[]` with `result: summarised` (written
-by `ailtir_bid-planner` for compliance and contract-risk) counts as "overview done,
-deep pass still valuable". Recommend it as `next_skill` and phrase the rationale as
-a deep dive — e.g. "Summarised in the bid plan; run for the full clause-by-clause
-review." Treat `result: proceed` as fully complete (do not re-recommend). A
-`skipped` entry is also complete, but may be re-recommended if the user explicitly
-asks to revisit it.
+**`summarised` entries:** an entry in `completed[]` with `result: summarised` counts as "touched but not done in full — worth completing". Recommend it as `next_skill` and phrase the rationale clearly. Treat `result: proceed` as fully complete (do not re-recommend). A `skipped` entry is also complete, but may be re-recommended if the user explicitly asks to revisit it.
 
 **Intelligence/ thin-check (submission phase only):** when the bid's current `phase` is `submission`, check whether `Intelligence/` in the workspace root contains fewer than 2 `.md` or `.yaml` files (count with a glob, do not read their contents). If it does, append this line to the four-line block:
 
@@ -142,7 +136,7 @@ Handle the submitted message:
     1. /ailtir_go-no-go — score the opportunity; proceed or no-bid
 
   PHASE: pre-bid
-    1. /ailtir_bid-planner — Tier-1 first pass: workbook + deck, full Go/No-Go, summarised risk & compliance, package outline
+    1. /ailtir_bid-planner — full first-pass analysis: Go/No-Go, contract risk overview, compliance requirements, bid workbook and kick-off deck
     2. /ailtir_contract-risk — full clause-by-clause risk register (deep dive)
     3. /ailtir_compliance-matrix — full returnables tracker (deep dive)
     4. /ailtir_pqq-manager — PQQ / SQ / Supplier Info form (if required)
@@ -201,12 +195,11 @@ next_action:
   reason: "Summarised in the bid plan; run the full clause-by-clause review"
   blocking: false
 completed:
-  # result values: proceed (done in full) | summarised (bid-planner overview,
-  # deep dive still worthwhile) | skipped (deliberately not done)
+  # result values: proceed (done in full) | summarised (touched but not complete) | skipped (deliberately not done)
   - {skill: ailtir_bid-planner, at: 2026-07-02, result: proceed}
   - {skill: ailtir_go-no-go, at: 2026-07-02, result: proceed}
-  - {skill: ailtir_compliance-matrix, at: 2026-07-02, result: summarised}
-  - {skill: ailtir_contract-risk, at: 2026-07-02, result: summarised}
+  - {skill: ailtir_compliance-matrix, at: 2026-07-02, result: proceed}
+  - {skill: ailtir_contract-risk, at: 2026-07-02, result: proceed}
 blockers: []              # e.g. [{type: rfi, ref: RFI-003, description: "Awaiting drawings"}]
 key_dates:
   submission: 2026-08-15
@@ -221,7 +214,7 @@ auto_drive: false         # opt-in per-bid escalation to auto-chain (post-MVP)
 - DO NOT hardcode a specific skill in the "Run it" card. `{next_skill}` is recomputed per bid in Step 4 — the card must always carry the skill that is actually next for the bid being prompted, for every phase and every bid.
 - DO NOT chain slash commands from inside the skill. The "Run it" card works because the *user's* submitted message is the slash command, not because the conductor invokes it.
 - DO NOT rewrite the whole README — the frontmatter block sits above the existing `# {bid_id}` heading and prose.
-- DO NOT recommend a skill that is already in `completed[]` with `result: proceed`. An entry with `result: summarised` is NOT complete — recommend it as a deep dive (see Step 4). Skipped skills can be re-recommended if the user explicitly asks.
+- DO NOT recommend a skill that is already in `completed[]` with `result: proceed`. An entry with `result: summarised` is NOT complete — recommend it as the next step. Skipped skills can be re-recommended if the user explicitly asks.
 - DO NOT invent phases. Phases come from `references/phase-map.md` only.
 - DO NOT run the conductor if `Context/profile.json` is missing. Direct the user to `ailtir_setup`.
 
