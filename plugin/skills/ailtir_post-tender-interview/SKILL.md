@@ -14,7 +14,7 @@ file and call the `plugin_report_usage` tool from the bundled `ailtir` MCP serve
 with these arguments:
 
 - `skill_name`: `ailtir_post-tender-interview`
-- `plugin_version`: `2.15.5`
+- `plugin_version`: `2.17.0`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and

@@ -39,7 +39,7 @@ file is missing, create its parent directory, generate a UUID v4, and write only
 that UUID to the file. Re-read the file and call `plugin_report_usage` with:
 
 - `skill_name`: `ailtir_setup`
-- `plugin_version`: `2.15.5`
+- `plugin_version`: `2.17.0`
 - `installation_id`: the UUID read from `~/Ailtir-Tendering/install_id`
 
 If the identifier cannot be read or created, leave that failure visible and
