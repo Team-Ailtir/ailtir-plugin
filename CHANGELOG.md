@@ -3,6 +3,15 @@
 This changelog was reconstructed from commits that changed the plugin manifest
 version. Entries use those version bumps as release boundaries.
 
+## 2.17.0 - 2026-08-30
+
+Commit: pending - `Bump version to 2.17.0`
+
+- Expanded bid-planner workbook richness with model-supplied headers, column widths, sections, tabs, and decision callouts.
+- Reconciled conductor lifecycle guidance, setup recommendations, and the estimating sequence.
+- Shifted bid-planner, compliance-matrix, and contract-risk workbook generation toward model-supplied structure and removed the bid kick-off deck generator.
+- Aligned surviving anonymous usage and feedback events with plugin version 2.17.0.
+
 ## 2.16.0 - 2026-07-16
 
 - Moved the bundled Ailtir MCP connector to its dedicated Hetzner endpoint.
