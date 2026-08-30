@@ -5,7 +5,7 @@ version. Entries use those version bumps as release boundaries.
 
 ## 2.17.0 - 2026-08-30
 
-Commit: pending - `Bump version to 2.17.0`
+Commit: `4e0070e` - `Bump version to 2.17.0`
 
 - Expanded bid-planner workbook richness with model-supplied headers, column widths, sections, tabs, and decision callouts.
 - Reconciled conductor lifecycle guidance, setup recommendations, and the estimating sequence.
